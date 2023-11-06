@@ -47,7 +47,7 @@ public class PokerTable {
 		this.dealer = new DealerHand(deck);
 		this.currentlyPlaying= new ArrayList<>();
 		for (Player player : this.playerList) {
-			if (player.getChipStack()>0) {
+			if (player.isPlaying()) {
 				this.currentlyPlaying.add(player);
 			}
 		}
@@ -104,7 +104,7 @@ public class PokerTable {
 	 */
 	public void kickBrokePlayers() {
 		for (Player player : this.playerList) {
-			if (player.getChipStack() == 0) {
+			if (player.isPlaying() && player.getChipStack() == 0) {
 				player.setPlaying(false);
 				this.currentlyPlaying.remove(player);
 			}
@@ -118,7 +118,7 @@ public class PokerTable {
 	 */
 	public void addPlayer(Player player) {
 		this.playerList.add(player);
-		if (player.getChipStack() > 0) {
+		if (player.isPlaying()) {
 			this.currentlyPlaying.add(player);
 		}
 	}
@@ -217,6 +217,9 @@ public class PokerTable {
 	 * @return
 	 */
 	public List<Player> checkWhoWins(List<Player> players) {
+		if (players.isEmpty()) {
+			return null;
+		}
 		List<Player> playersThatWon = new ArrayList<>();
 		for (Player player : players) {
 			player.setWinCombination(WinConditionLogic.findWinningCombination(dealer, player.getPlayerHand()));
@@ -309,6 +312,7 @@ public class PokerTable {
 			player.setCurrentlyRaising(false);
 			player.setHasNotFolded(true);
 			player.setBet(0);
+			player.setHand(null);
 		}
 	}
 
@@ -347,10 +351,10 @@ public class PokerTable {
 	 * player we're making a pot for is all-in.
 	 */
 	public boolean checkIfAnyoneCanStillBet() {
-		int numberOfPlayersStillBetting = this.playerList.size();
+		int numberOfPlayersStillBetting = this.currentlyPlaying.size();
 		boolean flag = false;
-		int bet = this.playerList.get(0).getBet();
-		for (Player player : this.playerList) {
+		int bet = this.currentlyPlaying.get(0).getBet();
+		for (Player player : this.currentlyPlaying) {
 			if (player.isAllIn() || !player.hasNotFolded()) {
 				numberOfPlayersStillBetting--;
 			}
@@ -405,11 +409,14 @@ public class PokerTable {
 		// work on the pot we just created
 		AllInPot pot = (AllInPot) this.pots.get(this.pots.size() - 1);
 		int playerBet = pot.getAllInBet();
-		for (Player playa : this.playerList) {
+		for (Player playa : this.currentlyPlaying) {
 			// if a player is all in with less chips, we add his bet value to the pot
 			// else we add the value of the all in player
-			pot.addBet(Math.min(playa.getBet(), playerBet));
-			pot.addPlayer(playa);
+			if (playa.getBet()>0) {
+				
+				pot.addBet(Math.min(playa.getBet(), playerBet));
+				pot.addPlayer(playa);
+			}
 		}
 	}
 
@@ -421,7 +428,7 @@ public class PokerTable {
 	 */
 	public void updateAllInPot(AllInPot pot) {
 		pot.setValue(0);
-		for (Player player : this.playerList) {
+		for (Player player : this.currentlyPlaying) {
 			pot.addBet(Math.min(pot.getAllInBet(), player.getBet()));
 		}
 	}
@@ -561,6 +568,9 @@ public class PokerTable {
 			return;
 		}
 		List<Player> winners = checkWhoWins(pot.getPlayers());
+		if (winners == null) {
+			return;
+		}
 		System.out.println( "Winner list: " + winners);
 		int gainSplit = winners.size();
 		for (Player player : winners) {
@@ -575,7 +585,7 @@ public class PokerTable {
 	}
 
 	public void printAllHands() {
-		for (Player player : this.playerList) {
+		for (Player player : this.currentlyPlaying) {
 			if (player.hasNotFolded()) {
 				System.out.println(player.getName() + " has the hand: " + player.getWinningCombination());
 				player.printHand();

@@ -7,6 +7,9 @@ public class PokerTableAutomatisee extends PokerTable{
 public PokerTableAutomatisee(List<Player> players) {
 	super(players);
 }
+public PokerTableAutomatisee() {
+	super();
+}
 @Override
 public int askForBetsWithPots(int playersInRound) {
 	boolean everyoneCalled = false;
