@@ -16,7 +16,10 @@ public class PlayerHand {
 		this.hand=cards;
 	}
 	public void remove(Card card) {
-		this.remove(card);
+		this.hand.remove(card);
+ {}	}
+	public void removeRandomCard() {
+		this.hand.remove((int) (Math.random() * this.hand.size()));
 	}
 	
 }
