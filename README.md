@@ -2,6 +2,7 @@
 
 On joue au poker Texas Hold'em. Toutes les règles du poker sont reprises. Il y a 4 joueurs qui jouent à une table. Ils commencent tous avec 300 jetons. Le gagnant est
 le dernier à quitter la table. Un joueur quitte la table lorsqu'il n'a plus de jetons. Pour jouer une manche, il faut avoir misé autant que tous les autres joueurs, ou avoir fait tapis (i.e. misé tous ses jetons).
+Il y a une couleur d'atout, décidée par la grande blinde, qui inverse l'ordre de puissance des cartes pendant une manche. Chaque joueur peut échanger, quand il veut, 50 jetons contre une carte supplémentaire, qu'il doit montrer à tout le monde. Il peut choisir de payer 100 jetons pour garder la carte secrète. Il peut le faire 1 fois par manche. Chaque joueur peut payer 100 jetons pour voir une des cartes de son adversaire, et 200 jetons pour détruire la carte.
 ## Mise en place
 
 Le maître du jeu est le croupier. Le croupier distribue les cartes aux joueurs (2 cartes par joueur) et distribue les cartes au milieu (3,puis 1, puis 1). Il demande également les mises aux joueurs et distribue les gains en fin de manche.
@@ -29,6 +30,6 @@ TODO
 
 > Le protocole réseau définit les séquences des commandes échangées entre les différentes parties prenantes. Il doit contenir, pour chaque commande, l'expéditeur, le destinataire, le nom de la commande et le contenu du corps de la commande.
 
-![protocole tictactoe](doc/protocole.png)
+![protocole Poker](protocole.png)
 
 
