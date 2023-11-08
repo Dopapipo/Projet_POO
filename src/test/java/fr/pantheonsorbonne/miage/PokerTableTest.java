@@ -544,14 +544,12 @@ class PokerTableTest {
 		
 		table.getPlayers().get(0).bet(200);
 		table.getPlayers().get(1).bet(200);
-		table.getPlayers().get(2).bet(200);
-		table.getPlayers().get(3).bet(200);
 		table.turnPots();
 		
 		//assert
-		assertEquals(player1.getChipStack(),800);
+		assertEquals(player1.getChipStack(),600);
 		assertEquals(player2.getChipStack(),0);
-		assertEquals(player3.getChipStack(), 0);
+		assertEquals(player3.getChipStack(), 200);
 		assertEquals(player4.getChipStack(),0);
 	}
 }

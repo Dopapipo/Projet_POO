@@ -61,4 +61,8 @@ public class Card  {
 		return c1.getCardValue().compare(c2.getCardValue());
 	}
 
+	public void show() {
+		System.out.println(this);
+	}
+
 }

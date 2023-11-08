@@ -10,8 +10,8 @@ import fr.pantheonsorbonne.miage.game.logic.WinConditionLogic;
 //TODO :Separate display and logic for PokerTable
 
 public class PokerTable {
-	protected List<Player> playerList;
-	protected List<Player> currentlyPlaying;
+	private List<Player> playerList;
+	private List<Player> currentlyPlaying;
 	protected DealerHand dealer;
 	protected Deck deck;
 	protected int totalBets;
@@ -45,7 +45,7 @@ public class PokerTable {
 		this.playerList = players;
 		this.deck = new Deck();
 		this.dealer = new DealerHand(deck);
-		this.currentlyPlaying= new ArrayList<>();
+		this.currentlyPlaying = new ArrayList<>();
 		for (Player player : this.playerList) {
 			if (player.isPlaying()) {
 				this.currentlyPlaying.add(player);
@@ -159,38 +159,38 @@ public class PokerTable {
 					}
 
 					switch (answer) {
-					case 1:
-						player.call(this.highestBet - player.getBet());
-						player.setCurrentlyRaising(false);
-						break;
-					case 2:
-						player.fold();
-						player.setCurrentlyRaising(false);
-						playersInRound--;
-						break;
-					// if a player raises, we set him to currently raising, and all the other
-					// players to not currently raising
-					case 3:
-						System.out.println("How much do you want to raise by? (negative will call!)");
-						int x = scanner.nextInt();
-						if (x > 0) {
-							player.bet(highestBet - player.getBet() + x);
-							if (player.isAllIn()) {
-								this.makePotForAllInPlayer(player);
-							}
-							for (Player aPlayer : this.currentlyPlaying) {
-								// we shouldn't have any weird behaviour
-								// if we use != for comparison, at least for now
-								aPlayer.setCurrentlyRaising(false);
-							}
-							player.setCurrentlyRaising((true));
-							playersCalled.add(false);
-						} else {
+						case 1:
 							player.call(this.highestBet - player.getBet());
 							player.setCurrentlyRaising(false);
-							playersCalled.add(true);
-						}
-						break;
+							break;
+						case 2:
+							player.fold();
+							player.setCurrentlyRaising(false);
+							playersInRound--;
+							break;
+						// if a player raises, we set him to currently raising, and all the other
+						// players to not currently raising
+						case 3:
+							System.out.println("How much do you want to raise by? (negative will call!)");
+							int x = scanner.nextInt();
+							if (x > 0) {
+								player.bet(highestBet - player.getBet() + x);
+								if (player.isAllIn()) {
+									this.makePotForAllInPlayer(player);
+								}
+								for (Player aPlayer : this.currentlyPlaying) {
+									// we shouldn't have any weird behaviour
+									// if we use != for comparison, at least for now
+									aPlayer.setCurrentlyRaising(false);
+								}
+								player.setCurrentlyRaising((true));
+								playersCalled.add(false);
+							} else {
+								player.call(this.highestBet - player.getBet());
+								player.setCurrentlyRaising(false);
+								playersCalled.add(true);
+							}
+							break;
 					}
 				}
 				if (player.isAllIn()) {
@@ -412,8 +412,8 @@ public class PokerTable {
 		for (Player playa : this.currentlyPlaying) {
 			// if a player is all in with less chips, we add his bet value to the pot
 			// else we add the value of the all in player
-			if (playa.getBet()>0) {
-				
+			if (playa.getBet() > 0) {
+
 				pot.addBet(Math.min(playa.getBet(), playerBet));
 				pot.addPlayer(playa);
 			}
@@ -468,33 +468,33 @@ public class PokerTable {
 					} while (answer != 1 && answer != 2 && answer != 3);
 
 					switch (answer) {
-					case 1:
-						player.call(this.highestBet - player.getBet());
-						player.setCurrentlyRaising(false);
-						break;
-					case 2:
-						player.fold();
-						player.setCurrentlyRaising(false);
-						playersInRound--;
-						break;
-					// if a player raises, we set him to currently raising, and all the other
-					// players to not currently raising
-					case 3:
-						System.out.println("How much do you want to raise by? (negative will call!)");
-						int x = scanner.nextInt();
-						if (x > 0) {
-							for (Player aPlayer : this.currentlyPlaying) {
-								// we shouldn't have any weird behaviour
-								// if we use != for comparison, at least for now
-								aPlayer.setCurrentlyRaising(false);
-							}
-							player.setCurrentlyRaising((true));
-							player.bet(this.highestBet - player.getBet() + x);
-						} else {
+						case 1:
 							player.call(this.highestBet - player.getBet());
 							player.setCurrentlyRaising(false);
-						}
-						break;
+							break;
+						case 2:
+							player.fold();
+							player.setCurrentlyRaising(false);
+							playersInRound--;
+							break;
+						// if a player raises, we set him to currently raising, and all the other
+						// players to not currently raising
+						case 3:
+							System.out.println("How much do you want to raise by? (negative will call!)");
+							int x = scanner.nextInt();
+							if (x > 0) {
+								for (Player aPlayer : this.currentlyPlaying) {
+									// we shouldn't have any weird behaviour
+									// if we use != for comparison, at least for now
+									aPlayer.setCurrentlyRaising(false);
+								}
+								player.setCurrentlyRaising((true));
+								player.bet(this.highestBet - player.getBet() + x);
+							} else {
+								player.call(this.highestBet - player.getBet());
+								player.setCurrentlyRaising(false);
+							}
+							break;
 					}
 				}
 				this.findHighestBet();
@@ -571,7 +571,7 @@ public class PokerTable {
 		if (winners == null) {
 			return;
 		}
-		System.out.println( "Winner list: " + winners);
+		System.out.println("Winner list: " + winners);
 		int gainSplit = winners.size();
 		for (Player player : winners) {
 			player.won(value / gainSplit);
@@ -648,4 +648,17 @@ public class PokerTable {
 		return this.currentlyPlaying;
 	}
 
+	public int askForSuperPowerUse(Player player) {
+		System.out.println(
+				"Do you want to use any power? 0: no, 1: see a random card from a player, 2: destroy a random card from a player, 3: add a card to your hand (shown),4: add a hidden card to your hand");
+		System.out.println("Superpower cost: 1 : 50 chips; 2 - 100 chips; 3 - 75 chips; 4- 125 chips");
+		int answer;
+		do {
+			 answer = scanner.nextInt();
+		}
+		while (answer>4 || answer<0);
+		return answer;
+	}
+
+	
 }
