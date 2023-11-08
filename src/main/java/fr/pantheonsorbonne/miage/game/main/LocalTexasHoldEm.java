@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.pantheonsorbonne.miage.game.classes.Player;
+import fr.pantheonsorbonne.miage.game.classes.PlayerBot;
 import fr.pantheonsorbonne.miage.game.classes.PokerTableAutomatisee;
 
 public class LocalTexasHoldEm {
@@ -11,11 +12,11 @@ public class LocalTexasHoldEm {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		Player p1 = new Player("Romain", 200);
-		Player p2 = new Player("Lucian", 200);
-		Player p3 = new Player("Raymond",200);
-		Player p4 = new Player("Abel",200);
-		List <Player> playerList = new ArrayList<>();
+		PlayerBot p1 = new PlayerBot("Romain", 200);
+		PlayerBot p2 = new PlayerBot("Lucian", 200);
+		PlayerBot p3 = new PlayerBot("Raymond",200);
+		PlayerBot p4 = new PlayerBot("Abel",200);
+		List <PlayerBot> playerList = new ArrayList<>();
 		playerList.add(p1);
 		playerList.add(p2);
 		playerList.add(p3);
