@@ -53,16 +53,22 @@ public class Card  {
 	}
 
 	public boolean compareTo(Card card) {
-		return this.getCardValue().compare(card.getCardValue()) > 0;
+		return this.getCardValue().compareTo(card.getCardValue()) > 0;
 	}
 
 	public int compare(Card c1, Card c2) {
 		// TODO Auto-generated method stub
-		return c1.getCardValue().compare(c2.getCardValue());
+		return c1.getCardValue().compareTo(c2.getCardValue());
 	}
 
 	public void show() {
 		System.out.println(this);
 	}
-
+	public String toFancyString() {
+        int rank = this.getCardValue().ordinal();
+        if (rank > 10) {
+            rank++;
+        }
+        return new String(Character.toChars(this.cardColor.getCode() + rank));
+    }
 }

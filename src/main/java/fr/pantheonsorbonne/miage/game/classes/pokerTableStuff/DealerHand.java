@@ -2,6 +2,7 @@ package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 
@@ -37,9 +38,10 @@ public class DealerHand {
 	}
 	public void printHand() {
 		System.out.println("Dealer"+ " has the following hand :");
-		for (Card card : this.dealerHand) {
-			System.out.println(card);
-		}
+		
+		System.out.print(this.dealerHand.stream().map(c -> c.toFancyString()).collect(Collectors.joining(" ")));
+
+		System.out.println();
 	}
 	public void clear() {
 		this.dealerHand.clear();

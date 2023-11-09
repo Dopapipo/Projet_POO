@@ -7,21 +7,15 @@ import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBot;
 
 public class PokerTableAutomatisee extends PokerTable {
-	private List<PlayerBot> currentlyPlaying;
-	public PokerTableAutomatisee(List<PlayerBot> players) {
-		super();
-		this.currentlyPlaying=new ArrayList<>();
-		for (PlayerBot player : players) {
-			if (player.isPlaying()) {
-				this.currentlyPlaying.add(player);
-			}
-		}
+	public PokerTableAutomatisee(List<Player> players) {
+		super(players);
 	}
-
 	public PokerTableAutomatisee() {
 		super();
 	}
-
+	public boolean gameContinues() {
+		return this.howManyAreStillPlaying() > 1;
+	}
 	@Override
 	public int askForBetsWithPots(int playersInRound) {
 		boolean everyoneCalled = false;
@@ -31,12 +25,12 @@ public class PokerTableAutomatisee extends PokerTable {
 		List<Boolean> playersCalled = new ArrayList<>();
 		while (!everyoneCalled) {
 			playersCalled.clear();
-			for (PlayerBot player : this.currentlyPlaying) {
+			for (Player player : this.currentlyPlaying) {
 				// if there's more than one player to ask, player hasn't folded, isn't all in
 				// and isn't the one currently raising,
 				// ask him for bet
 				if (player.hasNotFolded() && !player.isAllIn() && !player.isCurrentlyRaising()) {
-					int answer = player.getCommand();
+					int answer = ((PlayerBot) player).getCommand();
 					switch (answer) {
 						case 1:
 							player.call(this.highestBet - player.getBet());
@@ -50,7 +44,7 @@ public class PokerTableAutomatisee extends PokerTable {
 						// if a player raises, we set him to currently raising, and all the other
 						// players to not currently raising
 						case 3:
-							int x = player.getBetAmount();
+							int x = ((PlayerBot)player).getBetAmount();
 							if (x > 0) {
 								player.bet(highestBet - player.getBet() + x);
 								if (player.isAllIn()) {

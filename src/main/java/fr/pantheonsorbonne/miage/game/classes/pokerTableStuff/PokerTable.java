@@ -16,8 +16,8 @@ import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerShow;
 import fr.pantheonsorbonne.miage.game.logic.WinConditionLogic;
 
 public class PokerTable {
-	private List<Player> playerList;
-	private List<Player> currentlyPlaying;
+	protected List<Player> playerList;
+	protected List<Player> currentlyPlaying;
 	protected DealerHand dealer;
 	protected Deck deck;
 	protected int totalBets;
@@ -67,12 +67,12 @@ public class PokerTable {
 		this.superpowerAdd = new SuperpowerAdd();
 		this.superpowerAddHidden = new SuperpowerAddHidden();
 	}
-	public int howManyAreStillPlaying() {
+	protected int howManyAreStillPlaying() {
 		return this.currentlyPlaying.size();
 	}
 
 	public void initializeBlinds() {
-		int n = this.currentlyPlaying.size();
+		int n = this.howManyAreStillPlaying();
 		if (n <= 1) {
 			return;
 		}
@@ -340,7 +340,7 @@ public class PokerTable {
 		}
 
 	}
-
+	
 	/**
 	 * Add every player to the pot, even folded ones
 	 * 
