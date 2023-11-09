@@ -7,12 +7,11 @@ import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBot;
 
 public class PokerTableAutomatisee extends PokerTable {
-	private List<PlayerBot> playerList;
 	private List<PlayerBot> currentlyPlaying;
 	public PokerTableAutomatisee(List<PlayerBot> players) {
 		super();
-		this.playerList=players;
-		for (PlayerBot player : this.playerList) {
+		this.currentlyPlaying=new ArrayList<>();
+		for (PlayerBot player : players) {
 			if (player.isPlaying()) {
 				this.currentlyPlaying.add(player);
 			}

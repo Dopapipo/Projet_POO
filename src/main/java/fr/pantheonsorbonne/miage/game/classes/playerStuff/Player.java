@@ -6,7 +6,6 @@ import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.cards.WinningCombination;
 
 public class Player implements Comparable<Player> {
-
 	private String name;
 	private int chipStack;
 	private int bet;

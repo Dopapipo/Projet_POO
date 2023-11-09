@@ -13,7 +13,7 @@ public class SuperpowerShow extends SuperpowerOther{
      * This method is used to show a random card from the other player's hand.
      */
     @Override
-    protected void use(Player player, Player other) {
+    public void use(Player player, Player other) {
         other.getPlayerHand().getPlayerHand().get((int)Math.random() * other.getPlayerHand().getPlayerHand().size()).show();
     }
     

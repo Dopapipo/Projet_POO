@@ -6,10 +6,9 @@ public abstract class SuperpowerOther extends Superpower {
     public SuperpowerOther(int cost, String name, String description){
         super(cost, name, description);
     }
-    public void useOnOther(Player player, Player other){
-        player.setChipStack(player.getChipStack() - this.getCost());
+    public void useOnOther(Player player, Player other) throws RuntimeException{
+        this.handleChecksAndUse(player);
         this.use(player, other);
-        this.hasBeenUsed = true;
     }
     
     protected abstract void use(Player player, Player other);

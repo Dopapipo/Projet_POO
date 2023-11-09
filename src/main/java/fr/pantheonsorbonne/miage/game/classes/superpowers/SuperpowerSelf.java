@@ -7,8 +7,8 @@ public abstract class SuperpowerSelf extends Superpower {
     public SuperpowerSelf(int cost, String name, String description){
         super(cost, name, description);
     }
-    public void useOnSelf(Player player,Deck deck){
-        player.setChipStack(player.getChipStack() - this.getCost());
+    public void useOnSelf(Player player,Deck deck) throws RuntimeException{
+        this.handleChecksAndUse(player);
         this.use(player,deck);
     }
     protected abstract void use(Player player, Deck deck);

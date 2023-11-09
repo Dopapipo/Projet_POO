@@ -1,38 +1,35 @@
 package fr.pantheonsorbonne.miage.game.classes.superpowers;
 
-import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
+import java.util.ArrayList;
+import java.util.List;
 
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 public abstract class Superpower {
     protected int cost;
     protected String name;
     protected String description;
-    protected boolean hasBeenUsed;
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    protected List<Player> playersThatUsedIt;
     public Superpower(int cost, String name, String description){
         this.cost = cost;
         this.name = name;
         this.description = description;
-        this.hasBeenUsed=false;
+        this.playersThatUsedIt=new ArrayList<>();
     }
-    public int getCost(){
-        return this.cost;
-    }
-    public String getName() {
-        return this.name;
-    }
-    public boolean canUse(Player player){
+    protected boolean canUse(Player player){
         return player.getChipStack() >= this.cost;
     }
-    public String getDescription() {
-        return description;
+    protected boolean hasBeenUsedBy(Player player){
+        return this.playersThatUsedIt.contains(player);
     }
-    public boolean hasBeenUsed() {
-        return hasBeenUsed;
+
+    public void resetUsage() {
+        this.playersThatUsedIt.clear();
     }
-    public void setHasBeenUsed(boolean hasBeenUsed) {
-        this.hasBeenUsed = hasBeenUsed;
+    protected void handleChecksAndUse(Player player) {
+        if (!this.canUse(player)) throw new RuntimeException("Not enough chips");
+        if (this.hasBeenUsedBy(player)) throw new RuntimeException("Already used");
+        player.setChipStack(player.getChipStack() - this.cost);
+        this.playersThatUsedIt.add(player);
     }
 
 
