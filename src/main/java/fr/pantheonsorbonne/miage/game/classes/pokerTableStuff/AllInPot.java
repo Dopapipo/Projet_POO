@@ -1,6 +1,8 @@
-package fr.pantheonsorbonne.miage.game.classes;
+package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 
 import java.util.ArrayList;
+
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 /**
  * An all-in pot's purpose is to payout all-in players accordingly in case they win.
  */

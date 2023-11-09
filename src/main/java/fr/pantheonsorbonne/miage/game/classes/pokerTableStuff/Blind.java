@@ -1,4 +1,6 @@
-package fr.pantheonsorbonne.miage.game.classes;
+package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
+
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 
 public class Blind {
 	// A blind has a value and what player needs to pay it

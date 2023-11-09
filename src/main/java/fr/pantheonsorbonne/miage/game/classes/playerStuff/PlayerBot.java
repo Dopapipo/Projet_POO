@@ -1,4 +1,4 @@
-package fr.pantheonsorbonne.miage.game.classes;
+package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
 public class PlayerBot extends Player {
 

@@ -3,9 +3,8 @@ package fr.pantheonsorbonne.miage.game.main;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.pantheonsorbonne.miage.game.classes.Player;
-import fr.pantheonsorbonne.miage.game.classes.PlayerBot;
-import fr.pantheonsorbonne.miage.game.classes.PokerTableAutomatisee;
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBot;
+import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.PokerTableAutomatisee;
 
 public class LocalTexasHoldEm {
 

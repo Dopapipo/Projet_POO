@@ -1,7 +1,9 @@
-package fr.pantheonsorbonne.miage.game.classes;
+package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 
 public class DealerHand {
 	private List<Card> dealerHand;

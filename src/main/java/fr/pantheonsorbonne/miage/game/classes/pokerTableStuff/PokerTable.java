@@ -1,10 +1,12 @@
-package fr.pantheonsorbonne.miage.game.classes;
+package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerHand;
 import fr.pantheonsorbonne.miage.game.logic.WinConditionLogic;
 
 //TODO :Separate display and logic for PokerTable

@@ -8,13 +8,13 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import fr.pantheonsorbonne.miage.game.classes.Card;
-import fr.pantheonsorbonne.miage.game.classes.CardColor;
-import fr.pantheonsorbonne.miage.game.classes.CardValue;
-import fr.pantheonsorbonne.miage.game.classes.Player;
-import fr.pantheonsorbonne.miage.game.classes.PlayerHand;
-import fr.pantheonsorbonne.miage.game.classes.PokerTable;
-import fr.pantheonsorbonne.miage.game.classes.PokerTableAutomatisee;
+import fr.pantheonsorbonne.miage.game.classes.cards.Card;
+import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
+import fr.pantheonsorbonne.miage.game.classes.cards.CardValue;
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerHand;
+import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.PokerTable;
+import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.PokerTableAutomatisee;
 
 class PokerTableTest {
 

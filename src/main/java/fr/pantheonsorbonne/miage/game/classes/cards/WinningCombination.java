@@ -1,4 +1,4 @@
-package fr.pantheonsorbonne.miage.game.classes;
+package fr.pantheonsorbonne.miage.game.classes.cards;
 
 public class WinningCombination implements Comparable<WinningCombination> {
 	private WinCondition winCondition;

@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.pantheonsorbonne.miage.game.classes.Card;
-import fr.pantheonsorbonne.miage.game.classes.CardColor;
-import fr.pantheonsorbonne.miage.game.classes.CardValue;
-import fr.pantheonsorbonne.miage.game.classes.DealerHand;
-import fr.pantheonsorbonne.miage.game.classes.PlayerHand;
-import fr.pantheonsorbonne.miage.game.classes.WinCondition;
-import fr.pantheonsorbonne.miage.game.classes.WinningCombination;
+import fr.pantheonsorbonne.miage.game.classes.cards.Card;
+import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
+import fr.pantheonsorbonne.miage.game.classes.cards.CardValue;
+import fr.pantheonsorbonne.miage.game.classes.cards.WinCondition;
+import fr.pantheonsorbonne.miage.game.classes.cards.WinningCombination;
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerHand;
+import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.DealerHand;
 
 public class WinConditionLogic {
 

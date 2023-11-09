@@ -1,4 +1,6 @@
-package fr.pantheonsorbonne.miage.game.classes;
+package fr.pantheonsorbonne.miage.game.classes.superpowers;
+
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 
 public abstract class SuperpowerOther extends Superpower {
     public SuperpowerOther(int cost, String name, String description){
@@ -10,5 +12,5 @@ public abstract class SuperpowerOther extends Superpower {
         this.hasBeenUsed = true;
     }
     
-    public abstract void use(Player player, Player other);
+    protected abstract void use(Player player, Player other);
 }

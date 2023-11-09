@@ -1,7 +1,9 @@
-package fr.pantheonsorbonne.miage.game.classes;
+package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 /**
  * A Pot is used to distribute gains at the end of a round,
  * and holds all the bets. There can be multiple pots when a player goes all-in,

@@ -1,6 +1,9 @@
-package fr.pantheonsorbonne.miage.game.classes;
+package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
 import java.util.ArrayList;
+
+import fr.pantheonsorbonne.miage.game.classes.cards.Card;
+import fr.pantheonsorbonne.miage.game.classes.cards.WinningCombination;
 
 public class Player implements Comparable<Player> {
 
