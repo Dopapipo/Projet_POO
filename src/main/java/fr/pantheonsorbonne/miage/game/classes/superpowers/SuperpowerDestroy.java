@@ -11,7 +11,7 @@ public class SuperpowerDestroy extends SuperpowerOther{
     }
     @Override
     public void use(Player player, Player other){
-        other.getPlayerHand().getPlayerHand().remove((int)Math.random() * other.getPlayerHand().getPlayerHand().size());
+        other.getPlayerHand().getHand().remove((int)Math.random() * other.getPlayerHand().getHand().size());
     }
     
 }

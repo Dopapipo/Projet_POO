@@ -4,11 +4,14 @@ public class Card  {
 	// les attributs
 	private CardValue cardValue;
 	private CardColor cardColor;
+	//will be used in PokerTable to add face up cards to every player's map of known cards
+	private boolean faceUp;
 
 	// le constructeur
 	public Card(CardValue value, CardColor color) {
 		this.cardValue = value;
 		this.cardColor = color;
+		this.faceUp=false;
 	}
 
 	public CardValue getCardValue() {
@@ -56,13 +59,12 @@ public class Card  {
 		return this.getCardValue().compareTo(card.getCardValue()) > 0;
 	}
 
-	public int compare(Card c1, Card c2) {
-		// TODO Auto-generated method stub
-		return c1.getCardValue().compareTo(c2.getCardValue());
+	public boolean isFaceUp() {
+		return faceUp;
 	}
 
 	public void show() {
-		System.out.println(this);
+		this.faceUp = true;
 	}
 	public String toFancyString() {
         int rank = this.getCardValue().ordinal();

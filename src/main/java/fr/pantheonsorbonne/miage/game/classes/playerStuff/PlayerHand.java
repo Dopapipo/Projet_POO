@@ -7,7 +7,7 @@ import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 public class PlayerHand {
 	private List<Card> hand;
 	
-	public List<Card> getPlayerHand() {
+	public List<Card> getHand() {
 		return this.hand;
 	}
 	

@@ -16,7 +16,7 @@ public class WinningCombination implements Comparable<WinningCombination> {
 			return 1;
 		}
 		if (this.winCondition.compareTo(wc.winCondition)==0) {
-			return this.cardValue.compare(wc.cardValue);
+			return this.cardValue.compareTo(wc.cardValue);
 		}
 		return -1;
 	}

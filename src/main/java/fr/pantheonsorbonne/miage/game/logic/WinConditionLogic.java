@@ -32,7 +32,7 @@ public class WinConditionLogic {
 		for (Card card : dealerHand.getDealerHand()) {
 			consideredHand.add(card);
 		}
-		for (Card card : playerHand.getPlayerHand()) {
+		for (Card card : playerHand.getHand()) {
 			consideredHand.add(card);
 		}
 		// We will check for the highest values of WinningCombination first.
@@ -95,7 +95,7 @@ public class WinConditionLogic {
 				CardColor flushColor = color;
 				CardValue maxCard = CardValue.TWO;
 				for (Card card : hand) {
-					if (card.getCardColor() == flushColor && card.getCardValue().compare(maxCard) > 0) {
+					if (card.getCardColor() == flushColor && card.getCardValue().compareTo(maxCard) > 0) {
 						maxCard = card.getCardValue();
 					}
 				}
@@ -120,7 +120,7 @@ public class WinConditionLogic {
 		boolean flag = false;
 		int buffer = 1;
 		// sort hand by increasing cardValue 
-		Comparator<Card> comparator = (Card c1, Card c2) -> c1.getCardValue().compare(c2.getCardValue());
+		Comparator<Card> comparator = (Card c1, Card c2) -> c1.getCardValue().compareTo(c2.getCardValue());
 		Collections.sort(hand, comparator);
 
 		// There's up to 7 cards in a hand, but a straight is 5 cards. We have to be
@@ -236,7 +236,7 @@ public class WinConditionLogic {
 	private static CardValue findHighestCard(List<WinningCombination> winningHands) {
 		CardValue maxValue = null;
 		for (WinningCombination wc : winningHands) {
-			if (wc.getCardValue().compare(maxValue) > 0) {
+			if (wc.getCardValue().compareTo(maxValue) > 0) {
 				maxValue = wc.getCardValue();
 			}
 		}
@@ -252,7 +252,7 @@ public class WinConditionLogic {
 	private static CardValue findHighestCardInCardList(List<Card> cardList) {
 		CardValue maxValue = null;
 		for (Card card : cardList) {
-			if (card.getCardValue().compare(maxValue) > 0) {
+			if (card.getCardValue().compareTo(maxValue) > 0) {
 				maxValue = card.getCardValue();
 			}
 		}

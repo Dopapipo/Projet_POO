@@ -1,5 +1,9 @@
 package fr.pantheonsorbonne.miage.game.classes.superpowers;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 
 public class SuperpowerShow extends SuperpowerOther{
@@ -14,7 +18,10 @@ public class SuperpowerShow extends SuperpowerOther{
      */
     @Override
     public void use(Player player, Player other) {
-        other.getPlayerHand().getPlayerHand().get((int)Math.random() * other.getPlayerHand().getPlayerHand().size()).show();
+        player.getCardsKnownFromOtherPlayers().putIfAbsent(other,(Set<Card>)new HashSet<Card>());
+        Card card = other.getPlayerHand().getHand().get(((int) Math.random() * other.getPlayerHand().getHand().size()));
+        player.getCardsKnownFromOtherPlayers().get(other).add((card));
+        card.show();
     }
     
 }

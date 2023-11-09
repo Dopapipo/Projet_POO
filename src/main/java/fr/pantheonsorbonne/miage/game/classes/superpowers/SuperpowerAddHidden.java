@@ -12,7 +12,7 @@ public class SuperpowerAddHidden extends SuperpowerSelf{
 
     @Override
     protected void use(Player player,Deck deck) {
-        player.getPlayerHand().getPlayerHand().add(deck.draw());
+        player.getPlayerHand().getHand().add(deck.draw());
     }
     
 }

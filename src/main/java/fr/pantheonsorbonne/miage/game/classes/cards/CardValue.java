@@ -55,4 +55,16 @@ public enum CardValue {
     public int getRank() {
         return rank;
     }
+	public CardValue getNext() {
+		if (this == CardValue.ACE) {
+			return CardValue.TWO;
+		}
+		return CardValue.values()[this.ordinal() + 1];
+	}
+	public CardValue max(CardValue other) {
+		if (this.compareTo(other) > 0) {
+			return this;
+		}
+		return other;
+	}
 }

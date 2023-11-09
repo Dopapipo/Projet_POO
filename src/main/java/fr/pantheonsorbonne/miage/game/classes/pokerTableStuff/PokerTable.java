@@ -2,9 +2,11 @@ package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
+import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerHand;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerAdd;
@@ -640,6 +642,21 @@ public class PokerTable {
 				// add a hidden card to your hand
 				this.superpowerAddHidden.useOnSelf(player,this.deck);
 				break;
+		}
+	}
+	
+	public void updateShownCards() {
+		for (Player player : this.currentlyPlaying) {
+			for (Player otherPlayer : this.currentlyPlaying) {
+				if (player != otherPlayer) {
+					for (Card card : otherPlayer.getPlayerHand().getHand()) {
+						if (card.isFaceUp()) {
+							player.getCardsKnownFromOtherPlayers().putIfAbsent(otherPlayer, new HashSet<Card>());
+							player.getCardsKnownFromOtherPlayers().get(otherPlayer).add(card);
+						}
+					}
+				}
+			}
 		}
 	}
 	

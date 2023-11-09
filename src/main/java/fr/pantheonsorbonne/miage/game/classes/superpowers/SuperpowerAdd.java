@@ -14,7 +14,7 @@ public class SuperpowerAdd extends SuperpowerSelf{
     @Override
     protected void use(Player player,Deck deck) {
         Card card = deck.draw();
-        player.getPlayerHand().getPlayerHand().add(card);
+        player.getPlayerHand().getHand().add(card);
         card.show();
     }
     

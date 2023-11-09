@@ -1,6 +1,9 @@
 package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.cards.WinningCombination;
@@ -12,9 +15,10 @@ public class Player implements Comparable<Player> {
 	private WinningCombination combination;
 	private PlayerHand playerHand;
 	private boolean playing;
-	private boolean hasNotFolded = true;
+	private boolean hasNotFolded;
 	private boolean currentlyRaising;
-
+	
+	protected Map <Player,Set<Card>> cardsKnownFromOtherPlayers;
 	public Player(String name) {
 		this(name, 0);
 	}
@@ -24,6 +28,7 @@ public class Player implements Comparable<Player> {
 		this.chipStack = chips;
 		this.playing = (chips > 0);
 		this.hasNotFolded = true;
+		this.cardsKnownFromOtherPlayers=new HashMap<>();
 	}
 
 	public String getName() {
@@ -91,7 +96,7 @@ public class Player implements Comparable<Player> {
 
 	public void printHand() {
 		System.out.println(this.name + " has the following hand :");
-		for (Card card : this.playerHand.getPlayerHand()) {
+		for (Card card : this.playerHand.getHand()) {
 			System.out.println(card);
 		}
 	}
@@ -188,6 +193,9 @@ public class Player implements Comparable<Player> {
 	}
 	public void removeRandomCard() {
 		this.playerHand.removeRandomCard();
+	}
+	public Map<Player, Set<Card>> getCardsKnownFromOtherPlayers() {
+		return cardsKnownFromOtherPlayers;
 	}
 	
 

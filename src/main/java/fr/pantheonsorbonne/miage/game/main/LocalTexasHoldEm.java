@@ -1,10 +1,5 @@
 package fr.pantheonsorbonne.miage.game.main;
 
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
