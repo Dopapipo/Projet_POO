@@ -4,6 +4,9 @@ import java.util.List;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 
+
+
+
 public class PlayerHand {
 	private List<Card> hand;
 	
@@ -29,5 +32,6 @@ public class PlayerHand {
 			card.show();
 		}
 	}
+	
 	
 }

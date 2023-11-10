@@ -25,7 +25,7 @@ public abstract class Superpower {
     public void resetUsage() {
         this.playersThatUsedIt.clear();
     }
-    protected void handleChecksAndUse(Player player) {
+    protected void handleChecksAndUse(Player player) throws RuntimeException {
         if (!this.canUse(player)) throw new RuntimeException("Not enough chips");
         if (this.hasBeenUsedBy(player)) throw new RuntimeException("Already used");
         player.setChipStack(player.getChipStack() - this.cost);

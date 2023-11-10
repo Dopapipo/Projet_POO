@@ -37,5 +37,12 @@ public class WinningCombination implements Comparable<WinningCombination> {
 	public String toString() {
 		return this.cardValue +" " + this.winCondition;
 	}
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof WinningCombination) {
+			return this.compareTo((WinningCombination)other)==0;
+		}
+		return false;
+	}
 	
 }

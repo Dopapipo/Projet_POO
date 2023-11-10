@@ -54,9 +54,9 @@ public class Card  {
 	public boolean equals(Card card) {
 		return this.getCardValue() == card.getCardValue();
 	}
-
+	
 	public boolean compareTo(Card card) {
-		return this.getCardValue().compareTo(card.getCardValue()) > 0;
+		return this.getCardValue().compare(card.getCardValue()) > 0;
 	}
 
 	public boolean isFaceUp() {

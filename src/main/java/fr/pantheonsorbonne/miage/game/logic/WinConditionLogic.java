@@ -1,6 +1,7 @@
 package fr.pantheonsorbonne.miage.game.logic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -25,28 +26,25 @@ public class WinConditionLogic {
 	 * @param playerHand : The playerHand is updated when cards are dealt
 	 * @return a <WinningCombination> of the highest value in a hand
 	 */
-
-	public static WinningCombination findWinningCombination(DealerHand dealerHand, PlayerHand playerHand) {
-		List<Card> consideredHand = new ArrayList<>();
-
-		for (Card card : dealerHand.getDealerHand()) {
-			consideredHand.add(card);
-		}
-		for (Card card : playerHand.getHand()) {
-			consideredHand.add(card);
-		}
+	public static WinningCombination findWinningCombination(List<Card> consideredHand) {
 		// We will check for the highest values of WinningCombination first.
 
 		// check for royal flush and straight flush :
 		WinningCombination straight = straight(consideredHand);
 		WinningCombination flush = flush(consideredHand);
+
 		if (flush != null && straight != null) {
+			List<Card> flushList = getFlushList(consideredHand);
+			WinningCombination straightFlush = straight(flushList);
 			// check for royal flush:
-			if (flush.getCardValue() == CardValue.ACE) {
+			if (straightFlush != null && flush.getCardValue() == CardValue.ACE) {
 				return new WinningCombination(WinCondition.ROYAL_FLUSH, CardValue.ACE);
 			}
-			// else we only have a straight flush
-			return new WinningCombination(WinCondition.STRAIGHT_FLUSH, flush.getCardValue());
+			// check for straight flush:
+			if (straightFlush != null) {
+				return new WinningCombination(WinCondition.STRAIGHT_FLUSH, flush.getCardValue());
+			}
+			
 		}
 		// check for a fullHouse :
 		WinningCombination multipleCards = findMultipleCardsAndFullHouse(consideredHand);
@@ -69,7 +67,50 @@ public class WinConditionLogic {
 		// If we have none of the above, we only have a High Card :(
 		return new WinningCombination(WinCondition.HIGH_CARD, findHighestCardInCardList(consideredHand));
 	}
+	public static WinningCombination findWinningCombination(DealerHand dealerHand, PlayerHand playerHand) {
+		List<Card> consideredHand = new ArrayList<>();
 
+		for (Card card : dealerHand.getDealerHand()) {
+			consideredHand.add(card);
+		}
+		for (Card card : playerHand.getHand()) {
+			consideredHand.add(card);
+		}
+		return findWinningCombination(consideredHand);
+	}
+	/**
+	 * returns the list of flush cards if there's a flush (useful to check for straight flush)
+	 * 
+	 * @param hand
+	 * @return null if there's no flush, list of cards from flush otherwise
+	 */
+	private static List<Card> getFlushList(List<Card> hand) {
+		Map<CardColor, Integer> colors = new HashMap<>();
+		List<Card> toReturn = new ArrayList<>();
+		// count the cards for each color
+		for (Card card : hand) {
+			Integer hasBeenPut = colors.putIfAbsent(card.getCardColor(), 1);
+			if (hasBeenPut != null) {
+				colors.put(card.getCardColor(), colors.get(card.getCardColor()) + 1);
+			}
+		}
+		// check every color that we have a card from
+		for (CardColor color : colors.keySet()) {
+			// if we have at least 5 cards of the same color
+			if (colors.get(color) >= 5) {
+				// add the cards of that color to the list
+				for (Card card : hand) {
+					if (card.getCardColor() == color) {
+						toReturn.add(card);
+					}
+				}
+				return toReturn;
+			}
+		}
+		return null;
+
+	}
+	
 	/**
 	 * Checks for a flush in an List of cards. To use after merging dealer and
 	 * player hands
@@ -95,7 +136,7 @@ public class WinConditionLogic {
 				CardColor flushColor = color;
 				CardValue maxCard = CardValue.TWO;
 				for (Card card : hand) {
-					if (card.getCardColor() == flushColor && card.getCardValue().compareTo(maxCard) > 0) {
+					if (card.getCardColor() == flushColor && card.getCardValue().compare(maxCard) > 0) {
 						maxCard = card.getCardValue();
 					}
 				}
@@ -119,8 +160,8 @@ public class WinConditionLogic {
 	private static WinningCombination straight(List<Card> hand) {
 		boolean flag = false;
 		int buffer = 1;
-		// sort hand by increasing cardValue 
-		Comparator<Card> comparator = (Card c1, Card c2) -> c1.getCardValue().compareTo(c2.getCardValue());
+		// sort hand by increasing cardValue
+		Comparator<Card> comparator = (Card c1, Card c2) -> c1.getCardValue().compare(c2.getCardValue());
 		Collections.sort(hand, comparator);
 
 		// There's up to 7 cards in a hand, but a straight is 5 cards. We have to be
@@ -130,7 +171,10 @@ public class WinConditionLogic {
 			// check if the next CardValue is equal to the value of the next card
 			if (hand.get(i).getCardValue().getNext() == hand.get(i + 1).getCardValue()) {
 				buffer++;
-			} else { // reset the buffer if it's not.
+			} 
+			//reset the buffer only if the next card is not also the same value
+			//Because a 2,3,4,5,5,6,KING hand is still a straight for instance.
+			else if (hand.get(i).getCardValue() != hand.get(i + 1).getCardValue()){ 
 				buffer = 1;
 			}
 			// Since we sorted the hand beforehand, when buffer>=5, the highest card from
@@ -147,6 +191,12 @@ public class WinConditionLogic {
 		// because of some cases (e.g. a 2 3 4 5 6 QUEEN KING sorted hand)
 		if (flag) {
 			return new WinningCombination(WinCondition.STRAIGHT, hand.get(highestCardIndex).getCardValue());
+		}
+		// Too lazy to implement the ACE,TWO,THREE,FOUR,FIVE straight in a clean way so:
+		List<CardValue> aceLowStraight = Arrays.asList(
+				new CardValue[] { CardValue.ACE, CardValue.TWO, CardValue.THREE, CardValue.FOUR, CardValue.FIVE });
+		if (containsCardValue(aceLowStraight, hand)) {
+			return new WinningCombination(WinCondition.STRAIGHT, CardValue.FIVE);
 		}
 		return null;
 	}
@@ -189,15 +239,15 @@ public class WinConditionLogic {
 		List<WinningCombination> threes = new ArrayList<>();
 		for (CardValue cardValue : multipleCards.keySet()) {
 			switch (multipleCards.get(cardValue)) {
-			case 2:
-				pairs.add(new WinningCombination(WinCondition.PAIR, cardValue));
-				break;
-			case 3:
-				threes.add(new WinningCombination(WinCondition.THREE_OF_A_KIND, cardValue));
-				break;
-			case 4: // if we found 4 cards that are the same, we found the highest
-					// possible hand in the set of WinConditions we're checking for.
-				return new WinningCombination(WinCondition.FOUR_OF_A_KIND, cardValue);
+				case 2:
+					pairs.add(new WinningCombination(WinCondition.PAIR, cardValue));
+					break;
+				case 3:
+					threes.add(new WinningCombination(WinCondition.THREE_OF_A_KIND, cardValue));
+					break;
+				case 4: // if we found 4 cards that are the same, we found the highest
+						// possible hand in the set of WinConditions we're checking for.
+					return new WinningCombination(WinCondition.FOUR_OF_A_KIND, cardValue);
 
 			}
 		}
@@ -236,7 +286,7 @@ public class WinConditionLogic {
 	private static CardValue findHighestCard(List<WinningCombination> winningHands) {
 		CardValue maxValue = null;
 		for (WinningCombination wc : winningHands) {
-			if (wc.getCardValue().compareTo(maxValue) > 0) {
+			if (wc.getCardValue().compare(maxValue) > 0) {
 				maxValue = wc.getCardValue();
 			}
 		}
@@ -252,10 +302,26 @@ public class WinConditionLogic {
 	private static CardValue findHighestCardInCardList(List<Card> cardList) {
 		CardValue maxValue = null;
 		for (Card card : cardList) {
-			if (card.getCardValue().compareTo(maxValue) > 0) {
+			if (card.getCardValue().compare(maxValue) > 0) {
 				maxValue = card.getCardValue();
 			}
 		}
 		return maxValue;
+	}
+
+	private static boolean containsCardValue(CardValue value, List<Card> hand) {
+		for (Card card : hand) {
+			if (card.getCardValue() == value)
+				return true;
+		}
+		return false;
+	}
+
+	public static boolean containsCardValue(List<CardValue> values, List<Card> hand) {
+		for (CardValue value : values) {
+			if (!containsCardValue(value, hand))
+				return false;
+		}
+		return true;
 	}
 }

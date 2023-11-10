@@ -33,32 +33,17 @@ public class PokerTableAutomatisee extends PokerTable {
 					int answer = ((PlayerBot) player).getCommand();
 					switch (answer) {
 						case 1:
-							player.call(this.highestBet - player.getBet());
-							player.setCurrentlyRaising(false);
+							this.call(player);
 							break;
 						case 2:
 							player.fold();
-							player.setCurrentlyRaising(false);
 							playersInRound--;
 							break;
 						// if a player raises, we set him to currently raising, and all the other
 						// players to not currently raising
 						case 3:
 							int x = ((PlayerBot)player).getBetAmount();
-							if (x > 0) {
-								player.bet(highestBet - player.getBet() + x);
-								if (player.isAllIn()) {
-									this.makePotForAllInPlayer(player);
-								}
-								for (Player aPlayer : this.currentlyPlaying) {
-									aPlayer.setCurrentlyRaising(false);
-								}
-								player.setCurrentlyRaising((true));
-								playersCalled.add(false);
-							} else {
-								player.call(this.highestBet - player.getBet());
-								player.setCurrentlyRaising(false);
-							}
+							this.raise(player, x);
 							break;
 					}
 				}
@@ -98,7 +83,6 @@ public class PokerTableAutomatisee extends PokerTable {
 		playersInRound = this.askForBetsWithPots(playersInRound);
 		dealer.river();
 		this.askForBetsWithPots(playersInRound);
-		System.out.println("highest bet : " + this.highestBet);
 		for (Player player : this.currentlyPlaying) {
 			System.out.println(player.getName() + " is betting " + player.getBet());
 		}

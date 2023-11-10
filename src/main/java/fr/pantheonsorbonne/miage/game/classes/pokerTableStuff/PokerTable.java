@@ -420,11 +420,16 @@ public class PokerTable {
 							playersInRound--;
 							break;
 						case 3:
-							this.raise(player);
+						System.out.println("How much do you want to raise by? (negative will call!)");
+						int x = scanner.nextInt();
+							this.raise(player,x);
 							break;
 					}
 				}
 				this.findHighestBet();
+				if (player.isAllIn()) {
+					playersInRound--;
+				}
 			}
 			// If any player raised during the for loop, there will be at least
 			// a false in the list, so the function will loop again
@@ -595,9 +600,7 @@ public class PokerTable {
 		player.fold();
 		player.setCurrentlyRaising(false);
 	}
-	public void raise(Player player) {
-		System.out.println("How much do you want to raise by? (negative will call!)");
-		int x = scanner.nextInt();
+	public void raise(Player player, int x) {
 		if (x > 0) {
 			for (Player aPlayer : this.currentlyPlaying) {
 				aPlayer.setCurrentlyRaising(false);
@@ -618,18 +621,30 @@ public class PokerTable {
 			case 1:
 				// see a random card from a player
 
-				try {
-					int i = (int)Math.random() * this.currentlyPlaying.size();
-					this.superpowerShow.useOnOther(player,this.currentlyPlaying.get(i));
-				} catch (RuntimeException e) {
+				try {	
+						System.out.println("Enter player name to use on");
+						String name = scanner.next();
+						for (Player otherPlayer : this.currentlyPlaying) {
+							if (otherPlayer.getName().equals(name)) {
+								this.superpowerShow.useOnOther(player, otherPlayer);
+							}
+						}
+						
+					}
+				 catch (RuntimeException e) {
 					e.printStackTrace();
 				}
 				break;
 			case 2:
 				// destroy a random card from a player
 				try {
-					int i = (int)Math.random() * this.currentlyPlaying.size();
-					this.superpowerDestroy.useOnOther(player,this.currentlyPlaying.get(i));
+					System.out.println("Enter player name to use on");
+						String name = scanner.next();
+						for (Player otherPlayer : this.currentlyPlaying) {
+							if (otherPlayer.getName().equals(name)) {
+								this.superpowerDestroy.useOnOther(player, otherPlayer);
+							}
+						}
 				} catch (RuntimeException e) {
 					e.printStackTrace();
 				}

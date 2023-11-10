@@ -19,7 +19,11 @@ public class SuperpowerShow extends SuperpowerOther{
     @Override
     public void use(Player player, Player other) {
         player.getCardsKnownFromOtherPlayers().putIfAbsent(other,(Set<Card>)new HashSet<Card>());
-        Card card = other.getPlayerHand().getHand().get(((int) Math.random() * other.getPlayerHand().getHand().size()));
+        int k;
+        do {
+            k=((int) Math.random() * other.getPlayerHand().getHand().size());
+        } while(other.getPlayerHand().getHand().get(k).isFaceUp());
+        Card card = other.getPlayerHand().getHand().get(k);
         player.getCardsKnownFromOtherPlayers().get(other).add((card));
         card.show();
     }

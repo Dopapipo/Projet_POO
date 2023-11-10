@@ -38,10 +38,12 @@ public class DealerHand {
 	}
 	public void printHand() {
 		System.out.println("Dealer"+ " has the following hand :");
-		
-		System.out.print(this.dealerHand.stream().map(c -> c.toFancyString()).collect(Collectors.joining(" ")));
+		for (Card card: this.dealerHand) {
+			System.out.println(card);
+		}
+		//System.out.print(this.dealerHand.stream().map(c -> c.toFancyString()).collect(Collectors.joining(" ")));
 
-		System.out.println();
+		//System.out.println();
 	}
 	public void clear() {
 		this.dealerHand.clear();
