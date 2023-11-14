@@ -26,6 +26,8 @@ public class PokerTableAutomatisee extends PokerTable {
 		while (!everyoneCalled) {
 			playersCalled.clear();
 			for (Player player : this.currentlyPlaying) {
+				//ask for superpower use
+				this.useSuperpower(player);
 				// if there's more than one player to ask, player hasn't folded, isn't all in
 				// and isn't the one currently raising,
 				// ask him for bet
@@ -85,6 +87,61 @@ public class PokerTableAutomatisee extends PokerTable {
 		this.askForBetsWithPots(playersInRound);
 		for (Player player : this.currentlyPlaying) {
 			System.out.println(player.getName() + " is betting " + player.getBet());
+		}
+	}
+	@Override
+	public int askForSuperpowerUse(Player player) {
+		return ((PlayerBot)player).getSuperpower();
+	}
+	
+
+
+	@Override
+	protected void useSuperpower(Player player) {
+		int answer = askForSuperpowerUse(player);
+		if (answer==0) {
+			return;
+		}
+		switch (answer) {
+			case 1:
+				// see a random card from a player
+
+				try {	
+						Player otherPlayer = ((PlayerBot)player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
+						superpowerShow.useOnOther(player, otherPlayer);
+						
+					}
+				 catch (Exception e) {
+					System.out.println("You can't use this superpower right now");
+				}
+				break;
+			case 2:
+				// destroy a random card from a player
+				try {
+					Player otherPlayer = ((PlayerBot)player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
+					superpowerDestroy.useOnOther(player, otherPlayer);
+				} catch (Exception e) {
+					System.out.println("You can't use this superpower right now");
+				}
+				break;
+			case 3:
+				// add a card to your hand (shown)
+				try {
+					superpowerAdd.useOnSelf(player, this.deck);
+				} catch (RuntimeException e) {
+					System.out.println("You can't use this superpower right now");
+				}
+				break;
+			case 4:
+				// add a hidden card to your hand
+				try {
+
+					this.superpowerAddHidden.useOnSelf(player,this.deck);
+				}
+				catch (RuntimeException e) {
+					System.out.println("You can't use this superpower right now");
+				}
+				break;
 		}
 	}
 

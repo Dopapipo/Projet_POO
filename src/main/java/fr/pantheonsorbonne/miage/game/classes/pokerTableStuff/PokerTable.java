@@ -35,7 +35,7 @@ public class PokerTable {
 	protected SuperpowerOther superpowerDestroy;
 	protected SuperpowerSelf superpowerAddHidden;
 	protected Scanner scanner = new Scanner(System.in);
-
+	
 	protected List<Pot> pots = new ArrayList<>();
 
 	public PokerTable() {
@@ -398,6 +398,8 @@ public class PokerTable {
 		// We ask every other player for a call/fold/raise
 		while (!everyoneCalled) {
 			for (Player player : this.currentlyPlaying) {
+				//use superpower if player wants to use it
+				this.useSuperpower(player);
 				// if there's more than one player to ask, player hasn't folded, isn't all in
 				// and isn't the one currently raising,
 				// ask him for bet
@@ -430,6 +432,7 @@ public class PokerTable {
 				if (player.isAllIn()) {
 					playersInRound--;
 				}
+				this.updateShownCards();
 			}
 			// If any player raised during the for loop, there will be at least
 			// a false in the list, so the function will loop again
@@ -450,7 +453,7 @@ public class PokerTable {
 		return playersInRound;
 	}
 
-	public int makeAllInPotIfNecessary(int playersInRound) {
+	protected int makeAllInPotIfNecessary(int playersInRound) {
 		for (Player player : this.currentlyPlaying) {
 
 			if (player.hasNotFolded() && player.isAllIn()) {
@@ -467,7 +470,7 @@ public class PokerTable {
 	 * A player is still competing for the base pot when he managed to pay through
 	 * every raise without being all in OR if he's all in but with the most chips
 	 */
-	public void addCompetingPlayersToBasePot() {
+	protected void addCompetingPlayersToBasePot() {
 		for (Player player : this.currentlyPlaying) {
 			if (player.hasNotFolded() && player.getBet() >= this.pots.get(0).getThresholdBet()) {
 				this.pots.get(0).addPlayer(player);
@@ -475,11 +478,11 @@ public class PokerTable {
 		}
 	}
 
-	public void setThresholdForBasePot() {
+	protected void setThresholdForBasePot() {
 		this.pots.get(0).setThresholdBet(this.highestBet);
 	}
 
-	public void resetTable() {
+	protected void resetTable() {
 		kickBrokePlayers();
 		deck.resetDeck();
 		dealer.clear();
@@ -494,7 +497,7 @@ public class PokerTable {
 		resetPlayers();
 	}
 
-	public void payoutPot(Pot pot) {
+	protected void payoutPot(Pot pot) {
 		int value = pot.getValue();
 		if (value <= 0) {
 			return;
@@ -516,7 +519,7 @@ public class PokerTable {
 		}
 	}
 
-	public void printAllHands() {
+	protected void printAllHands() {
 		for (Player player : this.currentlyPlaying) {
 			if (player.hasNotFolded()) {
 				System.out.println(player.getName() + " has the hand: " + player.getWinningCombination());
@@ -525,7 +528,7 @@ public class PokerTable {
 		}
 	}
 
-	public void turnCards() {
+	protected void turnCards() {
 		this.giveCards();
 		this.initializeBlinds();
 		this.askBlindPayment();
@@ -580,7 +583,7 @@ public class PokerTable {
 		return this.currentlyPlaying;
 	}
 
-	public int askForSuperpowerUse(Player player) {
+	protected int askForSuperpowerUse(Player player) {
 		System.out.println(
 				"Do you want to use any power? 0: no, 1: see a random card from a player, 2: destroy a random card from a player, 3: add a card to your hand (shown),4: add a hidden card to your hand");
 		System.out.println("Superpower cost: 1 : 50 chips; 2 - 100 chips; 3 - 75 chips; 4- 125 chips");
@@ -592,15 +595,15 @@ public class PokerTable {
 		return answer;
 	}
 
-	public void call(Player player) {
+	protected void call(Player player) {
 		player.call(this.highestBet - player.getBet());
 		player.setCurrentlyRaising(false);
 	}
-	public void fold(Player player) {
+	protected void fold(Player player) {
 		player.fold();
 		player.setCurrentlyRaising(false);
 	}
-	public void raise(Player player, int x) {
+	protected void raise(Player player, int x) {
 		if (x > 0) {
 			for (Player aPlayer : this.currentlyPlaying) {
 				aPlayer.setCurrentlyRaising(false);
@@ -612,7 +615,7 @@ public class PokerTable {
 			player.setCurrentlyRaising(false);
 		}
 	}
-	public void useSuperpower(Player player) {
+	protected void useSuperpower(Player player) {
 		int answer = askForSuperpowerUse(player);
 		if (answer==0) {
 			return;
@@ -622,13 +625,8 @@ public class PokerTable {
 				// see a random card from a player
 
 				try {	
-						System.out.println("Enter player name to use on");
-						String name = scanner.next();
-						for (Player otherPlayer : this.currentlyPlaying) {
-							if (otherPlayer.getName().equals(name)) {
-								this.superpowerShow.useOnOther(player, otherPlayer);
-							}
-						}
+						Player otherPlayer = this.askForPlayerToUseSuperpowerOn();
+						superpowerShow.useOnOther(player, otherPlayer);
 						
 					}
 				 catch (RuntimeException e) {
@@ -638,13 +636,8 @@ public class PokerTable {
 			case 2:
 				// destroy a random card from a player
 				try {
-					System.out.println("Enter player name to use on");
-						String name = scanner.next();
-						for (Player otherPlayer : this.currentlyPlaying) {
-							if (otherPlayer.getName().equals(name)) {
-								this.superpowerDestroy.useOnOther(player, otherPlayer);
-							}
-						}
+					Player otherPlayer = this.askForPlayerToUseSuperpowerOn();
+					superpowerDestroy.useOnOther(player, otherPlayer);
 				} catch (RuntimeException e) {
 					e.printStackTrace();
 				}
@@ -660,9 +653,9 @@ public class PokerTable {
 		}
 	}
 	
-	public void updateShownCards() {
-		for (Player player : this.currentlyPlaying) {
-			for (Player otherPlayer : this.currentlyPlaying) {
+	protected void updateShownCards() {
+		for (Player player : this.currentlyPlaying) { //update cards that each player knows
+			for (Player otherPlayer : this.currentlyPlaying) { //from all the other player hands
 				if (player != otherPlayer) {
 					for (Card card : otherPlayer.getPlayerHand().getHand()) {
 						if (card.isFaceUp()) {
@@ -674,5 +667,16 @@ public class PokerTable {
 			}
 		}
 	}
+	private Player askForPlayerToUseSuperpowerOn() {
+		System.out.println("Enter player name to use on");
+		String name = scanner.next();
+		for (Player otherPlayer : this.currentlyPlaying) {
+			if (otherPlayer.getName().equals(name)) {
+				return otherPlayer;
+			}
+		}
+		return null;
+	}
+	
 	
 }

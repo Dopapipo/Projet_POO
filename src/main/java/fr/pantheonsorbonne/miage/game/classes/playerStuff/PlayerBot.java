@@ -1,7 +1,10 @@
 package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
-public class PlayerBot extends Player {
+import java.util.List;
+import java.util.Random;
 
+public class PlayerBot extends Player {
+	Random random = new Random();
     public PlayerBot(String name) {
         super(name);
     }
@@ -22,5 +25,15 @@ public class PlayerBot extends Player {
 	 */
 	public int getBetAmount() {
 		return this.getChipStack();
+	}
+
+	public int getSuperpower() {
+		return random.nextInt(5);
+	}
+	public Player askForPlayerToUseSuperpowerOn(List<Player> players) {
+		Player toReturn;
+		do { toReturn = players.get((int) Math.random() * players.size());}
+		while (!toReturn.isPlaying());
+		return toReturn;
 	}
 }

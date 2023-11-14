@@ -15,7 +15,7 @@ public enum CardColor {
         this.code = code;
     }
 
-    public static CardColor valueOfStr(String substring) {
+    private static CardColor valueOfStr(String substring) {
         for (CardColor color : CardColor.values()) {
             if (color.name().substring(0, 1).equals(substring)) {
                 return color;
@@ -28,7 +28,7 @@ public enum CardColor {
         return code;
     }
 
-    public String getStringRepresentation() {
+    private String getStringRepresentation() {
         return "" + this.name().charAt(0);
     }
 }

@@ -8,8 +8,12 @@ public abstract class SuperpowerSelf extends Superpower {
         super(cost, name, description);
     }
     public void useOnSelf(Player player,Deck deck) throws RuntimeException{
-        this.handleChecksAndUse(player);
-        this.use(player,deck);
+        try {
+            this.handleChecksAndUse(player);
+            this.use(player, deck);
+        } catch (RuntimeException e) {
+            throw e;
+        }
     }
     protected abstract void use(Player player, Deck deck);
 }

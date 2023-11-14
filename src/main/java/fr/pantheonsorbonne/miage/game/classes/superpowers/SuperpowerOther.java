@@ -7,8 +7,12 @@ public abstract class SuperpowerOther extends Superpower {
         super(cost, name, description);
     }
     public void useOnOther(Player player, Player other) throws RuntimeException{
-        this.handleChecksAndUse(player);
-        this.use(player, other);
+        try {
+            this.handleChecksAndUse(player);
+            this.use(player, other);
+        } catch (RuntimeException e) {
+            throw e;
+        }
     }
     
     protected abstract void use(Player player, Player other);

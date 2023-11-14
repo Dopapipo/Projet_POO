@@ -24,7 +24,7 @@ public enum CardValue {
         this.stringRepresentation = stringRepresentation;
         this.rank = value;
     }
-
+    //The stuff below will be useful for network most likely
     /**
      * From a string representation, return the cad
      *
@@ -32,7 +32,7 @@ public enum CardValue {
      * @return the corresponding card
      * @throws RuntimeException if the representation is invalid
      */
-    public static CardValue valueOfStr(String str) {
+    private static CardValue valueOfStr(String str) {
         for (CardValue value : CardValue.values()) {
             if (str.equals(value.getStringRepresentation())) {
                 return value;
@@ -43,7 +43,7 @@ public enum CardValue {
 
     }
 
-    public String getStringRepresentation() {
+    private String getStringRepresentation() {
         return stringRepresentation;
     }
 
@@ -52,7 +52,7 @@ public enum CardValue {
      *
      * @return
      */
-    public int getRank() {
+    private int getRank() {
         return rank;
     }
 	public CardValue getNext() {
