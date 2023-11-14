@@ -317,7 +317,7 @@ public class WinConditionLogic {
 		return false;
 	}
 
-	public static boolean containsCardValue(List<CardValue> values, List<Card> hand) {
+	private static boolean containsCardValue(List<CardValue> values, List<Card> hand) {
 		for (CardValue value : values) {
 			if (!containsCardValue(value, hand))
 				return false;

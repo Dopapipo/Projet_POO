@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
+import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerHand;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerAdd;
@@ -17,7 +18,13 @@ import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerSelf;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerShow;
 import fr.pantheonsorbonne.miage.game.logic.WinConditionLogic;
 
+/*
+ * This class represents a poker table. It holds all the functionnalities of a poker table.
+ * It is not automated, this class can be used to play poker with a console interface.
+ * The bots play using a class that inherits from this one.
+ */
 public class PokerTable {
+	protected CardColor invertedColor;
 	protected List<Player> playerList;
 	protected List<Player> currentlyPlaying;
 	protected DealerHand dealer;
@@ -35,7 +42,7 @@ public class PokerTable {
 	protected SuperpowerOther superpowerDestroy;
 	protected SuperpowerSelf superpowerAddHidden;
 	protected Scanner scanner = new Scanner(System.in);
-	
+
 	protected List<Pot> pots = new ArrayList<>();
 
 	public PokerTable() {
@@ -56,24 +63,26 @@ public class PokerTable {
 	public PokerTable(List<Player> players) {
 		this();
 		initializeSuperpowers();
-		this.playerList=players;
+		this.playerList = players;
 		for (Player player : this.playerList) {
 			if (player.isPlaying()) {
 				this.currentlyPlaying.add(player);
 			}
 		}
 	}
-	public void initializeSuperpowers() {
+
+	protected void initializeSuperpowers() {
 		this.superpowerShow = new SuperpowerShow();
 		this.superpowerDestroy = new SuperpowerDestroy();
 		this.superpowerAdd = new SuperpowerAdd();
 		this.superpowerAddHidden = new SuperpowerAddHidden();
 	}
+
 	protected int howManyAreStillPlaying() {
 		return this.currentlyPlaying.size();
 	}
 
-	public void initializeBlinds() {
+	protected void initializeBlinds() {
 		int n = this.howManyAreStillPlaying();
 		if (n <= 1) {
 			return;
@@ -92,7 +101,7 @@ public class PokerTable {
 	/**
 	 * Switches each blind to the next player in the table
 	 */
-	public void switchBlinds() {
+	protected void switchBlinds() {
 		int n = this.currentlyPlaying.size();
 		int bigBlindIndex = 0, smallBlindIndex = 0, donorIndex = 0;
 		// find the index of players that hold the blinds
@@ -118,7 +127,7 @@ public class PokerTable {
 	/**
 	 * Kicks every <Player> with no money left
 	 */
-	public void kickBrokePlayers() {
+	protected void kickBrokePlayers() {
 		for (Player player : this.playerList) {
 			if (player.isPlaying() && player.getChipStack() == 0) {
 				player.setPlaying(false);
@@ -129,6 +138,9 @@ public class PokerTable {
 
 	/**
 	 * Adds a player to the current <PokerTable>
+	 * This method is here for convenience, we could always initialize a pokerTable
+	 * from a list if we
+	 * wanted to. I left it public because it's used in pokerTableTest.
 	 * 
 	 * @param player
 	 */
@@ -142,7 +154,7 @@ public class PokerTable {
 	/**
 	 * Deals 2 new cards to every player from the current deck
 	 */
-	public void giveCards() {
+	protected void giveCards() {
 		for (Player player : this.currentlyPlaying) {
 			player.setHand(new PlayerHand(this.deck.getRandomCards(2)));
 		}
@@ -154,7 +166,7 @@ public class PokerTable {
 	 * @param players
 	 * @return
 	 */
-	public List<Player> checkWhoWins(List<Player> players) {
+	protected List<Player> checkWhoWins(List<Player> players) {
 		if (players.isEmpty()) {
 			return null;
 		}
@@ -183,7 +195,7 @@ public class PokerTable {
 	/**
 	 * Calculates total value for the base pot
 	 */
-	public void calculateTotalPot() {
+	protected void calculateTotalPot() {
 		for (Player player : this.currentlyPlaying) {
 			this.addBet(player.getBet());
 		}
@@ -194,7 +206,7 @@ public class PokerTable {
 	 * 
 	 * @param bet : a bet from a player
 	 */
-	public void addBet(int bet) {
+	protected void addBet(int bet) {
 		this.totalBets += bet;
 	}
 
@@ -204,7 +216,7 @@ public class PokerTable {
 	 * 
 	 * @param playersThatWon
 	 */
-	public void endTurn(List<Player> playersThatWon) {
+	protected void endTurn(List<Player> playersThatWon) {
 		int gainSplit = playersThatWon.size();
 		this.calculateTotalPot();
 		for (Player player : playersThatWon) {
@@ -236,22 +248,27 @@ public class PokerTable {
 		resetSuperpowerUsage();
 
 	}
-	private void resetSuperpowerUsage() {
+
+	protected void resetSuperpowerUsage() {
 		this.superpowerAdd.resetUsage();
 		this.superpowerAddHidden.resetUsage();
 		this.superpowerDestroy.resetUsage();
 		this.superpowerShow.resetUsage();
 	}
+
 	/**
-	 * Resets player fold & raise state
+	 * Resets all player's raise state
 	 */
-	public void resetPlayersRaise() {
+	protected void resetPlayersRaise() {
 		for (Player player : this.currentlyPlaying) {
 			player.setCurrentlyRaising(false);
 		}
 	}
 
-	public void resetPlayers() {
+	/*
+	 * Resets all player's status for the next turn
+	 */
+	protected void resetPlayers() {
 		for (Player player : this.currentlyPlaying) {
 			player.setCurrentlyRaising(false);
 			player.setHasNotFolded(true);
@@ -263,7 +280,7 @@ public class PokerTable {
 	/**
 	 * Gets payment for blinds from the associated players
 	 */
-	public void askBlindPayment() {
+	protected void askBlindPayment() {
 		this.bigBlind.getPlayer().bet(this.bigBlind.getValue());
 		this.smallBlind.getPlayer().bet(this.smallBlind.getValue());
 		this.findHighestBet();
@@ -272,7 +289,7 @@ public class PokerTable {
 	/**
 	 * Finds the highest bet in the current turn
 	 */
-	public void findHighestBet() {
+	protected void findHighestBet() {
 		for (Player player : this.currentlyPlaying) {
 			if (player.getBet() > this.highestBet) {
 				this.highestBet = player.getBet();
@@ -283,7 +300,7 @@ public class PokerTable {
 	/**
 	 * Used to increase blinds
 	 */
-	public void increaseBlinds() {
+	protected void increaseBlinds() {
 		this.bigBlind.increase(defaultBlind);
 		this.smallBlind.increase(defaultBlind / 2);
 	}
@@ -294,7 +311,7 @@ public class PokerTable {
 	 * players, or if at least 2 more players have the possibility to bet after the
 	 * player we're making a pot for is all-in.
 	 */
-	public boolean checkIfAnyoneCanStillBet() {
+	protected boolean checkIfAnyoneCanStillBet() {
 		int numberOfPlayersStillBetting = this.currentlyPlaying.size();
 		boolean flag = false;
 		int bet = this.currentlyPlaying.get(0).getBet();
@@ -311,12 +328,10 @@ public class PokerTable {
 	// pot implementation
 	// -------------------------------------------------------------------
 
-	// we will create a new pot when a player all-ins
-
 	/**
-	 * Creates a new pot, used for pot initialization of the first pot
+	 * Creates a new pot, used for pot initialization of the base pot
 	 */
-	public void createPot() {
+	protected void createPot() {
 		this.pots.add(new Pot());
 	}
 
@@ -326,15 +341,14 @@ public class PokerTable {
 	 * @param player to add
 	 * @param pot    to add to
 	 */
-	public void addToPot(Player player, Pot pot) {
+	protected void addToPot(Player player, Pot pot) {
 		pot.addPlayer(player);
 	}
 
 	/**
-	 * Updates a pot's value, to be used when no one is all in (all in players will
-	 * all have their separate pots)
+	 * Updates the base pot's value.
 	 */
-	public void updatePotValue(Pot pot) {
+	protected void updatePotValue(Pot pot) {
 		// set value to 0 then add every player bet
 		pot.setValue(0);
 		for (Player player : this.currentlyPlaying) {
@@ -342,17 +356,18 @@ public class PokerTable {
 		}
 
 	}
-	
+
 	/**
-	 * Add every player to the pot, even folded ones
+	 * Add every player to the pot, even folded ones (they won't be able to win the
+	 * pot, but their bets will still be in it!)
 	 * 
 	 * @param player that needs a new pot because he is all in now
 	 */
-	public void makePotForAllInPlayer(Player player) {
-		this.pots.add(new AllInPot(player.getBet(), player));
+	protected void makePotForAllInPlayer(Player player) {
+		this.pots.add(new AllInPot(player.getBet()));
 		// work on the pot we just created
 		AllInPot pot = (AllInPot) this.pots.get(this.pots.size() - 1);
-		int playerBet = pot.getAllInBet();
+		int playerBet = player.getBet();
 		for (Player playa : this.currentlyPlaying) {
 			// if a player is all in with less chips, we add his bet value to the pot
 			// else we add the value of the all in player
@@ -365,23 +380,25 @@ public class PokerTable {
 	}
 
 	/**
-	 * Updates an all-in pot with the value that the associated <Player> would win
+	 * Updates an all-in pot with the value that a <Player> would win
 	 * if he were to win the pot.
 	 * 
 	 * @param pot : the <AllInPot> associated with the <Player>
 	 */
-	public void updateAllInPot(AllInPot pot) {
+	protected void updateAllInPot(AllInPot pot) {
 		pot.setValue(0);
 		for (Player player : this.currentlyPlaying) {
-			pot.addBet(Math.min(pot.getAllInBet(), player.getBet()));
+			pot.addBet(Math.min(pot.getThresholdBet(), player.getBet()));
 		}
 	}
 
-	public void clearPots() {
+	// Clears pots for next round
+	protected void clearPots() {
 		this.pots.clear();
 	}
 
-	public void updateAllPotsValues() {
+	// Updates the value contained in all the pots
+	protected void updateAllPotsValues() {
 		for (Pot pot : this.pots) {
 			if (pot instanceof AllInPot) {
 				this.updateAllInPot((AllInPot) pot);
@@ -391,15 +408,16 @@ public class PokerTable {
 		}
 	}
 
-	public int askForBetsWithPots(int playersInRound) {
+	// Asks for bets ("with pots" because this function used to not support pots)
+	protected int askForBetsWithPots(int playersInRound) {
 		boolean everyoneCalled = false;
 		// Implementation of support for constant raising : while
 		// not everyone has called/folded (i.e. there's still a player raising)
 		// We ask every other player for a call/fold/raise
 		while (!everyoneCalled) {
 			for (Player player : this.currentlyPlaying) {
-				//use superpower if player wants to use it
-				this.useSuperpower(player);
+				// use superpower if player wants to use it
+				this.askAndUseSuperpower(player);
 				// if there's more than one player to ask, player hasn't folded, isn't all in
 				// and isn't the one currently raising,
 				// ask him for bet
@@ -422,9 +440,9 @@ public class PokerTable {
 							playersInRound--;
 							break;
 						case 3:
-						System.out.println("How much do you want to raise by? (negative will call!)");
-						int x = scanner.nextInt();
-							this.raise(player,x);
+							System.out.println("How much do you want to raise by? (negative will call!)");
+							int x = scanner.nextInt();
+							this.raise(player, x);
 							break;
 					}
 				}
@@ -497,6 +515,15 @@ public class PokerTable {
 		resetPlayers();
 	}
 
+	/**
+	 * Pays a pot to the players that won it
+	 * If there's a draw between n players, splits the pot n ways
+	 * With our implementation, if an all-in player wins, he will get paid
+	 * accordingly, then
+	 * the rest of the players will compete for the remainder
+	 * 
+	 * @param pot
+	 */
 	protected void payoutPot(Pot pot) {
 		int value = pot.getValue();
 		if (value <= 0) {
@@ -506,7 +533,6 @@ public class PokerTable {
 		if (winners == null) {
 			return;
 		}
-		System.out.println("Winner list: " + winners);
 		int gainSplit = winners.size();
 		for (Player player : winners) {
 			player.won(value / gainSplit);
@@ -546,6 +572,9 @@ public class PokerTable {
 		this.askForBetsWithPots(playersInRound);
 	}
 
+	// Handles functionalities related to pots in a turn
+	// This function is called after the dealer has dealt all the cards
+	// This method is public because it's used in unit testing
 	public void turnPots() {
 		createPot();
 		makeAllInPotIfNecessary(0);
@@ -567,6 +596,7 @@ public class PokerTable {
 		}
 	}
 
+	// Starts a turn (a round)
 	public void startTurnWithPots() {
 		turnCards();
 		turnPots();
@@ -575,12 +605,18 @@ public class PokerTable {
 		this.resetTable();
 	}
 
+	// unit testing purposes
 	public DealerHand getDealer() {
 		return this.dealer;
 	}
 
+	// unit testing purposes
 	public List<Player> getPlayers() {
 		return this.currentlyPlaying;
+	}
+
+	public boolean gameContinues() {
+		return this.howManyAreStillPlaying() > 1;
 	}
 
 	protected int askForSuperpowerUse(Player player) {
@@ -589,9 +625,8 @@ public class PokerTable {
 		System.out.println("Superpower cost: 1 : 50 chips; 2 - 100 chips; 3 - 75 chips; 4- 125 chips");
 		int answer;
 		do {
-			 answer = scanner.nextInt();
-		}
-		while (answer>4 || answer<0);
+			answer = scanner.nextInt();
+		} while (answer > 4 || answer < 0);
 		return answer;
 	}
 
@@ -599,10 +634,12 @@ public class PokerTable {
 		player.call(this.highestBet - player.getBet());
 		player.setCurrentlyRaising(false);
 	}
+
 	protected void fold(Player player) {
 		player.fold();
 		player.setCurrentlyRaising(false);
 	}
+
 	protected void raise(Player player, int x) {
 		if (x > 0) {
 			for (Player aPlayer : this.currentlyPlaying) {
@@ -615,21 +652,21 @@ public class PokerTable {
 			player.setCurrentlyRaising(false);
 		}
 	}
-	protected void useSuperpower(Player player) {
+
+	protected void askAndUseSuperpower(Player player) {
 		int answer = askForSuperpowerUse(player);
-		if (answer==0) {
+		if (answer == 0) {
 			return;
 		}
 		switch (answer) {
 			case 1:
 				// see a random card from a player
 
-				try {	
-						Player otherPlayer = this.askForPlayerToUseSuperpowerOn();
-						superpowerShow.useOnOther(player, otherPlayer);
-						
-					}
-				 catch (RuntimeException e) {
+				try {
+					Player otherPlayer = this.askForPlayerToUseSuperpowerOn();
+					superpowerShow.useOnOther(player, otherPlayer);
+
+				} catch (RuntimeException e) {
 					e.printStackTrace();
 				}
 				break;
@@ -648,14 +685,14 @@ public class PokerTable {
 				break;
 			case 4:
 				// add a hidden card to your hand
-				this.superpowerAddHidden.useOnSelf(player,this.deck);
+				this.superpowerAddHidden.useOnSelf(player, this.deck);
 				break;
 		}
 	}
-	
+
 	protected void updateShownCards() {
-		for (Player player : this.currentlyPlaying) { //update cards that each player knows
-			for (Player otherPlayer : this.currentlyPlaying) { //from all the other player hands
+		for (Player player : this.currentlyPlaying) { // update cards that each player knows
+			for (Player otherPlayer : this.currentlyPlaying) { // from all the other player hands
 				if (player != otherPlayer) {
 					for (Card card : otherPlayer.getPlayerHand().getHand()) {
 						if (card.isFaceUp()) {
@@ -667,6 +704,8 @@ public class PokerTable {
 			}
 		}
 	}
+
+	// Asks what player to use a superpower on using a scanner (for human playing)
 	private Player askForPlayerToUseSuperpowerOn() {
 		System.out.println("Enter player name to use on");
 		String name = scanner.next();
@@ -677,6 +716,33 @@ public class PokerTable {
 		}
 		return null;
 	}
-	
-	
+
+	protected void askForInvertedColor() {
+		System.out.println(
+				"Enter color to invert : 0: spades, 1: hearts, 2: diamonds, 3: clovers, other number will do nothing");
+		int answer = scanner.nextInt();
+		setInvertedColor(answer);
+
+	}
+
+	protected void setInvertedColor(int answer) {
+		switch (answer) {
+			case 1:
+				this.invertedColor = CardColor.SPADE;
+				break;
+			case 2:
+				this.invertedColor = CardColor.HEART;
+				break;
+			case 3:
+				this.invertedColor = CardColor.DIAMOND;
+				break;
+			case 4:
+				this.invertedColor = CardColor.CLOVER;
+				break;
+		}
+	}
+
+	public CardColor getInvertedColor() {
+		return this.invertedColor;
+	}
 }

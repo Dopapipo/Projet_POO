@@ -169,7 +169,6 @@ class PokerTableTest {
 				Assertions.assertEquals(player2.getChipStack(), 50);
 	}
 	
-	//TODO : Test with 3+ players. Test with multiple all-in players, that each
 	//have different chipstacks.
 	@Test
 	/**

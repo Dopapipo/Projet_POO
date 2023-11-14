@@ -16,21 +16,21 @@ public class Pot implements Comparable<Pot> {
 	private int thresholdBet;
 	private List<Player> players;
 	public Pot() {
-		this.value=0;
-		this.players= new ArrayList<>();
+		this(0);
 	}
 	public Pot(List<Player> players) {
 		this.players=players;
+	}
+	public Pot(int thresholdBet) {
+		this.thresholdBet=thresholdBet;
+		this.value=0;
+		this.players= new ArrayList<>();
 	}
 	public void addPlayer(Player player) {
 		this.players.add(player);
 	}
 	public void addBet(int bet) {
 		this.value+=bet;
-	}
-	public void resetPot() {
-		this.value=0;
-		this.players.clear();
 	}
 	public int getValue() {
 		return value;
@@ -64,7 +64,6 @@ public class Pot implements Comparable<Pot> {
 	 * has a lower value than the other pot
 	 */
 	public int compareTo(Pot o) {
-		// TODO Auto-generated method stub
 		return this.getValue()-o.getValue();
 	}
 	public String toString() {

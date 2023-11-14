@@ -1,6 +1,5 @@
 package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -35,9 +34,6 @@ public class Player implements Comparable<Player> {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public int getChipStack() {
 		return chipStack;
@@ -55,21 +51,10 @@ public class Player implements Comparable<Player> {
 		this.bet = bet;
 	}
 
-	public WinningCombination getCombination() {
-		return combination;
-	}
-
-	public void setCombination(WinningCombination combination) {
-		this.combination = combination;
-	}
-
 	public PlayerHand getPlayerHand() {
 		return playerHand;
 	}
 
-	public void setPlayerHand(PlayerHand playerHand) {
-		this.playerHand = playerHand;
-	}
 
 	public boolean isPlaying() {
 		return playing;
@@ -87,13 +72,7 @@ public class Player implements Comparable<Player> {
 	public void setWinCombination(WinningCombination winCondition) {
 		this.combination = winCondition;
 	}
-
-	public void addCard(ArrayList<Card> cards) {
-		for (Card card : cards) {
-			this.playerHand.add(card);
-		}
-	}
-
+	
 	public void printHand() {
 		System.out.println(this.name + " has the following hand :");
 		for (Card card : this.playerHand.getHand()) {
@@ -101,7 +80,7 @@ public class Player implements Comparable<Player> {
 		}
 	}
 
-	public int allIn() {
+	private int allIn() {
 		if (!this.playing) {
 			return 0;
 		}
@@ -143,17 +122,12 @@ public class Player implements Comparable<Player> {
 	}
 
 	public void lost() {
-		this.hasNotFolded = false;
-		this.bet = 0;
+		this.won(0);
 	}
 
 	public void won(int winnings) {
 		this.chipStack += winnings;
 		this.bet = 0;
-	}
-
-	public void addToChipStack(int n) {
-		this.chipStack += n;
 	}
 
 	public WinningCombination getWinningCombination() {

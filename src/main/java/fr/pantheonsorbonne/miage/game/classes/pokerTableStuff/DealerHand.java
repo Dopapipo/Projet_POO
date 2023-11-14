@@ -15,20 +15,23 @@ public class DealerHand {
 	}
 	
 	public void flop() {
+		this.deck.discard();
 		this.addToDealerHand(deck.getRandomCards(3));
 	}
 	public void turn() {
+		this.deck.discard();
 		this.addToDealerHand(deck.draw());
 	}
 	public void river() {
+		this.deck.discard();
 		this.addToDealerHand(deck.draw());
 	}
 	
-	public void addToDealerHand(Card card) {
+	private void addToDealerHand(Card card) {
 		this.dealerHand.add(card);
 	}
 	
-	public void addToDealerHand(List<Card> cards) {
+	private void addToDealerHand(List<Card> cards) {
 		for (Card card : cards) {
 			addToDealerHand(card);
 		}
@@ -45,9 +48,11 @@ public class DealerHand {
 
 		//System.out.println();
 	}
+	
 	public void clear() {
 		this.dealerHand.clear();
 	}
+	//This method is public for unit testing purposes
 	public void setHand(List<Card> cards) {
 		this.dealerHand=cards;
 	}

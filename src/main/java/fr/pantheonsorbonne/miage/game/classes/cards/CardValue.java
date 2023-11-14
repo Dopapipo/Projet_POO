@@ -58,6 +58,13 @@ public enum CardValue {
 	public CardValue getNext() {
 		return CardValue.values()[(this.ordinal() + 1)%CardValue.values().length];
 	}
+    //Try to be smart with the implementation of the inverted order rule
+    public int compareInverted(CardValue other) {
+        return -this.compare(other);
+    }
+    public CardValue getPrevious() {
+        return CardValue.values()[(this.ordinal() - 1)%CardValue.values().length];
+    }
     public int compare(CardValue other) {
         if (other==null) {
             return 1;

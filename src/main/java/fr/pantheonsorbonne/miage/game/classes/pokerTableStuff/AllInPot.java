@@ -1,37 +1,18 @@
 package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 
-import java.util.ArrayList;
 
-import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 /**
  * An all-in pot's purpose is to payout all-in players accordingly in case they win.
+ * In a poker table, there's only one pot and as many all in pots as there are all-in players.
+ * An all-in pot is a pot that has a thresholdBet equal to the all-in player's bet.
+ * This class exists for readability purposes, as functionally it is identical to a pot, in the way
+ * that it is used in the PokerTable class.
  */
 public class AllInPot extends Pot {
-	private Player player;
-	private int allInBet;
 	
-	public AllInPot(int allInBet, Player player) {
-		super();
-		this.setPlayer(player);
-		this.setAllInBet(allInBet);
-	}
-	public AllInPot(ArrayList<Player> players) {
-		super(players);
-		this.allInBet=players.get(0).getBet();
-	}
-	public int getAllInBet() {
-		return allInBet;
+	public AllInPot(int allInBet) {
+		super(allInBet);
 	}
 
-	public void setAllInBet(int allInBet) {
-		this.allInBet = allInBet;
-	}
 
-	public Player getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
 }

@@ -26,14 +26,19 @@ public class PlayerBot extends Player {
 	public int getBetAmount() {
 		return this.getChipStack();
 	}
-
+	//Use superpower at random
 	public int getSuperpower() {
 		return random.nextInt(5);
 	}
+	//Use superpower on random player
 	public Player askForPlayerToUseSuperpowerOn(List<Player> players) {
 		Player toReturn;
 		do { toReturn = players.get((int) Math.random() * players.size());}
 		while (!toReturn.isPlaying());
 		return toReturn;
+	}
+	//always invert the same color :D
+	public int askForInvertedColor() {
+		return 0;
 	}
 }

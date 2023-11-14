@@ -13,11 +13,9 @@ public class PokerTableAutomatisee extends PokerTable {
 	public PokerTableAutomatisee() {
 		super();
 	}
-	public boolean gameContinues() {
-		return this.howManyAreStillPlaying() > 1;
-	}
+	
 	@Override
-	public int askForBetsWithPots(int playersInRound) {
+	protected int askForBetsWithPots(int playersInRound) {
 		boolean everyoneCalled = false;
 		// Implementation of support for constant raising : while
 		// not everyone has called/folded (i.e. there's still a player raising)
@@ -27,7 +25,7 @@ public class PokerTableAutomatisee extends PokerTable {
 			playersCalled.clear();
 			for (Player player : this.currentlyPlaying) {
 				//ask for superpower use
-				this.useSuperpower(player);
+				this.askAndUseSuperpower(player);
 				// if there's more than one player to ask, player hasn't folded, isn't all in
 				// and isn't the one currently raising,
 				// ask him for bet
@@ -73,7 +71,7 @@ public class PokerTableAutomatisee extends PokerTable {
 	}
 
 	@Override
-	public void turnCards() {
+	protected void turnCards() {
 		this.giveCards();
 		this.initializeBlinds();
 		this.askBlindPayment();
@@ -90,14 +88,14 @@ public class PokerTableAutomatisee extends PokerTable {
 		}
 	}
 	@Override
-	public int askForSuperpowerUse(Player player) {
+	protected int askForSuperpowerUse(Player player) {
 		return ((PlayerBot)player).getSuperpower();
 	}
 	
 
 
 	@Override
-	protected void useSuperpower(Player player) {
+	protected void askAndUseSuperpower(Player player) {
 		int answer = askForSuperpowerUse(player);
 		if (answer==0) {
 			return;
@@ -143,6 +141,12 @@ public class PokerTableAutomatisee extends PokerTable {
 				}
 				break;
 		}
+	}
+	@Override
+	protected void askForInvertedColor() {
+		Player playerToAsk = this.bigBlind.getPlayer();
+		int answer = ((PlayerBot)playerToAsk).askForInvertedColor();
+		this.setInvertedColor(answer);
 	}
 
 }

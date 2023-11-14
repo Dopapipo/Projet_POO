@@ -13,22 +13,17 @@ public class Card  {
 		this.cardColor = color;
 		this.faceUp=false;
 	}
-
 	public CardValue getCardValue() {
 		return cardValue;
 	}
 
-	private void setCardValue(CardValue cardValue) {
-		this.cardValue = cardValue;
-	}
+
 
 	public CardColor getCardColor() {
 		return cardColor;
 	}
 
-	private void setCardColor(CardColor cardColor) {
-		this.cardColor = cardColor;
-	}
+
 
 	// les méthodes
 	@Override

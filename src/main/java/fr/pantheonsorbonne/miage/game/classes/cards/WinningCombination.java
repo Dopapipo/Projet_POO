@@ -11,7 +11,6 @@ public class WinningCombination implements Comparable<WinningCombination> {
 	}
 	@Override
 	public int compareTo(WinningCombination wc) {
-		// TODO Auto-generated method stub
 		if (this.winCondition.compareTo(wc.winCondition)>0) {
 			return 1;
 		}
