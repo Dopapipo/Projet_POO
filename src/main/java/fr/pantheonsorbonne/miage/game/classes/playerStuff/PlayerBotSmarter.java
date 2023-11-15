@@ -1,7 +1,8 @@
 package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
 /*
- * This playerbot always tries to use the add superpower as it's the most broken
+ * This playerbot always tries to use the add superpower as it's the most overpowered, so he's 
+ * smarter than the rest: he figured out the META!
  */
 public class PlayerBotSmarter extends PlayerBot {
 

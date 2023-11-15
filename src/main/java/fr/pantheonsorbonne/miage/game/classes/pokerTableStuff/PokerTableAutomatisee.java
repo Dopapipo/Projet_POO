@@ -76,6 +76,7 @@ public class PokerTableAutomatisee extends PokerTable {
 		this.giveCards();
 		this.initializeBlinds();
 		this.askBlindPayment();
+		this.askAndSetInvertedColor();
 		int playersInRound = currentlyPlaying.size();
 		playersInRound = this.askForBetsWithPots(playersInRound);
 		dealer.flop();
@@ -141,7 +142,7 @@ public class PokerTableAutomatisee extends PokerTable {
 	}
 
 	@Override
-	protected void askForInvertedColor() {
+	protected void askAndSetInvertedColor() {
 		Player playerToAsk = this.bigBlind.getPlayer();
 		int answer = ((PlayerBot) playerToAsk).askForInvertedColor();
 		this.setInvertedColor(answer);

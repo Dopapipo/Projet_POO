@@ -13,6 +13,10 @@ public class DealerHand {
 		this.dealerHand=new ArrayList<>();
 		this.deck = deck;
 	}
+	public DealerHand(List<Card> cards) {
+		this.dealerHand=cards;
+		this.deck = new Deck();
+	}
 	
 	public void flop() {
 		this.deck.discard();

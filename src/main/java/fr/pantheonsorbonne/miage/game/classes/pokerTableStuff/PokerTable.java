@@ -168,7 +168,7 @@ public class PokerTable {
 		}
 		List<Player> playersThatWon = new ArrayList<>();
 		for (Player player : players) {
-			player.setWinCombination(WinConditionLogic.findWinningCombination(dealer, player.getPlayerHand()));
+			player.setWinCombination(WinConditionLogic.findWinningCombination(this.invertedColor,dealer, player.getPlayerHand()));
 		}
 		Collections.sort(players);
 		int index = players.size() - 1;
@@ -475,6 +475,7 @@ public class PokerTable {
 		deck.resetDeck();
 		dealer.clear();
 		this.switchBlinds();
+		this.invertedColor=null; //reset inverted color
 		this.numberOfTurns++;
 		this.totalBets = 0;
 		this.highestBet = 0;
@@ -542,6 +543,13 @@ public class PokerTable {
 	protected void turnCards() {
 		this.giveCards();
 		this.initializeBlinds();
+		//well technically in this version of PokerTable four humans are playing on the same terminal 
+		//but let's just pretend for a second...
+		for (Player player : this.currentlyPlaying) {
+			if (player.equals(this.bigBlind.getPlayer())) {
+				this.askAndSetInvertedColor();
+			}
+		}
 		this.askBlindPayment();
 		this.findHighestBet();
 		int playersInRound = currentlyPlaying.size();
@@ -597,12 +605,12 @@ public class PokerTable {
 				+ this.currentlyPlaying.get(0).getChipStack() + " chips!");
 	}
 	// unit testing purposes
-	public DealerHand getDealer() {
+	protected DealerHand getDealer() {
 		return this.dealer;
 	}
 
 	// unit testing purposes
-	public List<Player> getPlayers() {
+	protected List<Player> getPlayers() {
 		return this.currentlyPlaying;
 	}
 
@@ -723,7 +731,8 @@ public class PokerTable {
 		return null;
 	}
 
-	protected void askForInvertedColor() {
+	protected void askAndSetInvertedColor() {
+		System.out.println("Big blind is : " + bigBlind.getPlayer().getName()+" so he gets to choose: ");
 		System.out.println(
 				"Enter color to invert : 0: spades, 1: hearts, 2: diamonds, 3: clovers, other number will do nothing");
 		int answer = scanner.nextInt();
@@ -733,16 +742,16 @@ public class PokerTable {
 
 	protected void setInvertedColor(int answer) {
 		switch (answer) {
-			case 1:
+			case 0:
 				this.invertedColor = CardColor.SPADE;
 				break;
-			case 2:
+			case 1:
 				this.invertedColor = CardColor.HEART;
 				break;
-			case 3:
+			case 2:
 				this.invertedColor = CardColor.DIAMOND;
 				break;
-			case 4:
+			case 3:
 				this.invertedColor = CardColor.CLOVER;
 				break;
 		}

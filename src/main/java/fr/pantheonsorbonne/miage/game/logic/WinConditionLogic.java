@@ -11,6 +11,7 @@ import java.util.Map;
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardValue;
+import fr.pantheonsorbonne.miage.game.classes.cards.InvertedCard;
 import fr.pantheonsorbonne.miage.game.classes.cards.WinCondition;
 import fr.pantheonsorbonne.miage.game.classes.cards.WinningCombination;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerHand;
@@ -26,10 +27,11 @@ public class WinConditionLogic {
 	 * @param playerHand : The playerHand is updated when cards are dealt
 	 * @return a <WinningCombination> of the highest value in a hand
 	 */
-	public static WinningCombination findWinningCombination(List<Card> consideredHand) {
+	private static WinningCombination findWinningCombination(List<Card> consideredHand) {
 		// We will check for the highest values of WinningCombination first.
 
 		// check for royal flush and straight flush :
+		
 		WinningCombination straight = straight(consideredHand);
 		WinningCombination flush = flush(consideredHand);
 
@@ -67,6 +69,7 @@ public class WinConditionLogic {
 		// If we have none of the above, we only have a High Card :(
 		return new WinningCombination(WinCondition.HIGH_CARD, findHighestCardInCardList(consideredHand));
 	}
+
 	public static WinningCombination findWinningCombination(DealerHand dealerHand, PlayerHand playerHand) {
 		List<Card> consideredHand = new ArrayList<>();
 
@@ -77,6 +80,36 @@ public class WinConditionLogic {
 			consideredHand.add(card);
 		}
 		return findWinningCombination(consideredHand);
+	}
+	public static WinningCombination findWinningCombination(CardColor invertedColor, DealerHand dealerHand, PlayerHand playerHand) {
+		List<Card> consideredHand = new ArrayList<>();
+
+		for (Card card : dealerHand.getDealerHand()) {
+			consideredHand.add(card);
+		}
+		for (Card card : playerHand.getHand()) {
+			consideredHand.add(card);
+		}
+		if (invertedColor == null) {
+			return findWinningCombination(consideredHand);
+		}
+		consideredHand = invertCardsOfColor(invertedColor, consideredHand);
+		return findWinningCombination(consideredHand);
+	}
+	//We will consider cards of the inverted color as if they were normal cards, but of
+	//inverted values (inverted two? ace. inverted ace? two. etc...)
+	private static List<Card> invertCardsOfColor(CardColor invertedColor, List<Card> hand) {
+		List<Card> toReturn = new ArrayList<>();
+		for (Card card : hand) {
+			if (card.getCardColor() == invertedColor) {
+				Card invertedCard = new InvertedCard(card.getCardValue().getInverted(), card.getCardColor());
+				toReturn.add(invertedCard);
+			}
+			else {
+				toReturn.add(card);
+			}
+		}
+		return toReturn;
 	}
 	/**
 	 * returns the list of flush cards if there's a flush (useful to check for straight flush)

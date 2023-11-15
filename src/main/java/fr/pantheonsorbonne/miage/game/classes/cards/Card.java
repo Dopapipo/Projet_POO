@@ -45,9 +45,19 @@ public class Card  {
 		}
 		return String.valueOf(this.cardValue) + " of " + color;
 	}
+	@Override
+	public boolean equals(Object card) {
+		if (card == null) {
+			return false;
+		}
+		if (card == this) {
+			return true;
+		}
+		if (card instanceof Card) {
+			return this.getCardValue() == ((Card)card).getCardValue();
 
-	public boolean equals(Card card) {
-		return this.getCardValue() == card.getCardValue();
+		}
+		return false;
 	}
 	
 	public boolean compareTo(Card card) {
