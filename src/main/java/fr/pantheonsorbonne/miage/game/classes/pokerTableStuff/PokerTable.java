@@ -52,23 +52,19 @@ public class PokerTable {
 		this.dealer = new DealerHand(deck);
 		totalBets = 0;
 		this.highestBet = 0;
+		this.initializeSuperpowers();
 	}
 
-	public PokerTable(Player player) {
-		this();
-		this.playerList.add(player);
-		this.currentlyPlaying.add(player);
-	}
 
 	public PokerTable(List<Player> players) {
 		this();
-		initializeSuperpowers();
 		this.playerList = players;
 		for (Player player : this.playerList) {
 			if (player.isPlaying()) {
 				this.currentlyPlaying.add(player);
 			}
 		}
+		this.initializeBlinds();
 	}
 
 	protected void initializeSuperpowers() {
@@ -216,38 +212,7 @@ public class PokerTable {
 	 * 
 	 * @param playersThatWon
 	 */
-	protected void endTurn(List<Player> playersThatWon) {
-		int gainSplit = playersThatWon.size();
-		this.calculateTotalPot();
-		for (Player player : playersThatWon) {
-			player.won(this.totalBets / gainSplit);
-			System.out.println(player.getName() + " won " + this.totalBets / gainSplit + " with the hand "
-					+ player.getWinningCombination());
-		}
-		for (Player player : this.currentlyPlaying) {
-
-			if (!playersThatWon.contains(player)) {
-				System.out.println(player.getName() + " lost " + player.getBet() + " with the hand "
-						+ player.getWinningCombination());
-				player.lost();
-			}
-			// reset player fold state for next turn
-			player.setHasNotFolded(true);
-		}
-		kickBrokePlayers();
-		deck.resetDeck();
-		dealer.clear();
-		this.switchBlinds();
-		this.numberOfTurns++;
-		this.totalBets = 0;
-		this.highestBet = 0;
-		if (this.numberOfTurns % this.turnsForBlindIncrease == 0) {
-			increaseBlinds();
-		}
-		clearPots();
-		resetSuperpowerUsage();
-
-	}
+	
 
 	protected void resetSuperpowerUsage() {
 		this.superpowerAdd.resetUsage();
@@ -275,6 +240,9 @@ public class PokerTable {
 			player.setBet(0);
 			player.setHand(null);
 		}
+	}
+	protected int getNumberOfPots() {
+		return this.pots.size();
 	}
 
 	/**
@@ -374,7 +342,9 @@ public class PokerTable {
 			if (playa.getBet() > 0) {
 
 				pot.addBet(Math.min(playa.getBet(), playerBet));
-				pot.addPlayer(playa);
+				if (playa.getBet() >=playerBet) {
+					pot.addPlayer(playa);
+				}
 			}
 		}
 	}
@@ -499,8 +469,8 @@ public class PokerTable {
 	protected void setThresholdForBasePot() {
 		this.pots.get(0).setThresholdBet(this.highestBet);
 	}
-
-	protected void resetTable() {
+	//public for unit testing
+	public void resetTable() {
 		kickBrokePlayers();
 		deck.resetDeck();
 		dealer.clear();
@@ -512,6 +482,7 @@ public class PokerTable {
 			increaseBlinds();
 		}
 		clearPots();
+		resetSuperpowerUsage();
 		resetPlayers();
 	}
 
@@ -553,7 +524,21 @@ public class PokerTable {
 			}
 		}
 	}
-
+	public int getSuperpowerUseNumber(String name) {
+		if (name.equals("add")) {
+			return this.superpowerAdd.getNumberOfUses();
+		}
+		if (name.equals("addHidden")) {
+			return this.superpowerAddHidden.getNumberOfUses();
+		}
+		if (name.equals("destroy")) {
+			return this.superpowerDestroy.getNumberOfUses();
+		}
+		if (name.equals("show")) {
+			return this.superpowerShow.getNumberOfUses();
+		}
+		return -1;
+	}
 	protected void turnCards() {
 		this.giveCards();
 		this.initializeBlinds();
@@ -602,9 +587,15 @@ public class PokerTable {
 		turnPots();
 		this.printAllHands();
 		this.getDealer().printHand();
-		this.resetTable();
 	}
-
+	public void play() {
+		while (this.gameContinues()) {
+			this.startTurnWithPots();
+			this.resetTable();
+		}
+		System.out.println(this.currentlyPlaying.get(0).getName() + " won the game with "
+				+ this.currentlyPlaying.get(0).getChipStack() + " chips!");
+	}
 	// unit testing purposes
 	public DealerHand getDealer() {
 		return this.dealer;
@@ -615,7 +606,7 @@ public class PokerTable {
 		return this.currentlyPlaying;
 	}
 
-	public boolean gameContinues() {
+	protected boolean gameContinues() {
 		return this.howManyAreStillPlaying() > 1;
 	}
 
@@ -655,6 +646,10 @@ public class PokerTable {
 
 	protected void askAndUseSuperpower(Player player) {
 		int answer = askForSuperpowerUse(player);
+		askAndUseSuperpower(player, answer);
+	}
+
+	protected void askAndUseSuperpower(Player player,int answer) {
 		if (answer == 0) {
 			return;
 		}
@@ -667,7 +662,7 @@ public class PokerTable {
 					superpowerShow.useOnOther(player, otherPlayer);
 
 				} catch (RuntimeException e) {
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 				break;
 			case 2:
@@ -676,16 +671,27 @@ public class PokerTable {
 					Player otherPlayer = this.askForPlayerToUseSuperpowerOn();
 					superpowerDestroy.useOnOther(player, otherPlayer);
 				} catch (RuntimeException e) {
-					e.printStackTrace();
-				}
+					System.out.println(e.getMessage());				}
 				break;
 			case 3:
 				// add a card to your hand (shown)
-				this.superpowerAdd.useOnSelf(player, this.deck);
+				try {
+					this.superpowerAdd.useOnSelf(player, this.deck);
+					
+				}
+				catch (RuntimeException e) {
+					System.out.println(e.getMessage());
+				}
 				break;
 			case 4:
 				// add a hidden card to your hand
-				this.superpowerAddHidden.useOnSelf(player, this.deck);
+				try {
+
+					this.superpowerAddHidden.useOnSelf(player, this.deck);
+				}
+				catch (RuntimeException e) {
+					System.out.println(e.getMessage());
+				}
 				break;
 		}
 	}

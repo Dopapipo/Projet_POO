@@ -13,7 +13,7 @@ public class Player implements Comparable<Player> {
 	private int bet;
 	private WinningCombination combination;
 	private PlayerHand playerHand;
-	private boolean playing;
+	private boolean playing=true;
 	private boolean hasNotFolded;
 	private boolean currentlyRaising;
 	

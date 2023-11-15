@@ -9,6 +9,7 @@ public abstract class Superpower {
     protected String name;
     protected String description;
     protected List<Player> playersThatUsedIt;
+    protected int numberOfUses;
     public Superpower(int cost, String name, String description){
         this.cost = cost;
         this.name = name;
@@ -30,6 +31,9 @@ public abstract class Superpower {
         if (this.hasBeenUsedBy(player)) throw new RuntimeException("Already used");
         player.setChipStack(player.getChipStack() - this.cost);
         this.playersThatUsedIt.add(player);
+    }
+    public int getNumberOfUses() {
+        return numberOfUses;
     }
 
 

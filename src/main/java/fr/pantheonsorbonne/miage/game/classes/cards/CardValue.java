@@ -32,20 +32,21 @@ public enum CardValue {
      * @return the corresponding card
      * @throws RuntimeException if the representation is invalid
      */
-    private static CardValue valueOfStr(String str) {
-        for (CardValue value : CardValue.values()) {
-            if (str.equals(value.getStringRepresentation())) {
-                return value;
-            }
-        }
+    
+    //  private static CardValue valueOfStr(String str) {
+    //     for (CardValue value : CardValue.values()) {
+    //         if (str.equals(value.getStringRepresentation())) {
+    //             return value;
+    //         }
+    //     }
 
-        throw new RuntimeException("failed to parse value");
+    //     throw new RuntimeException("failed to parse value");
 
-    }
+    // }
 
-    private String getStringRepresentation() {
-        return stringRepresentation;
-    }
+    // private String getStringRepresentation() {
+    //     return stringRepresentation;
+    // }
 
     /**
      * the rank of the card for comparison purpose. The higher the rank, the better the card
@@ -59,12 +60,12 @@ public enum CardValue {
 		return CardValue.values()[(this.ordinal() + 1)%CardValue.values().length];
 	}
     //Try to be smart with the implementation of the inverted order rule
-    public int compareInverted(CardValue other) {
-        return -this.compare(other);
-    }
-    public CardValue getPrevious() {
-        return CardValue.values()[(this.ordinal() - 1)%CardValue.values().length];
-    }
+    // public int compareInverted(CardValue other) {
+    //     return -this.compare(other);
+    // }
+    // public CardValue getPrevious() {
+    //     return CardValue.values()[(this.ordinal() - 1)%CardValue.values().length];
+    // }
     public int compare(CardValue other) {
         if (other==null) {
             return 1;

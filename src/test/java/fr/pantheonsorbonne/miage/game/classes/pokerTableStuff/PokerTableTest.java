@@ -1,8 +1,9 @@
-package fr.pantheonsorbonne.miage;
+package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
@@ -12,9 +13,12 @@ import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardValue;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBot;
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBotSmarter;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerHand;
 import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.PokerTable;
 import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.PokerTableAutomatisee;
+import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerShow;
 
 class PokerTableTest {
 
@@ -551,4 +555,67 @@ class PokerTableTest {
 		assertEquals(player3.getChipStack(), 200);
 		assertEquals(player4.getChipStack(),0);
 	}
+
+	@Test
+	void superpowerTestAdd() {
+		//PlayerBotSmarter always uses the add superpower
+		Player player1 = new PlayerBotSmarter("Flavio",400);
+		Player player2 = new PlayerBotSmarter ("Pablo", 400);
+		Player player3 = new PlayerBotSmarter("Mingo", 400);
+		Player player4 = new PlayerBotSmarter("Oslo",400);
+		List<Player> playerList = Arrays.asList(player1,player2,player3,player4);
+		PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
+		table.startTurnWithPots();
+		//testing that every player was able to use the superpower, and that the card was added
+		assertEquals(table.getSuperpowerUseNumber("add"),4);
+		assertEquals(player1.getPlayerHand().getHand().size(),3);
+	}
+
+	@Test
+	void superpowerTest() {
+		//PlayerBotSmarter always uses the add superpower
+		Player player1 = new PlayerBotSmarter("Flavio",400);
+		Player player2 = new PlayerBotSmarter ("Pablo", 400);
+		Player player3 = new PlayerBotSmarter("Mingo", 400);
+		Player player4 = new PlayerBotSmarter("Oslo",400);
+		List<Player> playerList = Arrays.asList(player1,player2,player3,player4);
+		PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
+		table.startTurnWithPots();
+		assertEquals(table.getSuperpowerUseNumber("add"),4);
+		assertEquals(player1.getPlayerHand().getHand().size(),3);
+		assertEquals(player2.getPlayerHand().getHand().size(),3);
+		assertEquals(player3.getPlayerHand().getHand().size(),3);
+		assertEquals(player4.getPlayerHand().getHand().size(),3);
+		table.resetTable();
+		//Test that table is reset
+		assertEquals(table.gameContinues(),false);
+		assertEquals(table.getNumberOfPots(),0);
+	}
+
+	@Test
+	void superpowerTestShow() {
+		//PlayerBot 
+		Player player1 = new PlayerBot("Flavio",400);
+		Player player2 = new PlayerBot ("Pablo", 400);
+		Player player3 = new PlayerBot("Mingo", 400);
+		Player player4 = new PlayerBot("Oslo",10);
+		List<Player> playerList = Arrays.asList(player1,player2,player3,player4);
+		PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
+		table.giveCards();
+		table.askAndUseSuperpower(player1, 1);
+		table.askAndUseSuperpower(player2, 1);
+		table.askAndUseSuperpower(player3, 1);
+		table.askAndUseSuperpower(player4, 1);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().values().iterator().next().size(),1);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().values().iterator().next().size(),1);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().values().iterator().next().size(),1);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().values().iterator().next().size(),0);
+		assertEquals(player1.getChipStack(), 400-SuperpowerShow.getCost());
+		assertEquals(player2.getChipStack(), 400-SuperpowerShow.getCost());
+		assertEquals(player3.getChipStack(), 400-SuperpowerShow.getCost());
+		assertEquals(player4.getChipStack(), 10);
+		
+	}
+
+	
 }

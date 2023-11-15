@@ -15,20 +15,20 @@ public enum CardColor {
         this.code = code;
     }
 
-    private static CardColor valueOfStr(String substring) {
-        for (CardColor color : CardColor.values()) {
-            if (color.name().substring(0, 1).equals(substring)) {
-                return color;
-            }
-        }
-        throw new RuntimeException("No Such Color");
-    }
+    // private static CardColor valueOfStr(String substring) {
+    //     for (CardColor color : CardColor.values()) {
+    //         if (color.name().substring(0, 1).equals(substring)) {
+    //             return color;
+    //         }
+    //     }
+    //     throw new RuntimeException("No Such Color");
+    // }
 
-    public int getCode() {
-        return code;
-    }
+    // public int getCode() {
+    //     return code;
+    // }
 
-    private String getStringRepresentation() {
-        return "" + this.name().charAt(0);
-    }
+    // private String getStringRepresentation() {
+    //     return "" + this.name().charAt(0);
+    // }
 }

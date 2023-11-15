@@ -10,6 +10,7 @@ public abstract class SuperpowerOther extends Superpower {
         try {
             this.handleChecksAndUse(player);
             this.use(player, other);
+            this.numberOfUses++;
         } catch (RuntimeException e) {
             throw e;
         }

@@ -10,10 +10,11 @@ public class PokerTableAutomatisee extends PokerTable {
 	public PokerTableAutomatisee(List<Player> players) {
 		super(players);
 	}
+
 	public PokerTableAutomatisee() {
 		super();
 	}
-	
+
 	@Override
 	protected int askForBetsWithPots(int playersInRound) {
 		boolean everyoneCalled = false;
@@ -24,7 +25,7 @@ public class PokerTableAutomatisee extends PokerTable {
 		while (!everyoneCalled) {
 			playersCalled.clear();
 			for (Player player : this.currentlyPlaying) {
-				//ask for superpower use
+				// ask for superpower use
 				this.askAndUseSuperpower(player);
 				// if there's more than one player to ask, player hasn't folded, isn't all in
 				// and isn't the one currently raising,
@@ -42,7 +43,7 @@ public class PokerTableAutomatisee extends PokerTable {
 						// if a player raises, we set him to currently raising, and all the other
 						// players to not currently raising
 						case 3:
-							int x = ((PlayerBot)player).getBetAmount();
+							int x = ((PlayerBot) player).getBetAmount();
 							this.raise(player, x);
 							break;
 					}
@@ -87,39 +88,36 @@ public class PokerTableAutomatisee extends PokerTable {
 			System.out.println(player.getName() + " is betting " + player.getBet());
 		}
 	}
+
 	@Override
 	protected int askForSuperpowerUse(Player player) {
-		return ((PlayerBot)player).getSuperpower();
+		return ((PlayerBot) player).getSuperpower();
 	}
-	
-
 
 	@Override
-	protected void askAndUseSuperpower(Player player) {
-		int answer = askForSuperpowerUse(player);
-		if (answer==0) {
+	protected void askAndUseSuperpower(Player player, int answer) {
+		if (answer == 0) {
 			return;
 		}
 		switch (answer) {
 			case 1:
 				// see a random card from a player
 
-				try {	
-						Player otherPlayer = ((PlayerBot)player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
-						superpowerShow.useOnOther(player, otherPlayer);
-						
-					}
-				 catch (Exception e) {
-					System.out.println("You can't use this superpower right now");
+				try {
+					Player otherPlayer = ((PlayerBot) player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
+					superpowerShow.useOnOther(player, otherPlayer);
+
+				} catch (RuntimeException e) {
+					System.out.println(e.getMessage());
 				}
 				break;
 			case 2:
 				// destroy a random card from a player
 				try {
-					Player otherPlayer = ((PlayerBot)player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
+					Player otherPlayer = ((PlayerBot) player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
 					superpowerDestroy.useOnOther(player, otherPlayer);
-				} catch (Exception e) {
-					System.out.println("You can't use this superpower right now");
+				} catch (RuntimeException e) {
+					System.out.println(e.getMessage());
 				}
 				break;
 			case 3:
@@ -127,25 +125,25 @@ public class PokerTableAutomatisee extends PokerTable {
 				try {
 					superpowerAdd.useOnSelf(player, this.deck);
 				} catch (RuntimeException e) {
-					System.out.println("You can't use this superpower right now");
+					System.out.println(e.getMessage());
 				}
 				break;
 			case 4:
 				// add a hidden card to your hand
 				try {
 
-					this.superpowerAddHidden.useOnSelf(player,this.deck);
-				}
-				catch (RuntimeException e) {
-					System.out.println("You can't use this superpower right now");
+					this.superpowerAddHidden.useOnSelf(player, this.deck);
+				} catch (RuntimeException e) {
+					System.out.println(e.getMessage());
 				}
 				break;
 		}
 	}
+
 	@Override
 	protected void askForInvertedColor() {
 		Player playerToAsk = this.bigBlind.getPlayer();
-		int answer = ((PlayerBot)playerToAsk).askForInvertedColor();
+		int answer = ((PlayerBot) playerToAsk).askForInvertedColor();
 		this.setInvertedColor(answer);
 	}
 

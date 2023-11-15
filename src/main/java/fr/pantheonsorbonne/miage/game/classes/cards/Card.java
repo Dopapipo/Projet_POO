@@ -61,11 +61,12 @@ public class Card  {
 	public void show() {
 		this.faceUp = true;
 	}
-	public String toFancyString() {
-        int rank = this.getCardValue().ordinal();
-        if (rank > 10) {
-            rank++;
-        }
-        return new String(Character.toChars(this.cardColor.getCode() + rank));
-    }
+	
+	// public String toFancyString() {
+    //     int rank = this.getCardValue().ordinal();
+    //     if (rank > 10) {
+    //         rank++;
+    //     }
+    //     return new String(Character.toChars(this.cardColor.getCode() + rank));
+    // }
 }

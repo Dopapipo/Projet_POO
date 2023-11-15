@@ -27,5 +27,7 @@ public class SuperpowerShow extends SuperpowerOther{
         player.getCardsKnownFromOtherPlayers().get(other).add((card));
         card.show();
     }
-    
+    public static int getCost() {
+        return COST;
+    }
 }

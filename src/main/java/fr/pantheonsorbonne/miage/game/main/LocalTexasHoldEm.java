@@ -21,14 +21,7 @@ public class LocalTexasHoldEm {
 		playerList.add(p3);
 		playerList.add(p4);
 		PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
-		while (table.gameContinues()) {
-			table.startTurnWithPots();
-			System.out.println(p1.getName() + ": " + p1.getChipStack());
-			System.out.println(p2.getName() + ": " + p2.getChipStack());
-			System.out.println(p3.getName() + ": " + p3.getChipStack());
-			System.out.println(p4.getName() + ": " + p4.getChipStack());
-			
-		}
+		table.play();
 	}
 	
 }

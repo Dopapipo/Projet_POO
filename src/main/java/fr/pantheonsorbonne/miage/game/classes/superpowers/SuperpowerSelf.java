@@ -11,6 +11,7 @@ public abstract class SuperpowerSelf extends Superpower {
         try {
             this.handleChecksAndUse(player);
             this.use(player, deck);
+            this.numberOfUses++;
         } catch (RuntimeException e) {
             throw e;
         }

@@ -33,7 +33,8 @@ public class PlayerBot extends Player {
 	//Use superpower on random player
 	public Player askForPlayerToUseSuperpowerOn(List<Player> players) {
 		Player toReturn;
-		do { toReturn = players.get((int) Math.random() * players.size());}
+		do { toReturn = players.get((int) Math.random() * players.size());
+		}
 		while (!toReturn.isPlaying());
 		return toReturn;
 	}
