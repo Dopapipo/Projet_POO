@@ -1,4 +1,4 @@
-/*package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
+package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,4 +41,3 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee{
     }
 }
 
-*/
