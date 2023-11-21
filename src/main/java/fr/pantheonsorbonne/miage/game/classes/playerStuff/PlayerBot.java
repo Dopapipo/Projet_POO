@@ -19,6 +19,18 @@ public class PlayerBot extends Player {
 	public int getCommand() {
 		return 3;
 	}
+	public String stringFromCommand(int command) {
+		switch (command) {
+		case 1:
+			return "call";
+		case 2:
+			return "fold";
+		case 3:
+			return "raise";
+		default:
+			return "";
+		}
+	}
 	/**
 	 * We always all-in
 	 * @return how much we bet
@@ -37,6 +49,10 @@ public class PlayerBot extends Player {
 		}
 		while (!toReturn.isPlaying());
 		return toReturn;
+	}
+	//Use superpower on random player (that might not be playing but hey the bot is dumb!)
+	public String askForPlayerToUseSuperpowerOn (String players) {
+		return players.split(",")[(int) Math.random() * players.split(",").length].trim();
 	}
 	//always invert the same color :D
 	public int askForInvertedColor() {

@@ -1,5 +1,6 @@
 package fr.pantheonsorbonne.miage.game.classes.cards;
 
+
 public class Card  {
 	// les attributs
 	private CardValue cardValue;
@@ -27,24 +28,9 @@ public class Card  {
 
 	// les méthodes
 	@Override
-	public String toString() {
-		String color = "";
-		switch (this.cardColor) {
-			case SPADE:
-				color = "SPADE";
-				break;
-			case DIAMOND:
-				color = "DIAMOND";
-				break;
-			case HEART:
-				color = "HEART";
-				break;
-			case CLOVER:
-				color = "CLOVER";
-				break;
-		}
-		return String.valueOf(this.cardValue) + " of " + color;
-	}
+    public String toString() {
+        return this.cardValue.getStringRepresentation() + this.cardColor.getStringRepresentation();
+    }
 	@Override
 	public boolean equals(Object card) {
 		if (card == null) {
@@ -71,7 +57,14 @@ public class Card  {
 	public void show() {
 		this.faceUp = true;
 	}
+	public static Card stringToCard(String str) {
+		String[] values = str.split(";");
+		return new Card(CardValue.valueOfStr(values[0]), CardColor.valueOfStr(values[1]));
+	}
 	
+    public static String cardToString(Card card) {
+		return card.getCardValue().getStringRepresentation() +";"+ card.getCardColor().getStringRepresentation();
+    }
 	// public String toFancyString() {
     //     int rank = this.getCardValue().ordinal();
     //     if (rank > 10) {

@@ -14,5 +14,7 @@ public class SuperpowerAddHidden extends SuperpowerSelf{
     protected void use(Player player,Deck deck) {
         player.addCard(deck.draw());
     }
-    
+    public static int getCost() {
+        return COST;
+    }
 }

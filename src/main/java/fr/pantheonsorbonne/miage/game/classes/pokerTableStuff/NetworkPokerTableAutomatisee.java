@@ -13,7 +13,7 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee{
     private final HostFacade hostFacade;
     private final Game poker;
     private final Set<String> players;
-    public NetworkPokerTableAutomatisee(HostFacade hostFacade, Set<String> players, fr.pantheonsorbonne.miage.model.Game war) {
+    public NetworkPokerTableAutomatisee(HostFacade hostFacade, Set<String> players, fr.pantheonsorbonne.miage.model.Game poker) {
         super();
         this.hostFacade = hostFacade;
         this.players = players;

@@ -96,7 +96,7 @@ public class PokerTableAutomatisee extends PokerTable {
 	}
 
 	@Override
-	protected void askAndUseSuperpower(Player player, int answer) {
+	protected void useSuperpower(Player player, int answer) {
 		if (answer == 0) {
 			return;
 		}
@@ -147,5 +147,43 @@ public class PokerTableAutomatisee extends PokerTable {
 		int answer = ((PlayerBot) playerToAsk).askForInvertedColor();
 		this.setInvertedColor(answer);
 	}
+
+	@Override
+	protected void useSuperpower(Player player, String name) {
+		switch (name) {
+			case "add":
+				try {
+					superpowerAdd.useOnSelf(player, this.deck);
+				} catch (RuntimeException e) {
+					System.out.println(e.getMessage());
+				}
+				break;
+			case "addHidden":
+				try {
+					this.superpowerAddHidden.useOnSelf(player, this.deck);
+				} catch (RuntimeException e) {
+					System.out.println(e.getMessage());
+				}
+				break;
+			case "destroy":
+				try {
+					Player otherPlayer = ((PlayerBot) player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
+					superpowerDestroy.useOnOther(player, otherPlayer);
+				} catch (RuntimeException e) {
+					System.out.println(e.getMessage());
+				}
+				break;
+			case "show":
+				try {
+					Player otherPlayer = ((PlayerBot) player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
+					superpowerShow.useOnOther(player, otherPlayer);
+				} catch (RuntimeException e) {
+					System.out.println(e.getMessage());
+				}
+				break;
+		}
+	}
+
+
 
 }

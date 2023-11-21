@@ -23,6 +23,14 @@ public class PlayerHand {
 	public void removeRandomCard() {
 		this.hand.remove((int) (Math.random() * this.hand.size()));
 	}
+	public void showRandomCard() {
+		int i;
+		do {
+			i=(int) (Math.random() * this.hand.size());
+		}
+		while(this.hand.get(i).isFaceUp());
+		this.hand.get(i).show();
+	}
 
 	
 	

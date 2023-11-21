@@ -7,10 +7,6 @@ public class Blind {
 	private int value;
 	private Player player;
 
-	public Blind(int value) {
-		this(value, null);
-	}
-
 	public Blind(int value, Player player) {
 		this.value = value;
 		this.player = player;

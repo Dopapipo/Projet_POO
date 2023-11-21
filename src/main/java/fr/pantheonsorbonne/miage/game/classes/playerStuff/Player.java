@@ -107,7 +107,6 @@ public class Player implements Comparable<Player> {
 			return allIn();
 		}
 		this.chipStack -= howMuch;
-		this.hasNotFolded = true;
 		this.bet += howMuch;
 		return this.bet;
 
@@ -115,10 +114,12 @@ public class Player implements Comparable<Player> {
 
 	public void call(int howMuch) {
 		this.bet(howMuch);
+		this.currentlyRaising=false;
 	}
 
 	public void fold() {
 		this.hasNotFolded = false;
+		this.currentlyRaising=false;
 	}
 
 	public void lost() {
@@ -172,5 +173,8 @@ public class Player implements Comparable<Player> {
 		return cardsKnownFromOtherPlayers;
 	}
 	
+	public void showRandomCard() {
+		this.playerHand.showRandomCard();
+	}
 
 }

@@ -13,5 +13,7 @@ public class SuperpowerDestroy extends SuperpowerOther{
     public void use(Player player, Player other){
         other.removeRandomCard();
     }
-    
+    public static int getCost() {
+        return COST;
+    }
 }

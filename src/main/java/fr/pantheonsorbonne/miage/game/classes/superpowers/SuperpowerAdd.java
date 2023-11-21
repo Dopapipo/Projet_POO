@@ -17,5 +17,8 @@ public class SuperpowerAdd extends SuperpowerSelf{
         player.addCard(card);
         card.show();
     }
+    public static int getCost() {
+        return COST;
+    }
     
 }
