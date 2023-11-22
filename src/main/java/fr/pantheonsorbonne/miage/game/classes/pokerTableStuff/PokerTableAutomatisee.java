@@ -96,9 +96,9 @@ public class PokerTableAutomatisee extends PokerTable {
 	}
 
 	@Override
-	protected void useSuperpower(Player player, int answer) {
+	protected Player useSuperpower(Player player, int answer) {
 		if (answer == 0) {
-			return;
+			return null;
 		}
 		switch (answer) {
 			case 1:
@@ -107,6 +107,7 @@ public class PokerTableAutomatisee extends PokerTable {
 				try {
 					Player otherPlayer = ((PlayerBot) player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
 					superpowerShow.useOnOther(player, otherPlayer);
+					return otherPlayer;
 
 				} catch (RuntimeException e) {
 					System.out.println(e.getMessage());
@@ -117,6 +118,7 @@ public class PokerTableAutomatisee extends PokerTable {
 				try {
 					Player otherPlayer = ((PlayerBot) player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
 					superpowerDestroy.useOnOther(player, otherPlayer);
+					return otherPlayer;
 				} catch (RuntimeException e) {
 					System.out.println(e.getMessage());
 				}
@@ -139,6 +141,7 @@ public class PokerTableAutomatisee extends PokerTable {
 				}
 				break;
 		}
+		return null;
 	}
 
 	@Override
@@ -149,7 +152,7 @@ public class PokerTableAutomatisee extends PokerTable {
 	}
 
 	@Override
-	protected void useSuperpower(Player player, String name) {
+	protected Player useSuperpower(Player player, String name) {
 		switch (name) {
 			case "add":
 				try {
@@ -169,6 +172,7 @@ public class PokerTableAutomatisee extends PokerTable {
 				try {
 					Player otherPlayer = ((PlayerBot) player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
 					superpowerDestroy.useOnOther(player, otherPlayer);
+					return otherPlayer;
 				} catch (RuntimeException e) {
 					System.out.println(e.getMessage());
 				}
@@ -177,11 +181,13 @@ public class PokerTableAutomatisee extends PokerTable {
 				try {
 					Player otherPlayer = ((PlayerBot) player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
 					superpowerShow.useOnOther(player, otherPlayer);
+					return otherPlayer;
 				} catch (RuntimeException e) {
 					System.out.println(e.getMessage());
 				}
 				break;
 		}
+		return null;
 	}
 
 

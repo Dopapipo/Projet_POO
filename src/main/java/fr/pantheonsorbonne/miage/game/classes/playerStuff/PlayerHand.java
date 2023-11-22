@@ -21,10 +21,14 @@ public class PlayerHand {
 		this.hand.add(card);
 	}
 	public void removeRandomCard() {
+		if (this.hand.size()>0) 
 		this.hand.remove((int) (Math.random() * this.hand.size()));
 	}
 	public void showRandomCard() {
 		int i;
+		if (this.hand.size()<1||this.allCardsAreShown()) {
+			return;
+		}
 		do {
 			i=(int) (Math.random() * this.hand.size());
 		}
@@ -32,6 +36,14 @@ public class PlayerHand {
 		this.hand.get(i).show();
 	}
 
+	public boolean allCardsAreShown() {
+		for (Card card : this.hand) {
+			if (!card.isFaceUp()) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	
 }

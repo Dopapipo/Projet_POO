@@ -176,5 +176,8 @@ public class Player implements Comparable<Player> {
 	public void showRandomCard() {
 		this.playerHand.showRandomCard();
 	}
+	public boolean allCardsAreShown() {
+		return this.playerHand.allCardsAreShown();
+	}
 
 }

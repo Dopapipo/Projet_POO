@@ -547,9 +547,9 @@ public abstract class PokerTable {
 		useSuperpower(player, answer);
 	}
 
-	protected abstract void useSuperpower(Player player,int answer) ;
+	protected abstract Player useSuperpower(Player player,int answer) ;
 
-	protected abstract void useSuperpower(Player player, String name);
+	protected abstract Player useSuperpower(Player player, String name);
 
 	protected void updateShownCards() {
 		for (Player player : this.currentlyPlaying) { // update cards that each player knows
