@@ -155,37 +155,13 @@ public class PokerTableAutomatisee extends PokerTable {
 	protected Player useSuperpower(Player player, String name) {
 		switch (name) {
 			case "add":
-				try {
-					superpowerAdd.useOnSelf(player, this.deck);
-				} catch (RuntimeException e) {
-					System.out.println(e.getMessage());
-				}
-				break;
+				return this.useSuperpower(player, 3);
 			case "addHidden":
-				try {
-					this.superpowerAddHidden.useOnSelf(player, this.deck);
-				} catch (RuntimeException e) {
-					System.out.println(e.getMessage());
-				}
-				break;
+				return this.useSuperpower(player, 4);
 			case "destroy":
-				try {
-					Player otherPlayer = ((PlayerBot) player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
-					superpowerDestroy.useOnOther(player, otherPlayer);
-					return otherPlayer;
-				} catch (RuntimeException e) {
-					System.out.println(e.getMessage());
-				}
-				break;
+				return this.useSuperpower(player, 2);
 			case "show":
-				try {
-					Player otherPlayer = ((PlayerBot) player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
-					superpowerShow.useOnOther(player, otherPlayer);
-					return otherPlayer;
-				} catch (RuntimeException e) {
-					System.out.println(e.getMessage());
-				}
-				break;
+				return this.useSuperpower(player, 1);
 		}
 		return null;
 	}
