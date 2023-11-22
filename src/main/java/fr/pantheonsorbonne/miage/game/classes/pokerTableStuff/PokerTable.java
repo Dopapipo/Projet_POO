@@ -125,13 +125,16 @@ public abstract class PokerTable {
 	/**
 	 * Kicks every <Player> with no money left
 	 */
-	protected void kickBrokePlayers() {
+	protected List<String> kickBrokePlayers() {
+		List<String> removedNames = new ArrayList<>();
 		for (Player player : this.playerList) {
 			if (player.isPlaying() && player.getChipStack() == 0) {
 				player.setPlaying(false);
+				removedNames.add(player.getName());
 				this.currentlyPlaying.remove(player);
 			}
 		}
+		return removedNames;
 	}
 
 	/**
@@ -157,7 +160,9 @@ public abstract class PokerTable {
 			player.setHand(new PlayerHand(this.deck.getRandomCards(2)));
 		}
 	}
-
+	public Deck getDeck() {
+		return this.deck;
+	}
 	/**
 	 * Checks what <Player> won the current round. Also supports draws
 	 * 
@@ -250,7 +255,9 @@ public abstract class PokerTable {
 			}
 		}
 	}
-
+	public int getHighestBet() {
+		return this.highestBet;
+	}
 	/**
 	 * Used to increase blinds
 	 */
@@ -427,18 +434,22 @@ public abstract class PokerTable {
 		if (winners == null) {
 			return;
 		}
-		int gainSplit = winners.size();
-		for (Player player : winners) {
-			player.won(value / gainSplit);
-			System.out.println(
-					player.getName() + " won " + value / gainSplit + " with hand " + player.getWinningCombination());
-		}
+		this.distributeGains(winners, value);
 
 		for (Pot aPot : this.pots) {
 			aPot.setValue(aPot.getValue() - value);
 		}
 	}
-
+	protected void distributeGains(List<Player> winners, int value) {
+		for (Player player : winners) {
+			this.won(player, value/winners.size());
+		}
+	}
+	protected void won( Player player,int value) {
+		player.won(value);
+		System.out.println(
+				player.getName() + " won " + value + " with hand " + player.getWinningCombination());
+	}
 	protected void printAllHands() {
 		for (Player player : this.currentlyPlaying) {
 			if (player.hasNotFolded()) {
@@ -500,6 +511,9 @@ public abstract class PokerTable {
 		while (this.gameContinues()) {
 			this.startTurnWithPots();
 			this.resetTable();
+			for (Player player : this.currentlyPlaying) {
+				System.out.println(player.getName() + " has " + player.getChipStack() + " chips left.");
+			}
 		}
 		System.out.println(this.currentlyPlaying.get(0).getName() + " won the game with "
 				+ this.currentlyPlaying.get(0).getChipStack() + " chips!");
@@ -538,7 +552,6 @@ public abstract class PokerTable {
 			this.highestBet = player.getBet();
 		} else {
 			player.call(this.highestBet - player.getBet());
-			player.setCurrentlyRaising(false);
 		}
 	}
 
@@ -546,7 +559,14 @@ public abstract class PokerTable {
 		int answer = askForSuperpowerUse(player);
 		useSuperpower(player, answer);
 	}
-
+	public Player strToPlayer(String name) {
+		for (Player player : this.currentlyPlaying) {
+			if (player.getName().equals(name)) {
+				return player;
+			}
+		}
+		return null;
+	}
 	protected abstract Player useSuperpower(Player player,int answer) ;
 
 	protected abstract Player useSuperpower(Player player, String name);

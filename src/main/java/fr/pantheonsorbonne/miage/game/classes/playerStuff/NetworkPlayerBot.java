@@ -46,7 +46,24 @@ public class NetworkPlayerBot {
                 case "kick" :
                     handleKick(command);
                     break;
-                
+                case "invertedColor":
+                    handleInvertedColor(command);
+                    break;
+                case "giveCards":
+                    handleGiveCards(command);
+                    break;
+                case "cardAdded":
+                    handleCardAdded(command);
+                    break;
+                case "cardDestroyed":
+                    handleCardDestroyed(command);
+                    break;
+                case "cardSeen":
+                    handleCardSeen(command);
+                    break;  
+                case "lostMoney":
+                    handleLostMoney(command);
+                    break;
 
             }
         }
@@ -71,28 +88,64 @@ public class NetworkPlayerBot {
     private static void handleRaiseCallOrFold(GameCommand command) {
         int playerCommand = ((PlayerBot)player).getCommand();
         int playerBetAmount = ((PlayerBot)player).getBetAmount();
-        int highestBet = Integer.valueOf(command.body());
+        int highestestBet = Integer.valueOf(command.body());
         switch (playerCommand) {
             case 1:
-                player.call(Integer.valueOf(command.body())-player.getBet());
+                player.call(highestestBet-player.getBet());
                 break;
             case 2:
                 player.fold();
                 break;
             case 3:
-                player.bet(highestBet+playerBetAmount-player.getBet());
+                player.bet(highestestBet+playerBetAmount-player.getBet());
         }
-        playerFacade.sendGameCommandToPlayer(poker,poker.getHostName(), new GameCommand(((PlayerBot)player).stringFromCommand(playerCommand),String.valueOf(((PlayerBot)player).getBetAmount())));
+        playerFacade.sendGameCommandToPlayer(poker,poker.getHostName(), new GameCommand(String.valueOf(playerCommand),String.valueOf(playerBetAmount)));
     }
     private static void handlePayBlind(GameCommand command) {
         int toPay = Integer.valueOf(command.body());
         bet(toPay);
     }
 
-    public static void bet(int howMuch) {
+    private static void bet(int howMuch) {
 		player.bet(howMuch);
 
 	}
-
+    private static void handleInvertedColor(GameCommand command) {
+        playerFacade.sendGameCommandToPlayer(poker, poker.getHostName(), new GameCommand("invertedColorAnswer",String.valueOf(((PlayerBot)player).askForInvertedColor())));
+    }
+    private static void handleGiveCards(GameCommand command) {
+        List<Card> cards = Arrays.stream(command.body().split(",")).map(Card::stringToCard).collect(Collectors.toList());
+        player.setHand(new PlayerHand(cards));
+    }
+    private static void handleCardAdded(GameCommand command) {
+        Card card = Card.stringToCard(command.body());
+        player.getPlayerHand().add(card);
+    }
+    private static void handleCardSeen(GameCommand command) {
+        String[] args = command.body().split(",");
+        Card card = Card.stringToCard(args[0]);
+        Player playerSeen = new Player(args[1],Integer.valueOf(args[2]));
+        player.getCardsKnownFromOtherPlayers().get(playerSeen).add(card);
+    }
+    private static void handleCardDestroyed(GameCommand command) {
+        String[] args = command.body().split(",");
+        Card card = Card.stringToCard(args[0]);
+        String playerName = args[1];
+        int playerChips = Integer.valueOf(args[2]);
+        if (player.getName().equals(playerName)) {
+            player.getPlayerHand().remove(card);
+        } else {
+            for (Player player : player.getCardsKnownFromOtherPlayers().keySet()) {
+                if (player.getName().equals(playerName)) {
+                    player.getCardsKnownFromOtherPlayers().get(new Player(playerName,playerChips)).remove(card);
+                }
+            }
+        }
+    }
+    private static void handleLostMoney(GameCommand command) {
+        int amount = Integer.valueOf(command.body());
+        //other functions handle checks so this function should never malfunction
+        player.setChipStack(player.getChipStack()-amount);
+    }
     
 }

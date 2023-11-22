@@ -1,5 +1,6 @@
 package fr.pantheonsorbonne.miage.game.classes.superpowers;
 
+import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 
 public class SuperpowerDestroy extends SuperpowerOther{
@@ -10,8 +11,8 @@ public class SuperpowerDestroy extends SuperpowerOther{
         super(COST, NAME, DESCRIPTION);
     }
     @Override
-    public void use(Player player, Player other){
-        other.removeRandomCard();
+    public Card use(Player player, Player other){
+    return other.removeRandomCard();
     }
     public static int getCost() {
         return COST;

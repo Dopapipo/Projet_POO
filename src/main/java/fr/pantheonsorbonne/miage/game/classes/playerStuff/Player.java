@@ -166,8 +166,8 @@ public class Player implements Comparable<Player> {
 	public void addCard(Card card) {
 		this.playerHand.add(card);
 	}
-	public void removeRandomCard() {
-		this.playerHand.removeRandomCard();
+	public Card removeRandomCard() {
+		return this.playerHand.removeRandomCard();
 	}
 	public Map<Player, Set<Card>> getCardsKnownFromOtherPlayers() {
 		return cardsKnownFromOtherPlayers;
@@ -178,6 +178,19 @@ public class Player implements Comparable<Player> {
 	}
 	public boolean allCardsAreShown() {
 		return this.playerHand.allCardsAreShown();
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (obj==null) {
+			return false;
+		}
+		if (obj==this) {
+			return true;
+		}
+		if (obj instanceof Player) {
+			return this.name.equals(((Player)obj).getName())&&this.chipStack==((Player)obj).getChipStack();
+		}
+		return false;
 	}
 
 }

@@ -17,17 +17,18 @@ public class SuperpowerShow extends SuperpowerOther{
      * This method is used to show a random card from the other player's hand.
      */
     @Override
-    public void use(Player player, Player other) {
+    public Card use(Player player, Player other) {
         player.getCardsKnownFromOtherPlayers().putIfAbsent(other,(Set<Card>)new HashSet<Card>());
         int k;
         if (other.allCardsAreShown()||player.getCardsKnownFromOtherPlayers().get(other).size()==other.getPlayerHand().getHand().size()) {
-            return;
+            return null;
         }
         do {
             k=((int) Math.random() * other.getPlayerHand().getHand().size());
         } while(other.getPlayerHand().getHand().get(k).isFaceUp()||player.getCardsKnownFromOtherPlayers().get(other).contains(other.getPlayerHand().getHand().get(k)));
         Card card = other.getPlayerHand().getHand().get(k);
         player.getCardsKnownFromOtherPlayers().get(other).add((card));
+        return card;
     }
     public static int getCost() {
         return COST;

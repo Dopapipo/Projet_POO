@@ -1,5 +1,6 @@
 package fr.pantheonsorbonne.miage.game.classes.superpowers;
 
+import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.Deck;
 
@@ -11,8 +12,9 @@ public class SuperpowerAddHidden extends SuperpowerSelf{
         super(COST, NAME, DESCRIPTION);}
 
     @Override
-    protected void use(Player player,Deck deck) {
+    protected Card use(Player player,Deck deck) {
         player.addCard(deck.draw());
+        return null;
     }
     public static int getCost() {
         return COST;

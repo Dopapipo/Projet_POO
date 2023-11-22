@@ -20,9 +20,17 @@ public class PlayerHand {
 	public void add(Card card) {
 		this.hand.add(card);
 	}
-	public void removeRandomCard() {
+	public Card removeRandomCard() {
 		if (this.hand.size()>0) 
-		this.hand.remove((int) (Math.random() * this.hand.size()));
+		return this.hand.remove((int) (Math.random() * this.hand.size()));
+		return null;
+	}
+	public Card remove(Card card) {
+		if (this.hand.contains(card)) {
+			this.hand.remove(card);
+			return card;
+		}
+		return null;
 	}
 	public void showRandomCard() {
 		int i;

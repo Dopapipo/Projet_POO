@@ -12,10 +12,11 @@ public class SuperpowerAdd extends SuperpowerSelf{
         super(COST, NAME, DESCRIPTION);}
 
     @Override
-    protected void use(Player player,Deck deck) {
+    protected Card use(Player player,Deck deck) {
         Card card = deck.draw();
         player.addCard(card);
         card.show();
+        return card;
     }
     public static int getCost() {
         return COST;

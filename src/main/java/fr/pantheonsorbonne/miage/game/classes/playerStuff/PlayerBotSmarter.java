@@ -5,7 +5,7 @@ package fr.pantheonsorbonne.miage.game.classes.playerStuff;
  * smarter than the rest: he figured out the META!
  */
 public class PlayerBotSmarter extends PlayerBot {
-
+    private int superpower = 3;
     public PlayerBotSmarter(String name) {
         super(name);
     }
@@ -22,7 +22,14 @@ public class PlayerBotSmarter extends PlayerBot {
     }
     @Override
     public int getSuperpower() {
-        return 3;
+        int toReturn = this.superpower;
+        this.superpower=1000; //so that we don't use it again for this round
+        return toReturn;
+    }
+    @Override
+    public void won(int winnings) {
+        super.won(winnings);
+        this.superpower=3;//reset superpower bc round ended
     }
 
 }

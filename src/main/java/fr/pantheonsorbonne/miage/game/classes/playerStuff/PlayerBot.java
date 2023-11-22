@@ -19,18 +19,7 @@ public class PlayerBot extends Player {
 	public int getCommand() {
 		return 3;
 	}
-	public String stringFromCommand(int command) {
-		switch (command) {
-		case 1:
-			return "call";
-		case 2:
-			return "fold";
-		case 3:
-			return "raise";
-		default:
-			return "";
-		}
-	}
+	
 	/**
 	 * We always all-in
 	 * @return how much we bet
@@ -47,7 +36,7 @@ public class PlayerBot extends Player {
 		Player toReturn;
 		do { toReturn = players.get((int) Math.random() * players.size());
 		}
-		while (!toReturn.isPlaying());
+		while (!toReturn.isPlaying()&&players.size()>1&&toReturn!=this);
 		return toReturn;
 	}
 	//Use superpower on random player (that might not be playing but hey the bot is dumb!)
