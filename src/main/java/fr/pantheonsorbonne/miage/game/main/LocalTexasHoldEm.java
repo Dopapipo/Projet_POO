@@ -5,16 +5,17 @@ import java.util.List;
 
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBot;
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBotSmarter;
 import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.PokerTableAutomatisee;
 
 public class LocalTexasHoldEm {
 
 	public static void main(String[] args) {
 
-		PlayerBot p1 = new PlayerBot("Romain", 300);
-		PlayerBot p2 = new PlayerBot("Lucian", 300);
-		PlayerBot p3 = new PlayerBot("Raymond", 300);
-		PlayerBot p4 = new PlayerBot("Abel", 300);
+		Player p1 = new PlayerBotSmarter("Romain", 300);
+		Player p2 = new PlayerBotSmarter("Lucian", 300);
+		Player p3 = new PlayerBotSmarter("Raymond", 300);
+		Player p4 = new PlayerBotSmarter("Abel", 300);
 		List<Player> playerList = new ArrayList<>();
 		playerList.add(p1);
 		playerList.add(p2);

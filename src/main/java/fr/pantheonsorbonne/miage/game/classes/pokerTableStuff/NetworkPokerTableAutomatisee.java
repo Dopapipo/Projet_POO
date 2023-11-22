@@ -18,7 +18,7 @@ import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerDestroy;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerShow;
 
 public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
-	private static final int PLAYER_COUNT = 4;
+	private static final int PLAYER_COUNT = 5;
 	private static final int DEFAULT_CHIPS = 300;
 	private final HostFacade hostFacade;
 	private final Game poker;
@@ -113,7 +113,6 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 				// ask him for bet
 				if (player.hasNotFolded() && !player.isAllIn() && !player.isCurrentlyRaising()) {
 					GameCommand playerAnswer = this.askRaiseCallOrFold(player);
-					System.out.println(playerAnswer.body());
 					switch (Integer.valueOf(playerAnswer.name())) {
 						case 1:
 							this.call(player);
@@ -248,5 +247,10 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 			hostFacade.sendGameCommandToPlayer(poker, player.getName(),
 					new GameCommand("payout", String.valueOf(value)));
 		}
+	}
+	@Override
+	protected void flop() {
+		super.flop();
+		hostFacade.sendGameCommandToAll(poker, new GameCommand("updateDealer", this.getDealer().getDealerHand().stream().map(Card::cardToString).collect(Collectors.joining(","))));
 	}
 }

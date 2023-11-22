@@ -1,9 +1,9 @@
 package fr.pantheonsorbonne.miage.game.classes.cards;
 
 public enum WinCondition {
-	HIGH_CARD(1), PAIR(2), TWO_PAIR(3), THREE_OF_A_KIND(4), STRAIGHT(5), FLUSH(6), FULL_HOUSE(7), FOUR_OF_A_KIND(8),
-	STRAIGHT_FLUSH(9),
-	ROYAL_FLUSH(10);
+	HIGH_CARD(1), PAIR(2), TWO_PAIR(3), THREE_OF_A_KIND(6), STRAIGHT(12), FLUSH(24), FULL_HOUSE(31), FOUR_OF_A_KIND(39),
+	STRAIGHT_FLUSH(48),
+	ROYAL_FLUSH(58);
 
 	private int rank;
 	// Royal flush is a straight flush with maxCard=ACE
@@ -23,8 +23,7 @@ public enum WinCondition {
 	}
 
 	// This could be useful to write algorithms for the bots to decide what to do,
-	// i'll leave it private for now
-	private int getRank() {
+	public int getRank() {
 		return this.rank;
 	}
 

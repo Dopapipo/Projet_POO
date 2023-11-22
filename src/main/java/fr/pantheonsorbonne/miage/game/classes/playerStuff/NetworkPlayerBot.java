@@ -22,6 +22,7 @@ public class NetworkPlayerBot {
         playerFacade.waitReady();
         playerFacade.createNewPlayer(playerId);
         poker = playerFacade.autoJoinGame("Poker");
+        outerLoop:
         while (true) {
 
             GameCommand command = playerFacade.receiveGameCommand(poker);
@@ -44,8 +45,7 @@ public class NetworkPlayerBot {
                     handlePayout(command);
                     break;
                 case "kick":
-                    handleKick(command);
-                    break;
+                    break outerLoop;
                 case "invertedColor":
                     handleInvertedColor(command);
                     break;
@@ -64,24 +64,25 @@ public class NetworkPlayerBot {
                 case "lostMoney":
                     handleLostMoney(command);
                     break;
+                case "updateDealer":
+                    handleUpdateDealer(command);
+                    break;
 
             }
         }
     }
 
     private static void handleAskSuperpowerTarget(GameCommand command) {
-        String target = ((PlayerBot) player).askForPlayerToUseSuperpowerOn(command.body());
+        String target = ((PlayerBotSmarter) player).askForPlayerToUseSuperpowerOn(command.body());
         playerFacade.sendGameCommandToPlayer(poker, poker.getHostName(), new GameCommand("superpowerTarget", target));
     }
 
     private static void handleAskSuperpower(GameCommand command) {
-        String superpower = String.valueOf(((PlayerBot) player).getSuperpower());
+        String superpower = String.valueOf(((PlayerBotSmarter) player).getSuperpower());
         playerFacade.sendGameCommandToPlayer(poker, poker.getHostName(), new GameCommand("superpower", superpower));
     }
 
-    private static void handleKick(GameCommand command) {
-        playerFacade.sendGameCommandToAll(poker, new GameCommand("I have been kicked :( - ", playerId));
-    }
+
 
     private static void handleShowCards(GameCommand command) {
         player.getPlayerHand().showRandomCard();
@@ -92,9 +93,9 @@ public class NetworkPlayerBot {
     }
 
     private static void handleRaiseCallOrFold(GameCommand command) {
-        int playerCommand = ((PlayerBot) player).getCommand();
-        int playerBetAmount = ((PlayerBot) player).getBetAmount();
         int highestestBet = Integer.valueOf(command.body());
+        int playerCommand = ((PlayerBotSmarter) player).getCommand(highestestBet-player.getBet());
+        int playerBetAmount = ((PlayerBotSmarter) player).getBetAmount(highestestBet-player.getBet());
         switch (playerCommand) {
             case 1:
                 player.call(highestestBet - player.getBet());
@@ -121,7 +122,7 @@ public class NetworkPlayerBot {
 
     private static void handleInvertedColor(GameCommand command) {
         playerFacade.sendGameCommandToPlayer(poker, poker.getHostName(),
-                new GameCommand("invertedColorAnswer", String.valueOf(((PlayerBot) player).askForInvertedColor())));
+                new GameCommand("invertedColorAnswer", String.valueOf(((PlayerBotSmarter) player).askForInvertedColor())));
     }
 
     private static void handleGiveCards(GameCommand command) {
@@ -163,5 +164,7 @@ public class NetworkPlayerBot {
         // other functions handle checks so this function should never malfunction
         player.setChipStack(player.getChipStack() - amount);
     }
-
+    private static void handleUpdateDealer(GameCommand command) {
+        player.setDealerHand(Arrays.stream(command.body().split(",")).map(Card::stringToCard).collect(Collectors.toList()));
+    }
 }

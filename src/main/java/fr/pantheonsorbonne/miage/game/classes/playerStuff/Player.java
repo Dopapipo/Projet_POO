@@ -1,10 +1,13 @@
 package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
+import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
 import fr.pantheonsorbonne.miage.game.classes.cards.WinningCombination;
 
 public class Player implements Comparable<Player> {
@@ -16,11 +19,12 @@ public class Player implements Comparable<Player> {
 	private boolean playing = true;
 	private boolean hasNotFolded;
 	private boolean currentlyRaising;
-
-	protected Map<Player, Set<Card>> cardsKnownFromOtherPlayers;
-
+	private List<Card> dealerHand;
+	private Map<Player, Set<Card>> cardsKnownFromOtherPlayers;
+	private CardColor invertedColor;
 	public Player(String name) {
 		this(name, 0);
+		this.dealerHand=new ArrayList<>();
 	}
 
 	public Player(String name, int chips) {
@@ -29,6 +33,7 @@ public class Player implements Comparable<Player> {
 		this.playing = (chips > 0);
 		this.hasNotFolded = true;
 		this.cardsKnownFromOtherPlayers = new HashMap<>();
+		this.dealerHand=new ArrayList<>();
 	}
 
 	public String getName() {
@@ -38,7 +43,12 @@ public class Player implements Comparable<Player> {
 	public int getChipStack() {
 		return chipStack;
 	}
-
+	public List<Card> getDealerHand() {
+		return dealerHand;
+	}
+	public void setDealerHand(List<Card> dealerHand) {
+		this.dealerHand = dealerHand;
+	}
 	public void setChipStack(int chipStack) {
 		this.chipStack = chipStack;
 	}
@@ -54,7 +64,12 @@ public class Player implements Comparable<Player> {
 	public PlayerHand getPlayerHand() {
 		return playerHand;
 	}
-
+	public void setInvertedColor(CardColor inverted) {
+		this.invertedColor=inverted;
+	}
+	public CardColor getInvertedColor() {
+		return this.invertedColor;
+	}
 	public boolean isPlaying() {
 		return playing;
 	}

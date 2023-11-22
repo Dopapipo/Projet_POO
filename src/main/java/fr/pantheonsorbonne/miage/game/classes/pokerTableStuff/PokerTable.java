@@ -53,6 +53,7 @@ public abstract class PokerTable {
 		totalBets = 0;
 		this.highestBet = 0;
 		this.initializeSuperpowers();
+		this.updateShownCards(); //will initialize player's maps
 	}
 
 	public PokerTable(List<Player> players) {
@@ -221,7 +222,23 @@ public abstract class PokerTable {
 			player.setCurrentlyRaising(false);
 		}
 	}
-
+	protected void flop() {
+		this.dealer.flop();
+		this.updateDealerHandForPlayers();
+	}
+	private void updateDealerHandForPlayers() {
+		for (Player player : this.currentlyPlaying) {
+			player.setDealerHand(this.dealer.getDealerHand());
+		}
+	}
+	protected void turn() {
+		this.dealer.turn();
+		this.updateDealerHandForPlayers();
+	}
+	protected void river() {
+		this.dealer.river();
+		this.updateDealerHandForPlayers();
+	}
 	/*
 	 * Resets all player's status for the next turn
 	 */
@@ -606,19 +623,24 @@ public abstract class PokerTable {
 	protected abstract void askAndSetInvertedColor();
 
 	protected void setInvertedColor(int answer) {
+		CardColor toInvertTo = null;
 		switch (answer) {
 			case 0:
-				this.invertedColor = CardColor.SPADE;
+				toInvertTo = CardColor.SPADE;
 				break;
 			case 1:
-				this.invertedColor = CardColor.HEART;
+				toInvertTo = CardColor.HEART;
 				break;
 			case 2:
-				this.invertedColor = CardColor.DIAMOND;
+				toInvertTo = CardColor.DIAMOND;
 				break;
 			case 3:
-				this.invertedColor = CardColor.CLOVER;
+				toInvertTo = CardColor.CLOVER;
 				break;
+		}
+		this.invertedColor = toInvertTo;
+		for (Player player : this.currentlyPlaying) {
+			player.setInvertedColor(toInvertTo);
 		}
 	}
 

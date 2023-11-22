@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
@@ -27,7 +28,7 @@ public class WinConditionLogic {
 	 * @param playerHand : The playerHand is updated when cards are dealt
 	 * @return a <WinningCombination> of the highest value in a hand
 	 */
-	private static WinningCombination findWinningCombination(List<Card> consideredHand) {
+	public static WinningCombination findWinningCombination(List<Card> consideredHand) {
 		// We will check for the highest values of WinningCombination first.
 
 		// check for royal flush and straight flush :

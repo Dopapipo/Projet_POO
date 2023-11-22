@@ -20,7 +20,7 @@ public class PlayerBot extends Player {
 	 * 
 	 * @return 1,2,3 (call,fold,raise)
 	 */
-	public int getCommand() {
+	public int getCommand(int amountToCall) {
 		return 3;
 	}
 
@@ -29,7 +29,7 @@ public class PlayerBot extends Player {
 	 * 
 	 * @return how much we bet
 	 */
-	public int getBetAmount() {
+	public int getBetAmount(int amountToCall) {
 		return this.getChipStack();
 	}
 

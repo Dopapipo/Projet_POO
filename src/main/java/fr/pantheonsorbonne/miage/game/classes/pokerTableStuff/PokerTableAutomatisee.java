@@ -5,6 +5,7 @@ import java.util.List;
 
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBot;
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBotSmarter;
 
 public class PokerTableAutomatisee extends PokerTable {
 	public PokerTableAutomatisee(List<Player> players) {
@@ -31,7 +32,7 @@ public class PokerTableAutomatisee extends PokerTable {
 				// and isn't the one currently raising,
 				// ask him for bet
 				if (player.hasNotFolded() && !player.isAllIn() && !player.isCurrentlyRaising()) {
-					int answer = ((PlayerBot) player).getCommand();
+					int answer = ((PlayerBotSmarter) player).getCommand(this.highestBet-player.getBet());
 					switch (answer) {
 						case 1:
 							this.call(player);
@@ -43,7 +44,7 @@ public class PokerTableAutomatisee extends PokerTable {
 						// if a player raises, we set him to currently raising, and all the other
 						// players to not currently raising
 						case 3:
-							int x = ((PlayerBot) player).getBetAmount();
+							int x = ((PlayerBotSmarter) player).getBetAmount(this.highestBet-player.getBet());
 							this.raise(player, x);
 							break;
 					}
@@ -79,11 +80,11 @@ public class PokerTableAutomatisee extends PokerTable {
 		this.askAndSetInvertedColor();
 		int playersInRound = currentlyPlaying.size();
 		playersInRound = this.askForBetsWithPots(playersInRound);
-		dealer.flop();
+		this.flop();
 		playersInRound = this.askForBetsWithPots(playersInRound);
-		dealer.turn();
+		this.turn();
 		playersInRound = this.askForBetsWithPots(playersInRound);
-		dealer.river();
+		this.river();
 		this.askForBetsWithPots(playersInRound);
 		for (Player player : this.currentlyPlaying) {
 			System.out.println(player.getName() + " is betting " + player.getBet());

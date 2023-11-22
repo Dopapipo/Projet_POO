@@ -10,7 +10,9 @@ public class PlayerHand {
 	public PlayerHand(List<Card> cards) {
 		this.hand = cards;
 	}
-
+	public int size() {
+		return this.hand.size();
+	}
 	public List<Card> getHand() {
 		return this.hand;
 	}

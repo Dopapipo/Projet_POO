@@ -36,7 +36,9 @@ public class Deck {
 		return cards;
 
 	};
-
+	public void remove(Card card) {
+		this.cards.remove(card);
+	}
 	/**
 	 * draws a card and then removes it from the deck
 	 * 
