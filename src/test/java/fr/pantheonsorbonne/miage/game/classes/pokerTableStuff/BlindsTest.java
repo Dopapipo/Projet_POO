@@ -6,7 +6,6 @@ package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
@@ -28,20 +27,21 @@ public class BlindsTest {
 
     @Test
     void testBlindIncreaseInPokerTable() {
-        Player speedyGonzales =new Player("Speedy Gonzales", 300);
+        Player speedyGonzales = new Player("Speedy Gonzales", 300);
         Player luckyLuke = new Player("Lucky Luke", 300);
         Player pabloEscobar = new Player("Pablo Escobar", 300);
-        PokerTable table = new PokerTableAutomatisee(Arrays.asList(new Player[] {speedyGonzales, luckyLuke, pabloEscobar}));
+        PokerTable table = new PokerTableAutomatisee(
+                Arrays.asList(new Player[] { speedyGonzales, luckyLuke, pabloEscobar }));
         table.initializeBlinds();
-        assert(table.getSmallBlind().getValue() == table.getDefaultBlind()/2);
-        assert(table.getBigBlind().getValue() == table.getDefaultBlind());
+        assert (table.getSmallBlind().getValue() == table.getDefaultBlind() / 2);
+        assert (table.getBigBlind().getValue() == table.getDefaultBlind());
         table.increaseBlinds();
-        assert(table.getSmallBlind().getValue() == table.getDefaultBlind());
-        assert(table.getBigBlind().getValue() == table.getDefaultBlind()*2);
-        assertEquals(table.getBigBlind().getPlayer(),pabloEscobar); //last player in list should get BB
-        assertEquals(table.getSmallBlind().getPlayer(),luckyLuke); //the one before him should get SB
+        assert (table.getSmallBlind().getValue() == table.getDefaultBlind());
+        assert (table.getBigBlind().getValue() == table.getDefaultBlind() * 2);
+        assertEquals(table.getBigBlind().getPlayer(), pabloEscobar); // last player in list should get BB
+        assertEquals(table.getSmallBlind().getPlayer(), luckyLuke); // the one before him should get SB
         table.switchBlinds();
-        assertEquals(table.getBigBlind().getPlayer(),speedyGonzales); //blinds place increments mod size(PlayerList)
-        assertEquals(table.getSmallBlind().getPlayer(),pabloEscobar);  
+        assertEquals(table.getBigBlind().getPlayer(), speedyGonzales); // blinds place increments mod size(PlayerList)
+        assertEquals(table.getSmallBlind().getPlayer(), pabloEscobar);
     }
 }

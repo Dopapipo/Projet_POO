@@ -5,45 +5,55 @@ import java.util.Random;
 
 public class PlayerBot extends Player {
 	Random random = new Random();
-    public PlayerBot(String name) {
-        super(name);
-    }
-    public PlayerBot(String name, int chipStack) {
-        super(name, chipStack);    }
-    
-    	/**
+
+	public PlayerBot(String name) {
+		super(name);
+	}
+
+	public PlayerBot(String name, int chipStack) {
+		super(name, chipStack);
+	}
+
+	/**
 	 * Call,fold,raise
-	 * For now, we always all-in. 
+	 * For now, we always all-in.
+	 * 
 	 * @return 1,2,3 (call,fold,raise)
 	 */
 	public int getCommand() {
 		return 3;
 	}
-	
+
 	/**
 	 * We always all-in
+	 * 
 	 * @return how much we bet
 	 */
 	public int getBetAmount() {
 		return this.getChipStack();
 	}
-	//Use superpower at random
+
+	// Use superpower at random
 	public int getSuperpower() {
 		return random.nextInt(5);
 	}
-	//Use superpower on random player
+
+	// Use superpower on random player
 	public Player askForPlayerToUseSuperpowerOn(List<Player> players) {
 		Player toReturn;
-		do { toReturn = players.get((int) Math.random() * players.size());
-		}
-		while (!toReturn.isPlaying()&&players.size()>1&&toReturn!=this);
+		do {
+			toReturn = players.get((int) Math.random() * players.size());
+		} while (!toReturn.isPlaying() && players.size() > 1 && toReturn != this);
 		return toReturn;
 	}
-	//Use superpower on random player (that might not be playing but hey the bot is dumb!)
-	public String askForPlayerToUseSuperpowerOn (String players) {
+
+	// Use superpower on random player (that might not be playing but hey the bot is
+	// dumb!)
+	public String askForPlayerToUseSuperpowerOn(String players) {
 		return players.split(",")[(int) Math.random() * players.split(",").length].trim();
 	}
-	//always invert the same color :D
+
+	// always invert the same color :D
 	public int askForInvertedColor() {
 		return 0;
 	}

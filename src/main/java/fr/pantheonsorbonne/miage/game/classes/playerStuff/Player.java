@@ -13,11 +13,12 @@ public class Player implements Comparable<Player> {
 	private int bet;
 	private WinningCombination combination;
 	private PlayerHand playerHand;
-	private boolean playing=true;
+	private boolean playing = true;
 	private boolean hasNotFolded;
 	private boolean currentlyRaising;
-	
-	protected Map <Player,Set<Card>> cardsKnownFromOtherPlayers;
+
+	protected Map<Player, Set<Card>> cardsKnownFromOtherPlayers;
+
 	public Player(String name) {
 		this(name, 0);
 	}
@@ -27,13 +28,12 @@ public class Player implements Comparable<Player> {
 		this.chipStack = chips;
 		this.playing = (chips > 0);
 		this.hasNotFolded = true;
-		this.cardsKnownFromOtherPlayers=new HashMap<>();
+		this.cardsKnownFromOtherPlayers = new HashMap<>();
 	}
 
 	public String getName() {
 		return name;
 	}
-
 
 	public int getChipStack() {
 		return chipStack;
@@ -55,7 +55,6 @@ public class Player implements Comparable<Player> {
 		return playerHand;
 	}
 
-
 	public boolean isPlaying() {
 		return playing;
 	}
@@ -72,7 +71,7 @@ public class Player implements Comparable<Player> {
 	public void setWinCombination(WinningCombination winCondition) {
 		this.combination = winCondition;
 	}
-	
+
 	public void printHand() {
 		System.out.println(this.name + " has the following hand :");
 		for (Card card : this.playerHand.getHand()) {
@@ -114,12 +113,12 @@ public class Player implements Comparable<Player> {
 
 	public void call(int howMuch) {
 		this.bet(howMuch);
-		this.currentlyRaising=false;
+		this.currentlyRaising = false;
 	}
 
 	public void fold() {
 		this.hasNotFolded = false;
-		this.currentlyRaising=false;
+		this.currentlyRaising = false;
 	}
 
 	public void lost() {
@@ -159,36 +158,41 @@ public class Player implements Comparable<Player> {
 	public boolean isAllIn() {
 		return this.chipStack == 0;
 	}
-	
+
 	public String toString() {
-		return this.name+" current chips: " + this.chipStack;
+		return this.name + " current chips: " + this.chipStack;
 	}
+
 	public void addCard(Card card) {
 		this.playerHand.add(card);
 	}
+
 	public Card removeRandomCard() {
 		return this.playerHand.removeRandomCard();
 	}
+
 	public Map<Player, Set<Card>> getCardsKnownFromOtherPlayers() {
 		return cardsKnownFromOtherPlayers;
 	}
-	
+
 	public void showRandomCard() {
 		this.playerHand.showRandomCard();
 	}
+
 	public boolean allCardsAreShown() {
 		return this.playerHand.allCardsAreShown();
 	}
+
 	@Override
 	public boolean equals(Object obj) {
-		if (obj==null) {
+		if (obj == null) {
 			return false;
 		}
-		if (obj==this) {
+		if (obj == this) {
 			return true;
 		}
 		if (obj instanceof Player) {
-			return this.name.equals(((Player)obj).getName())&&this.chipStack==((Player)obj).getChipStack();
+			return this.name.equals(((Player) obj).getName()) && this.chipStack == ((Player) obj).getChipStack();
 		}
 		return false;
 	}

@@ -5,10 +5,11 @@ import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 
 public abstract class SuperpowerSelf extends Superpower {
-    public SuperpowerSelf(int cost, String name, String description){
+    public SuperpowerSelf(int cost, String name, String description) {
         super(cost, name, description);
     }
-    public Card useOnSelf(Player player,Deck deck) throws RuntimeException{
+
+    public Card useOnSelf(Player player, Deck deck) throws RuntimeException {
         try {
             this.handleChecksAndUse(player);
             this.numberOfUses++;
@@ -17,5 +18,6 @@ public abstract class SuperpowerSelf extends Superpower {
             throw e;
         }
     }
+
     protected abstract Card use(Player player, Deck deck);
 }

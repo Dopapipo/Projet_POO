@@ -1,16 +1,11 @@
 package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +19,6 @@ import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerAdd;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerAddHidden;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerDestroy;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerShow;
-
 
 /*
  * Tests for PokerTable global functions(betting,giving cards,handling pots & wins,different player counts, kicking broke players,superpowers...)
@@ -848,13 +842,13 @@ class PokerTableTest {
 		assertEquals(table.getSuperpowerUseNumber("destroy"), 0);
 		assertEquals(table.getSuperpowerUseNumber("randomNonsense"), -1);
 		table.giveCards();
-		//Player that gets destroyed is random so let's handle that!
+		// Player that gets destroyed is random so let's handle that!
 		Player removed1 = table.useSuperpower(player1, "destroy");
 		Player removed2 = table.useSuperpower(player2, "destroy");
 		Player removed3 = table.useSuperpower(player3, "destroy");
 		Player removed4 = table.useSuperpower(player4, "destroy");
 		Player removed5 = table.useSuperpower(player5, "destroy");
-		//We know that 4 players used that superpoweer, and the last couldn't use it
+		// We know that 4 players used that superpoweer, and the last couldn't use it
 		assertEquals(table.getSuperpowerUseNumber("destroy"), 4);
 		assertEquals(player1.getChipStack(), 400 - SuperpowerDestroy.getCost());
 		assertEquals(player2.getChipStack(), 400 - SuperpowerDestroy.getCost());
@@ -865,7 +859,7 @@ class PokerTableTest {
 		assertEquals(removed5, null);
 		players.addAll(Arrays.asList(removed1, removed2, removed3, removed4));
 		Map<Player, Integer> map = new HashMap<>();
-		//count how many times each player had a card destroyed
+		// count how many times each player had a card destroyed
 		for (Player p : players) {
 			map.putIfAbsent(p, 0);
 			map.put(p, map.get(p) + 1);
@@ -875,6 +869,7 @@ class PokerTableTest {
 		assertEquals(removed3.getPlayerHand().getHand().size(), Math.max(0, 2 - map.get(removed3)));
 		assertEquals(removed4.getPlayerHand().getHand().size(), Math.max(0, 2 - map.get(removed4)));
 	}
+
 	@Test
 	void testSuperpowerShow() {
 		Player player1 = new PlayerBotSmarter("Flavio", 400);
@@ -889,9 +884,9 @@ class PokerTableTest {
 		assertEquals(table.getSuperpowerUseNumber("randomNonsense"), -1);
 		table.giveCards();
 		Player shown1 = table.useSuperpower(player1, "show");
-		Player shown2=table.useSuperpower(player2, "show");
-		Player shown3=table.useSuperpower(player3, "show");
-		Player shown4=table.useSuperpower(player4, "show");
+		Player shown2 = table.useSuperpower(player2, "show");
+		Player shown3 = table.useSuperpower(player3, "show");
+		Player shown4 = table.useSuperpower(player4, "show");
 		table.useSuperpower(player5, "show");
 		assertEquals(table.getSuperpowerUseNumber("show"), 4);
 		assertEquals(player1.getChipStack(), 400 - SuperpowerShow.getCost());
@@ -905,15 +900,16 @@ class PokerTableTest {
 		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(shown3).size(), 1);
 		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(shown4).size(), 1);
 		Player showAgain = table.useSuperpower(player1, "show");
-		//couldn't use the superpower because already used!
-		assertEquals(table.getSuperpowerUseNumber("show"),4);
+		// couldn't use the superpower because already used!
+		assertEquals(table.getSuperpowerUseNumber("show"), 4);
 		assertEquals(player1.getChipStack(), 400 - SuperpowerShow.getCost());
 		assertEquals(showAgain, null);
 		table.resetSuperpowerUsage();
 		/*
-		table.useSuperpower(player1, "show");
-		assertEquals(table.getSuperpowerUseNumber("show"),5);
-		assertEquals(player1.getChipStack(), 400 - SuperpowerShow.getCost()*2);*/
+		 * table.useSuperpower(player1, "show");
+		 * assertEquals(table.getSuperpowerUseNumber("show"),5);
+		 * assertEquals(player1.getChipStack(), 400 - SuperpowerShow.getCost()*2);
+		 */
 	}
-	
+
 }

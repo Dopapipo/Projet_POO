@@ -55,7 +55,6 @@ public abstract class PokerTable {
 		this.initializeSuperpowers();
 	}
 
-
 	public PokerTable(List<Player> players) {
 		this();
 		this.playerList = players;
@@ -77,9 +76,11 @@ public abstract class PokerTable {
 	protected int howManyAreStillPlaying() {
 		return this.currentlyPlaying.size();
 	}
+
 	public int getDefaultBlind() {
 		return this.defaultBlind;
 	}
+
 	protected void initializeBlinds() {
 		int n = this.howManyAreStillPlaying();
 		if (n <= 1) {
@@ -160,9 +161,11 @@ public abstract class PokerTable {
 			player.setHand(new PlayerHand(this.deck.getRandomCards(2)));
 		}
 	}
+
 	public Deck getDeck() {
 		return this.deck;
 	}
+
 	/**
 	 * Checks what <Player> won the current round. Also supports draws
 	 * 
@@ -175,7 +178,8 @@ public abstract class PokerTable {
 		}
 		List<Player> playersThatWon = new ArrayList<>();
 		for (Player player : players) {
-			player.setWinCombination(WinConditionLogic.findWinningCombination(this.invertedColor,dealer, player.getPlayerHand()));
+			player.setWinCombination(
+					WinConditionLogic.findWinningCombination(this.invertedColor, dealer, player.getPlayerHand()));
 		}
 		Collections.sort(players);
 		int index = players.size() - 1;
@@ -195,15 +199,12 @@ public abstract class PokerTable {
 		return playersThatWon;
 	}
 
-	
-
 	/**
 	 * Gives their money to the players that won. If there's a draw between n
 	 * players, splits the pot n ways.
 	 * 
 	 * @param playersThatWon
 	 */
-	
 
 	protected void resetSuperpowerUsage() {
 		this.superpowerAdd.resetUsage();
@@ -232,6 +233,7 @@ public abstract class PokerTable {
 			player.setHand(null);
 		}
 	}
+
 	protected int getNumberOfPots() {
 		return this.pots.size();
 	}
@@ -255,9 +257,11 @@ public abstract class PokerTable {
 			}
 		}
 	}
+
 	public int getHighestBet() {
 		return this.highestBet;
 	}
+
 	/**
 	 * Used to increase blinds
 	 */
@@ -296,7 +300,6 @@ public abstract class PokerTable {
 		this.pots.add(new Pot());
 	}
 
-
 	/**
 	 * Updates the base pot's value.
 	 */
@@ -326,7 +329,7 @@ public abstract class PokerTable {
 			if (playa.getBet() > 0) {
 
 				pot.addBet(Math.min(playa.getBet(), playerBet));
-				if (playa.getBet() >=playerBet) {
+				if (playa.getBet() >= playerBet) {
 					pot.addPlayer(playa);
 				}
 			}
@@ -345,12 +348,15 @@ public abstract class PokerTable {
 			pot.addBet(Math.min(pot.getThresholdBet(), player.getBet()));
 		}
 	}
+
 	public Blind getBigBlind() {
 		return this.bigBlind;
 	}
+
 	public Blind getSmallBlind() {
 		return this.smallBlind;
 	}
+
 	// Clears pots for next round
 	protected void clearPots() {
 		this.pots.clear();
@@ -368,7 +374,7 @@ public abstract class PokerTable {
 	}
 
 	// Asks for bets ("with pots" because this function used to not support pots)
-	protected abstract int askForBetsWithPots(int playersInRound) ;
+	protected abstract int askForBetsWithPots(int playersInRound);
 
 	protected int makeAllInPotIfNecessary(int playersInRound) {
 		for (Player player : this.currentlyPlaying) {
@@ -398,13 +404,14 @@ public abstract class PokerTable {
 	protected void setThresholdForBasePot() {
 		this.pots.get(0).setThresholdBet(this.highestBet);
 	}
-	//public for unit testing
+
+	// public for unit testing
 	public void resetTable() {
 		kickBrokePlayers();
 		deck.resetDeck();
 		dealer.clear();
 		this.switchBlinds();
-		this.invertedColor=null; //reset inverted color
+		this.invertedColor = null; // reset inverted color
 		this.numberOfTurns++;
 		this.totalBets = 0;
 		this.highestBet = 0;
@@ -440,16 +447,19 @@ public abstract class PokerTable {
 			aPot.setValue(aPot.getValue() - value);
 		}
 	}
+
 	protected void distributeGains(List<Player> winners, int value) {
 		for (Player player : winners) {
-			this.won(player, value/winners.size());
+			this.won(player, value / winners.size());
 		}
 	}
-	protected void won( Player player,int value) {
+
+	protected void won(Player player, int value) {
 		player.won(value);
 		System.out.println(
 				player.getName() + " won " + value + " with hand " + player.getWinningCombination());
 	}
+
 	protected void printAllHands() {
 		for (Player player : this.currentlyPlaying) {
 			if (player.hasNotFolded()) {
@@ -458,6 +468,7 @@ public abstract class PokerTable {
 			}
 		}
 	}
+
 	public int getSuperpowerUseNumber(String name) {
 		if (name.equals("add")) {
 			return this.superpowerAdd.getNumberOfUses();
@@ -473,7 +484,9 @@ public abstract class PokerTable {
 		}
 		return -1;
 	}
-	//used in a turn for card & interaction related functionalities (dealing, betting,superpowers)
+
+	// used in a turn for card & interaction related functionalities (dealing,
+	// betting,superpowers)
 	protected abstract void turnCards();
 
 	// Handles functionalities related to pots in a turn
@@ -507,6 +520,7 @@ public abstract class PokerTable {
 		this.printAllHands();
 		this.getDealer().printHand();
 	}
+
 	public void play() {
 		while (this.gameContinues()) {
 			this.startTurnWithPots();
@@ -518,6 +532,7 @@ public abstract class PokerTable {
 		System.out.println(this.currentlyPlaying.get(0).getName() + " won the game with "
 				+ this.currentlyPlaying.get(0).getChipStack() + " chips!");
 	}
+
 	// unit testing purposes
 	protected DealerHand getDealer() {
 		return this.dealer;
@@ -559,6 +574,7 @@ public abstract class PokerTable {
 		int answer = askForSuperpowerUse(player);
 		useSuperpower(player, answer);
 	}
+
 	public Player strToPlayer(String name) {
 		for (Player player : this.currentlyPlaying) {
 			if (player.getName().equals(name)) {
@@ -567,7 +583,8 @@ public abstract class PokerTable {
 		}
 		return null;
 	}
-	protected abstract Player useSuperpower(Player player,int answer) ;
+
+	protected abstract Player useSuperpower(Player player, int answer);
 
 	protected abstract Player useSuperpower(Player player, String name);
 

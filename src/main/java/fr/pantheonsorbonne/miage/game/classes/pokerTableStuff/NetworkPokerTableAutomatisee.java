@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.xml.bind.annotation.XmlElement.DEFAULT;
-
 import fr.pantheonsorbonne.miage.Facade;
 import fr.pantheonsorbonne.miage.HostFacade;
 import fr.pantheonsorbonne.miage.model.Game;
@@ -19,76 +17,86 @@ import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerAddHidden;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerDestroy;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerShow;
 
-public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee{
-    private static final int PLAYER_COUNT = 4;
-    private static final int DEFAULT_CHIPS = 300;
-    private final HostFacade hostFacade;
-    private final Game poker;
-    public NetworkPokerTableAutomatisee(HostFacade hostFacade, Set<String> players, fr.pantheonsorbonne.miage.model.Game poker) {
-        super();
-        this.hostFacade = hostFacade;
-        this.poker = poker;
-        List<Player> playersList = players.stream().map(p -> new Player(p, DEFAULT_CHIPS)).collect(Collectors.toList());
-        this.playerList=playersList;
-        for (Player player : this.playerList) {
-            if (player.getChipStack()>0){
-                this.currentlyPlaying.add(player);
-            }
-        }
-    }
-    public static void main(String[] args) {
-        //create the host facade
-        HostFacade hostFacade = Facade.getFacade();
-        hostFacade.waitReady();
+public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
+	private static final int PLAYER_COUNT = 4;
+	private static final int DEFAULT_CHIPS = 300;
+	private final HostFacade hostFacade;
+	private final Game poker;
 
-        //set the name of the player
-        hostFacade.createNewPlayer("Host");
+	public NetworkPokerTableAutomatisee(HostFacade hostFacade, Set<String> players,
+			fr.pantheonsorbonne.miage.model.Game poker) {
+		super();
+		this.hostFacade = hostFacade;
+		this.poker = poker;
+		List<Player> playersList = players.stream().map(p -> new Player(p, DEFAULT_CHIPS)).collect(Collectors.toList());
+		this.playerList = playersList;
+		for (Player player : this.playerList) {
+			if (player.getChipStack() > 0) {
+				this.currentlyPlaying.add(player);
+			}
+		}
+	}
 
-        //create a new game of poker
-        fr.pantheonsorbonne.miage.model.Game poker = hostFacade.createNewGame("Poker");
+	public static void main(String[] args) {
+		// create the host facade
+		HostFacade hostFacade = Facade.getFacade();
+		hostFacade.waitReady();
 
-        //wait for enough players to join
-        hostFacade.waitForExtraPlayerCount(PLAYER_COUNT);
+		// set the name of the player
+		hostFacade.createNewPlayer("Host");
 
-        NetworkPokerTableAutomatisee host = new NetworkPokerTableAutomatisee(hostFacade, poker.getPlayers(), poker);
-        host.play();
-        System.exit(0);
+		// create a new game of poker
+		fr.pantheonsorbonne.miage.model.Game poker = hostFacade.createNewGame("Poker");
 
+		// wait for enough players to join
+		hostFacade.waitForExtraPlayerCount(PLAYER_COUNT);
 
-    }
+		NetworkPokerTableAutomatisee host = new NetworkPokerTableAutomatisee(hostFacade, poker.getPlayers(), poker);
+		host.play();
+		System.exit(0);
 
-    @Override
-    protected void askBlindPayment() {
-        super.askBlindPayment();
-        hostFacade.sendGameCommandToPlayer(poker, this.getBigBlind().getPlayer().getName(), new GameCommand("payBlind",String.valueOf(this.getBigBlind().getValue())));
-        hostFacade.sendGameCommandToPlayer(poker, this.getSmallBlind().getPlayer().getName(), new GameCommand("payBlind",String.valueOf(this.getSmallBlind().getValue())));
-    }
-    @Override
-    protected void askAndSetInvertedColor() {
-        hostFacade.sendGameCommandToPlayer(poker, this.getBigBlind().getPlayer().getName(), new GameCommand("invertedColor",String.valueOf(this.getInvertedColor())));
-        String answer = hostFacade.receiveGameCommand(poker).body();
-        this.setInvertedColor(Integer.valueOf(answer));
-    }
-    @Override
-    protected void giveCards() {
-        for (Player player : this.getPlayers()) {
-            Card c1=this.getDeck().draw();
-            Card c2=this.getDeck().draw();
-            player.setHand(new PlayerHand(Arrays.asList(c1,c2)));
-            String card1 = Card.cardToString(c1);
-            String card2 = Card.cardToString(c2);
-            hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("giveCards",card1 + "," + card2));
-        }
-    }
-    @Override
-    protected List<String> kickBrokePlayers() {
-        List<String> removed = super.kickBrokePlayers();
-        for (String player : removed) {
-            hostFacade.sendGameCommandToPlayer(poker, player, new GameCommand("kick",""));
-        }
-        return removed;
-    }
-   @Override
+	}
+
+	@Override
+	protected void askBlindPayment() {
+		super.askBlindPayment();
+		hostFacade.sendGameCommandToPlayer(poker, this.getBigBlind().getPlayer().getName(),
+				new GameCommand("payBlind", String.valueOf(this.getBigBlind().getValue())));
+		hostFacade.sendGameCommandToPlayer(poker, this.getSmallBlind().getPlayer().getName(),
+				new GameCommand("payBlind", String.valueOf(this.getSmallBlind().getValue())));
+	}
+
+	@Override
+	protected void askAndSetInvertedColor() {
+		hostFacade.sendGameCommandToPlayer(poker, this.getBigBlind().getPlayer().getName(),
+				new GameCommand("invertedColor", String.valueOf(this.getInvertedColor())));
+		String answer = hostFacade.receiveGameCommand(poker).body();
+		this.setInvertedColor(Integer.valueOf(answer));
+	}
+
+	@Override
+	protected void giveCards() {
+		for (Player player : this.getPlayers()) {
+			Card c1 = this.getDeck().draw();
+			Card c2 = this.getDeck().draw();
+			player.setHand(new PlayerHand(Arrays.asList(c1, c2)));
+			String card1 = Card.cardToString(c1);
+			String card2 = Card.cardToString(c2);
+			hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+					new GameCommand("giveCards", card1 + "," + card2));
+		}
+	}
+
+	@Override
+	protected List<String> kickBrokePlayers() {
+		List<String> removed = super.kickBrokePlayers();
+		for (String player : removed) {
+			hostFacade.sendGameCommandToPlayer(poker, player, new GameCommand("kick", ""));
+		}
+		return removed;
+	}
+
+	@Override
 	protected int askForBetsWithPots(int playersInRound) {
 		boolean everyoneCalled = false;
 		// Implementation of support for constant raising : while
@@ -104,8 +112,8 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee{
 				// and isn't the one currently raising,
 				// ask him for bet
 				if (player.hasNotFolded() && !player.isAllIn() && !player.isCurrentlyRaising()) {
-                    GameCommand playerAnswer = this.askRaiseCallOrFold(player);
-                    System.out.println(playerAnswer.body());
+					GameCommand playerAnswer = this.askRaiseCallOrFold(player);
+					System.out.println(playerAnswer.body());
 					switch (Integer.valueOf(playerAnswer.name())) {
 						case 1:
 							this.call(player);
@@ -145,13 +153,14 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee{
 		return playersInRound;
 	}
 
-    @Override
+	@Override
 	protected int askForSuperpowerUse(Player player) {
-        hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("askSuperpower",""));
-        GameCommand received = hostFacade.receiveGameCommand(poker);
+		hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("askSuperpower", ""));
+		GameCommand received = hostFacade.receiveGameCommand(poker);
 		return Integer.valueOf(received.body());
 	}
-    @Override
+
+	@Override
 	protected Player useSuperpower(Player player, int answer) {
 		if (answer == 0) {
 			return null;
@@ -161,12 +170,15 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee{
 				// see a random card from a player
 
 				try {
-                    hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("askSuperpowerTarget",""));
-                    GameCommand received = hostFacade.receiveGameCommand(poker);
+					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+							new GameCommand("askSuperpowerTarget", ""));
+					GameCommand received = hostFacade.receiveGameCommand(poker);
 					Player otherPlayer = this.strToPlayer(received.body());
 					Card card = this.superpowerShow.useOnOther(player, otherPlayer);
-                    hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("lostMoney",String.valueOf(SuperpowerShow.getCost())));
-                    hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("cardSeen", Card.cardToString(card)+","+otherPlayer.getName()));
+					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+							new GameCommand("lostMoney", String.valueOf(SuperpowerShow.getCost())));
+					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+							new GameCommand("cardSeen", Card.cardToString(card) + "," + otherPlayer.getName()));
 					return otherPlayer;
 
 				} catch (RuntimeException e) {
@@ -176,12 +188,16 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee{
 			case 2:
 				// destroy a random card from a player
 				try {
-                    hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("askSuperpowerTarget",""));
-                    GameCommand received = hostFacade.receiveGameCommand(poker);
-					Player otherPlayer = this.strToPlayer(received.body());					
-                    Card card = this.superpowerDestroy.useOnOther(player, otherPlayer); //will throw an exception if can't use
-                    hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("lostMoney",String.valueOf(SuperpowerDestroy.getCost())));
-                    hostFacade.sendGameCommandToAll(poker, new GameCommand("cardDestroyed",Card.cardToString(card)+ "," + otherPlayer.getName()+","+otherPlayer.getChipStack()));
+					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+							new GameCommand("askSuperpowerTarget", ""));
+					GameCommand received = hostFacade.receiveGameCommand(poker);
+					Player otherPlayer = this.strToPlayer(received.body());
+					Card card = this.superpowerDestroy.useOnOther(player, otherPlayer); // will throw an exception if
+																						// can't use
+					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+							new GameCommand("lostMoney", String.valueOf(SuperpowerDestroy.getCost())));
+					hostFacade.sendGameCommandToAll(poker, new GameCommand("cardDestroyed",
+							Card.cardToString(card) + "," + otherPlayer.getName() + "," + otherPlayer.getChipStack()));
 					return otherPlayer;
 				} catch (RuntimeException e) {
 					System.out.println(e.getMessage());
@@ -191,9 +207,12 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee{
 				// add a card to your hand (shown)
 				try {
 					Card card = superpowerAdd.useOnSelf(player, this.deck);
-                    hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("lostMoney",String.valueOf(SuperpowerAdd.getCost())));
-                    hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("cardAdded", Card.cardToString(card)));
-                    hostFacade.sendGameCommandToAll(poker, new GameCommand("cardSeen", Card.cardToString(card)+","+player.getName()+","+player.getChipStack()));
+					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+							new GameCommand("lostMoney", String.valueOf(SuperpowerAdd.getCost())));
+					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+							new GameCommand("cardAdded", Card.cardToString(card)));
+					hostFacade.sendGameCommandToAll(poker, new GameCommand("cardSeen",
+							Card.cardToString(card) + "," + player.getName() + "," + player.getChipStack()));
 				} catch (RuntimeException e) {
 					System.out.println(e.getMessage());
 				}
@@ -203,8 +222,10 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee{
 				try {
 
 					Card card = this.superpowerAddHidden.useOnSelf(player, this.deck);
-                    hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("lostMoney",String.valueOf(SuperpowerAddHidden.getCost())));
-                    hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("cardAdded", Card.cardToString(card)));
+					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+							new GameCommand("lostMoney", String.valueOf(SuperpowerAddHidden.getCost())));
+					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+							new GameCommand("cardAdded", Card.cardToString(card)));
 				} catch (RuntimeException e) {
 					System.out.println(e.getMessage());
 				}
@@ -212,17 +233,20 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee{
 		}
 		return null;
 	}
-    private GameCommand askRaiseCallOrFold(Player player) {
-        hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("raiseCallOrFold",String.valueOf(this.getHighestBet())));
-        GameCommand received = hostFacade.receiveGameCommand(poker);
-        return received;
-    }
-    @Override
-    protected void distributeGains(List<Player> winners,int value) {
-        for (Player player : winners) {
-			this.won(player, value/winners.size());
-            hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("payout",String.valueOf(value)));
-		}
-    }
-}
 
+	private GameCommand askRaiseCallOrFold(Player player) {
+		hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+				new GameCommand("raiseCallOrFold", String.valueOf(this.getHighestBet())));
+		GameCommand received = hostFacade.receiveGameCommand(poker);
+		return received;
+	}
+
+	@Override
+	protected void distributeGains(List<Player> winners, int value) {
+		for (Player player : winners) {
+			this.won(player, value / winners.size());
+			hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+					new GameCommand("payout", String.valueOf(value)));
+		}
+	}
+}

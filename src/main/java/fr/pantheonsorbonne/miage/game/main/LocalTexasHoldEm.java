@@ -13,9 +13,9 @@ public class LocalTexasHoldEm {
 
 		PlayerBot p1 = new PlayerBot("Romain", 300);
 		PlayerBot p2 = new PlayerBot("Lucian", 300);
-		PlayerBot p3 = new PlayerBot("Raymond",300);
-		PlayerBot p4 = new PlayerBot("Abel",300);
-		List <Player> playerList = new ArrayList<>();
+		PlayerBot p3 = new PlayerBot("Raymond", 300);
+		PlayerBot p4 = new PlayerBot("Abel", 300);
+		List<Player> playerList = new ArrayList<>();
 		playerList.add(p1);
 		playerList.add(p2);
 		playerList.add(p3);
@@ -23,5 +23,5 @@ public class LocalTexasHoldEm {
 		PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
 		table.play();
 	}
-	
+
 }

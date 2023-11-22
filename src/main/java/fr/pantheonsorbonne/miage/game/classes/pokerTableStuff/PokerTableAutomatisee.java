@@ -166,6 +166,4 @@ public class PokerTableAutomatisee extends PokerTable {
 		return null;
 	}
 
-
-
 }

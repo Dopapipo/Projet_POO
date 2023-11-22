@@ -31,7 +31,7 @@ public class WinConditionLogic {
 		// We will check for the highest values of WinningCombination first.
 
 		// check for royal flush and straight flush :
-		
+
 		WinningCombination straight = straight(consideredHand);
 		WinningCombination flush = flush(consideredHand);
 
@@ -46,7 +46,7 @@ public class WinConditionLogic {
 			if (straightFlush != null) {
 				return new WinningCombination(WinCondition.STRAIGHT_FLUSH, flush.getCardValue());
 			}
-			
+
 		}
 		// check for a fullHouse :
 		WinningCombination multipleCards = findMultipleCardsAndFullHouse(consideredHand);
@@ -81,7 +81,9 @@ public class WinConditionLogic {
 		}
 		return findWinningCombination(consideredHand);
 	}
-	public static WinningCombination findWinningCombination(CardColor invertedColor, DealerHand dealerHand, PlayerHand playerHand) {
+
+	public static WinningCombination findWinningCombination(CardColor invertedColor, DealerHand dealerHand,
+			PlayerHand playerHand) {
 		List<Card> consideredHand = new ArrayList<>();
 
 		for (Card card : dealerHand.getDealerHand()) {
@@ -96,23 +98,26 @@ public class WinConditionLogic {
 		consideredHand = invertCardsOfColor(invertedColor, consideredHand);
 		return findWinningCombination(consideredHand);
 	}
-	//We will consider cards of the inverted color as if they were normal cards, but of
-	//inverted values (inverted two? ace. inverted ace? two. etc...)
+
+	// We will consider cards of the inverted color as if they were normal cards,
+	// but of
+	// inverted values (inverted two? ace. inverted ace? two. etc...)
 	private static List<Card> invertCardsOfColor(CardColor invertedColor, List<Card> hand) {
 		List<Card> toReturn = new ArrayList<>();
 		for (Card card : hand) {
 			if (card.getCardColor() == invertedColor) {
 				Card invertedCard = new InvertedCard(card.getCardValue().getInverted(), card.getCardColor());
 				toReturn.add(invertedCard);
-			}
-			else {
+			} else {
 				toReturn.add(card);
 			}
 		}
 		return toReturn;
 	}
+
 	/**
-	 * returns the list of flush cards if there's a flush (useful to check for straight flush)
+	 * returns the list of flush cards if there's a flush (useful to check for
+	 * straight flush)
 	 * 
 	 * @param hand
 	 * @return null if there's no flush, list of cards from flush otherwise
@@ -143,7 +148,7 @@ public class WinConditionLogic {
 		return null;
 
 	}
-	
+
 	/**
 	 * Checks for a flush in an List of cards. To use after merging dealer and
 	 * player hands
@@ -204,10 +209,10 @@ public class WinConditionLogic {
 			// check if the next CardValue is equal to the value of the next card
 			if (hand.get(i).getCardValue().getNext() == hand.get(i + 1).getCardValue()) {
 				buffer++;
-			} 
-			//reset the buffer only if the next card is not also the same value
-			//Because a 2,3,4,5,5,6,KING hand is still a straight for instance.
-			else if (hand.get(i).getCardValue() != hand.get(i + 1).getCardValue()){ 
+			}
+			// reset the buffer only if the next card is not also the same value
+			// Because a 2,3,4,5,5,6,KING hand is still a straight for instance.
+			else if (hand.get(i).getCardValue() != hand.get(i + 1).getCardValue()) {
 				buffer = 1;
 			}
 			// Since we sorted the hand beforehand, when buffer>=5, the highest card from
