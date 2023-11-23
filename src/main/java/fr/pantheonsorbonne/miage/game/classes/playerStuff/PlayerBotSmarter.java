@@ -2,7 +2,10 @@ package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.PokerTableSimulations;
 
 /*
@@ -30,14 +33,14 @@ public class PlayerBotSmarter extends PlayerBot {
     @Override
     public int getCommand(int amountToCall) {
         this.winrate = this.findWinrate();
-        if (!alreadyRaised && winrate>0.6) {
+        if (!alreadyRaised && winrate>0.4) {
             alreadyRaised = true;
             return 3;
         }
         if (amountToCall==0) {
             return 1;
         }
-        if (winrate>0.4 || (this.getChipStack()*0.1<amountToCall&&winrate>0.1)) {
+        if (winrate>0.3 || (this.getChipStack()*0.1<amountToCall&&winrate>0.1)) {
             return 1;
         }
         return 2;
@@ -74,17 +77,19 @@ public class PlayerBotSmarter extends PlayerBot {
     }
 
     private double findWinrate() {
-        PokerTableSimulations simulation = new PokerTableSimulations(this.getPlayerHand().getHand(), this.getDealerHand(),this, this.getPlayers(), this.getCardsKnownFromOtherPlayers(),this.getInvertedColor(),1000);
+        List<Card> thisHand = this.getPlayerHand().getHand().stream().collect(Collectors.toList());
+        List<Card> thisDealer = this.getDealerHand().stream().collect(Collectors.toList());
+        PokerTableSimulations simulation = new PokerTableSimulations(thisHand, thisDealer,this.copy(), this.getPlayers(), this.getCardsKnownFromOtherPlayers(),this.getInvertedColor(),100);
         return simulation.getWinRate();
     }
     private List<Player> getPlayers() {
         List<Player> players = new ArrayList<>();
         for (Player player : this.getCardsKnownFromOtherPlayers().keySet()) {
-            players.add(player);
+            players.add(player.copy());
         }
-        players.add(this);
+        players.add(this.copy());
         return players;
     }
     
-
+    
 }

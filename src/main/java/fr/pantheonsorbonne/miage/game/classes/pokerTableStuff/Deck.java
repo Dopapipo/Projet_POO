@@ -45,6 +45,9 @@ public class Deck {
 	 * @return card drawn
 	 */
 	public Card draw() {
+		if (this.cards.size()<1) {
+			return null;
+		}
 		int i = random.nextInt(this.cards.size());
 		Card toReturn = this.cards.get(i);
 		this.cards.remove(i);

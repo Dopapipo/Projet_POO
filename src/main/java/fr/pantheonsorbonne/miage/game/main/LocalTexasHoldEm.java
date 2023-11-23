@@ -12,17 +12,49 @@ public class LocalTexasHoldEm {
 
 	public static void main(String[] args) {
 
-		Player p1 = new PlayerBotSmarter("Romain", 300);
-		Player p2 = new PlayerBotSmarter("Lucian", 300);
-		Player p3 = new PlayerBotSmarter("Raymond", 300);
-		Player p4 = new PlayerBotSmarter("Abel", 300);
-		List<Player> playerList = new ArrayList<>();
-		playerList.add(p1);
-		playerList.add(p2);
-		playerList.add(p3);
-		playerList.add(p4);
-		PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
-		table.play();
+		// Player p1 = new PlayerBotSmarter("Romain", 300);
+		// Player p2 = new PlayerBot("Lucian", 300);
+		// Player p3 = new PlayerBot("Raymond", 300);
+		// Player p4 = new PlayerBot("Abel", 300);
+		// List<Player> playerList = new ArrayList<>();
+		// playerList.add(p1);
+		// playerList.add(p2);
+		// playerList.add(p3);
+		// playerList.add(p4);
+		// PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
+		// System.out.println(table.play().getName());
+
+		System.out.println(runSimulations());
+	}
+	static Class runSimulations() {
+		int smartWins=0;
+		int otherWins=0;
+		for (int i =0;i<1000;i++) {
+			Player p1 = new PlayerBotSmarter("Romain", 300);
+			Player p2 = new PlayerBotSmarter("Lucian", 300);
+			Player p3 = new PlayerBot("Raymond", 300);
+			Player p4 = new PlayerBot("Abel", 300);
+			List<Player> playerList = new ArrayList<>();
+			playerList.add(p1);
+			playerList.add(p2);
+			playerList.add(p3);
+			playerList.add(p4);
+			PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
+			Player winner = table.play();
+			if (winner instanceof PlayerBotSmarter) {
+				smartWins++;
+			}
+			else {
+				otherWins++;
+			}
+			System.out.println("smart: " + smartWins + " other: " + otherWins);
+		}
+		if (smartWins>otherWins) {
+			return PlayerBotSmarter.class;
+		}
+		else {
+			return PlayerBot.class;
+		}
 	}
 
 }

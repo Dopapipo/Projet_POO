@@ -18,24 +18,26 @@ public class PokerTableAutomatisee extends PokerTable {
 
 	@Override
 	protected int askForBetsWithPots(int playersInRound) {
-		boolean everyoneCalled = false;
-		// Implementation of support for constant raising : while
-		// not everyone has called/folded (i.e. there's still a player raising)
-		// We ask every other player for a call/fold/raise
-		List<Boolean> playersCalled = new ArrayList<>();
-		while (!everyoneCalled) {
-			playersCalled.clear();
-			for (Player player : this.currentlyPlaying) {
+		boolean loopAgain = true;
+		//if only one player can still bet, it's pointless to keep looping
+		while (playersInRound>1&&loopAgain) {
+			int playersToAsk = this.playerQueue.size();
+			loopAgain=false;
+			for (int i = 0;i<playersToAsk;i++) {
+				Player player = this.playerQueue.poll();
 				// ask for superpower use
 				this.askAndUseSuperpower(player);
 				// if there's more than one player to ask, player hasn't folded, isn't all in
-				// and isn't the one currently raising,
 				// ask him for bet
-				if (player.hasNotFolded() && !player.isAllIn() && !player.isCurrentlyRaising()) {
-					int answer = ((PlayerBotSmarter) player).getCommand(this.highestBet-player.getBet());
+				if (player.hasNotFolded() && !player.isAllIn()) {
+	
+					int answer = player instanceof PlayerBotSmarter
+							? ((PlayerBotSmarter) player).getCommand(this.highestBet - player.getBet())
+							: ((PlayerBot) player).getCommand(this.highestBet - player.getBet());
 					switch (answer) {
 						case 1:
 							this.call(player);
+							this.playerQueue.add(player);
 							break;
 						case 2:
 							player.fold();
@@ -44,29 +46,21 @@ public class PokerTableAutomatisee extends PokerTable {
 						// if a player raises, we set him to currently raising, and all the other
 						// players to not currently raising
 						case 3:
-							int x = ((PlayerBotSmarter) player).getBetAmount(this.highestBet-player.getBet());
+							int x = player instanceof PlayerBotSmarter
+							? ((PlayerBotSmarter) player).getBetAmount(this.highestBet - player.getBet())
+							: ((PlayerBot) player).getBetAmount(this.highestBet - player.getBet());;
 							this.raise(player, x);
+							this.playerQueue.add(player);
+							if (x>0) loopAgain=true;
 							break;
+						}
 					}
-				}
-				if (player.isAllIn()) {
-					playersInRound--;
-				}
-				this.findHighestBet();
-			}
-			/**
-			 * If everyone has called, we can stop asking for bets
-			 * If someone has raised, we need to ask everyone again
-			 * If everyone called, playersCalled is empty.
-			 */
-			everyoneCalled = true;
-			for (Boolean playerCalled : playersCalled) {
-				if (!playerCalled) {
-					everyoneCalled = false;
-					break;
+					if (player.isAllIn()) {
+						playersInRound--;
+					}
+					this.findHighestBet();
 				}
 			}
-		}
 		// reset player raise state for next dealer card
 		this.resetPlayersRaise();
 		return playersInRound;
@@ -86,9 +80,9 @@ public class PokerTableAutomatisee extends PokerTable {
 		playersInRound = this.askForBetsWithPots(playersInRound);
 		this.river();
 		this.askForBetsWithPots(playersInRound);
-		for (Player player : this.currentlyPlaying) {
-			System.out.println(player.getName() + " is betting " + player.getBet());
-		}
+		// for (Player player : this.currentlyPlaying) {
+		// 	System.out.println(player.getName() + " is betting " + player.getBet());
+		// }
 	}
 
 	@Override
@@ -111,7 +105,7 @@ public class PokerTableAutomatisee extends PokerTable {
 					return otherPlayer;
 
 				} catch (RuntimeException e) {
-					System.out.println(e.getMessage());
+					//System.out.println(e.getMessage());
 				}
 				break;
 			case 2:
@@ -121,7 +115,7 @@ public class PokerTableAutomatisee extends PokerTable {
 					superpowerDestroy.useOnOther(player, otherPlayer);
 					return otherPlayer;
 				} catch (RuntimeException e) {
-					System.out.println(e.getMessage());
+					//System.out.println(e.getMessage());
 				}
 				break;
 			case 3:
@@ -129,7 +123,7 @@ public class PokerTableAutomatisee extends PokerTable {
 				try {
 					superpowerAdd.useOnSelf(player, this.deck);
 				} catch (RuntimeException e) {
-					System.out.println(e.getMessage());
+					//System.out.println(e.getMessage());
 				}
 				break;
 			case 4:
@@ -138,7 +132,7 @@ public class PokerTableAutomatisee extends PokerTable {
 
 					this.superpowerAddHidden.useOnSelf(player, this.deck);
 				} catch (RuntimeException e) {
-					System.out.println(e.getMessage());
+					//System.out.println(e.getMessage());
 				}
 				break;
 		}

@@ -3,7 +3,9 @@ package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
@@ -27,6 +29,10 @@ public abstract class PokerTable {
 	protected CardColor invertedColor;
 	protected List<Player> playerList;
 	protected List<Player> currentlyPlaying;
+	protected Queue<Player> playerQueue; // used for turn order
+	// Code refactoring would be too big if I had to change currentlyPlaying to a
+	// queue
+	// So i'll just use a queue for turn order and keep currentlyPlaying as a list
 	protected DealerHand dealer;
 	protected Deck deck;
 	protected int totalBets;
@@ -53,7 +59,7 @@ public abstract class PokerTable {
 		totalBets = 0;
 		this.highestBet = 0;
 		this.initializeSuperpowers();
-		this.updateShownCards(); //will initialize player's maps
+		this.playerQueue = new LinkedList<Player>();
 	}
 
 	public PokerTable(List<Player> players) {
@@ -65,6 +71,24 @@ public abstract class PokerTable {
 			}
 		}
 		this.initializeBlinds();
+		this.initializePlayerHands();
+		this.updateShownCards(); // will initialize player's maps
+
+	}
+
+	private void buildQueue() {
+		Player first = this.bigBlind.getPlayer();
+		int firstIndex = this.currentlyPlaying.indexOf(first);
+		while (this.playerQueue.size() < this.currentlyPlaying.size()) {
+			this.playerQueue.add(this.currentlyPlaying.get(firstIndex));
+			firstIndex = (firstIndex + 1) % this.currentlyPlaying.size();
+		}
+	}
+
+	private void initializePlayerHands() {
+		for (Player player : this.currentlyPlaying) {
+			player.setHand(new PlayerHand(new ArrayList<Card>()));
+		}
 	}
 
 	protected void initializeSuperpowers() {
@@ -222,23 +246,28 @@ public abstract class PokerTable {
 			player.setCurrentlyRaising(false);
 		}
 	}
+
 	protected void flop() {
 		this.dealer.flop();
 		this.updateDealerHandForPlayers();
 	}
+
 	private void updateDealerHandForPlayers() {
 		for (Player player : this.currentlyPlaying) {
 			player.setDealerHand(this.dealer.getDealerHand());
 		}
 	}
+
 	protected void turn() {
 		this.dealer.turn();
 		this.updateDealerHandForPlayers();
 	}
+
 	protected void river() {
 		this.dealer.river();
 		this.updateDealerHandForPlayers();
 	}
+
 	/*
 	 * Resets all player's status for the next turn
 	 */
@@ -473,8 +502,6 @@ public abstract class PokerTable {
 
 	protected void won(Player player, int value) {
 		player.won(value);
-		System.out.println(
-				player.getName() + " won " + value + " with hand " + player.getWinningCombination());
 	}
 
 	protected void printAllHands() {
@@ -532,22 +559,23 @@ public abstract class PokerTable {
 
 	// Starts a turn (a round)
 	public void startTurnWithPots() {
+		this.buildQueue();
 		turnCards();
 		turnPots();
-		this.printAllHands();
-		this.getDealer().printHand();
+		// this.printAllHands();
+		// this.getDealer().printHand();
 	}
 
-	public void play() {
+	public Player play() {
 		while (this.gameContinues()) {
 			this.startTurnWithPots();
 			this.resetTable();
-			for (Player player : this.currentlyPlaying) {
-				System.out.println(player.getName() + " has " + player.getChipStack() + " chips left.");
-			}
+			// for (Player player : this.currentlyPlaying) {
+			// System.out.println(player.getName() + " has " + player.getChipStack() + "
+			// chips left.");
+			// }
 		}
-		System.out.println(this.currentlyPlaying.get(0).getName() + " won the game with "
-				+ this.currentlyPlaying.get(0).getChipStack() + " chips!");
+		return this.currentlyPlaying.get(0);
 	}
 
 	// unit testing purposes

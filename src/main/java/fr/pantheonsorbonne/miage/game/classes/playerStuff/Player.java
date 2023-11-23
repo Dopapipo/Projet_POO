@@ -56,7 +56,9 @@ public class Player implements Comparable<Player> {
 	public int getBet() {
 		return bet;
 	}
-
+	public void resetHand() {
+		this.playerHand.getHand().clear();
+	}
 	public void setBet(int bet) {
 		this.bet = bet;
 	}
@@ -93,7 +95,15 @@ public class Player implements Comparable<Player> {
 			System.out.println(card);
 		}
 	}
-
+	protected Player copy() {
+		Player copy =  new Player(this.getName(),this.getChipStack());
+		 copy.setCurrentlyPlaying(true);
+		 copy.setHand(this.playerHand);
+		 return copy;
+	 }
+	public void setCurrentlyPlaying(boolean g) {
+		this.playing = true;
+	}
 	private int allIn() {
 		if (!this.playing) {
 			return 0;
