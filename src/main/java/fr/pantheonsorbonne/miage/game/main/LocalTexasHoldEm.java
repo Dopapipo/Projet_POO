@@ -26,7 +26,7 @@ public class LocalTexasHoldEm {
 
 		System.out.println(runSimulations());
 	}
-	static Class runSimulations() {
+	static String runSimulations() {
 		int smartWins=0;
 		int otherWins=0;
 		for (int i =0;i<1000;i++) {
@@ -50,10 +50,10 @@ public class LocalTexasHoldEm {
 			System.out.println("smart: " + smartWins + " other: " + otherWins);
 		}
 		if (smartWins>otherWins) {
-			return PlayerBotSmarter.class;
+			return PlayerBotSmarter.class.getName();
 		}
 		else {
-			return PlayerBot.class;
+			return PlayerBot.class.getName();
 		}
 	}
 

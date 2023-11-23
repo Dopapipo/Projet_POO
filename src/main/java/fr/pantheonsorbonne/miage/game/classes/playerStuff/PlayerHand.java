@@ -28,8 +28,7 @@ public class PlayerHand {
 	}
 
 	public Card remove(Card card) {
-		if (this.hand.contains(card)) {
-			this.hand.remove(card);
+		if (this.hand.remove(card)) {
 			return card;
 		}
 		return null;

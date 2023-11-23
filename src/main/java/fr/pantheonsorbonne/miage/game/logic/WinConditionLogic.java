@@ -7,8 +7,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardValue;
@@ -256,7 +254,7 @@ public class WinConditionLogic {
 			for (Card card : hand.subList(i + 1, hand.size())) {
 				// check if we already checked for multiple cards on the current card
 				// before checking for equality for optimisation
-				if (!hasBeenChecked.contains(card.getCardValue()) && card.equals(hand.get(i))) {
+				if (!hasBeenChecked.contains(card.getCardValue()) && card.getCardValue().equals(hand.get(i).getCardValue())) {
 					Integer hasBeenPut = multipleCards.putIfAbsent(hand.get(i).getCardValue(), 2);
 					if (hasBeenPut != null) {
 						multipleCards.put(hand.get(i).getCardValue(),

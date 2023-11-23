@@ -21,8 +21,7 @@ import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerShow;
 import fr.pantheonsorbonne.miage.game.logic.WinConditionLogic;
 
 /*
- * This class represents a poker table. It holds all the functionnalities of a poker table.
- * It is not automated, this class can be used to play poker with a console interface.
+ * This abstract class represents a poker table. It holds all the functionnalities of a poker table.
  * The bots play using a class that inherits from this one.
  */
 public abstract class PokerTable {
@@ -252,7 +251,7 @@ public abstract class PokerTable {
 		this.updateDealerHandForPlayers();
 	}
 
-	private void updateDealerHandForPlayers() {
+	protected void updateDealerHandForPlayers() {
 		for (Player player : this.currentlyPlaying) {
 			player.setDealerHand(this.dealer.getDealerHand());
 		}

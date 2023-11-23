@@ -38,7 +38,7 @@ public class Card {
 			return true;
 		}
 		if (card instanceof Card) {
-			return this.getCardValue() == ((Card) card).getCardValue();
+			return this.getCardValue() == ((Card) card).getCardValue() && this.getCardColor().equals(((Card)card).getCardColor());
 
 		}
 		return false;

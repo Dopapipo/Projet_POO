@@ -2,7 +2,6 @@ package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
@@ -29,18 +28,17 @@ public class PlayerBotSmarter extends PlayerBot {
     public PlayerBotSmarter(String name, int chipStack) {
         super(name, chipStack);
     }
-
     @Override
     public int getCommand(int amountToCall) {
         this.winrate = this.findWinrate();
-        if (!alreadyRaised && winrate>0.4) {
+        if (winrate>0.9||(!alreadyRaised && winrate>0.4 && amountToCall<this.getChipStack()*0.2)){
             alreadyRaised = true;
             return 3;
         }
         if (amountToCall==0) {
             return 1;
         }
-        if (winrate>0.3 || (this.getChipStack()*0.1<amountToCall&&winrate>0.1)) {
+        if ((this.getChipStack()*0.4<amountToCall&&winrate>0.4) || (this.getChipStack()*0.1<amountToCall&&winrate>0.1) || (this.getChipStack()*0.9<amountToCall&&winrate>0.8)) {
             return 1;
         }
         return 2;
@@ -54,7 +52,7 @@ public class PlayerBotSmarter extends PlayerBot {
         if (winrate>0.7) {
             return (int) ((this.getChipStack()-amountToCall)*0.3);
         }
-        return (int) ((this.getChipStack()-amountToCall)*0.3);
+        return (int) ((this.getChipStack()-amountToCall)*0.1);
     }
 
     @Override
@@ -75,7 +73,9 @@ public class PlayerBotSmarter extends PlayerBot {
         super.won(winnings);
         this.superpower = 3;// reset superpower bc round ended
     }
-
+    public void setWinrate(double winrate) {
+        this.winrate = winrate;
+    }
     private double findWinrate() {
         List<Card> thisHand = this.getPlayerHand().getHand().stream().collect(Collectors.toList());
         List<Card> thisDealer = this.getDealerHand().stream().collect(Collectors.toList());
@@ -90,6 +90,7 @@ public class PlayerBotSmarter extends PlayerBot {
         players.add(this.copy());
         return players;
     }
-    
+
+
     
 }

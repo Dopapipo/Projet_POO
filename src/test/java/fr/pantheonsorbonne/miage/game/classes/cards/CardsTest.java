@@ -65,7 +65,7 @@ public class CardsTest {
         Card card2 = new Card(CardValue.KING, CardColor.HEART);
         assert (!card.equals(card2));
         Card card3 = new Card(CardValue.ACE, CardColor.HEART);
-        assert (card.equals(card3));
+        assert (!card.equals(card3));
         assertEquals(card.compareTo(card2), true);
         assertEquals(card.compareTo(card3), false);
         assert (card.getCardValue().compare(card2.getCardValue()) > 0);
