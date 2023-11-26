@@ -20,7 +20,7 @@ public class SuperpowerShow extends SuperpowerOther {
      */
     @Override
     public Card use(Player player, Player other) {
-        player.getCardsKnownFromOtherPlayers().putIfAbsent(other, (Set<Card>) new HashSet<Card>());
+        player.getCardsKnownFromOtherPlayers().putIfAbsent(other, new HashSet<>());
         int k;
         if (other.allCardsAreShown()
                 || player.getCardsKnownFromOtherPlayers().get(other).size() == other.getPlayerHand().getHand().size()) {

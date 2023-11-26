@@ -90,7 +90,7 @@ public class PlayerBotSmarter extends PlayerBot {
         players.add(this.copy());
         return players;
     }
-
+    
 
     
 }

@@ -3,8 +3,15 @@ package fr.pantheonsorbonne.miage.game.classes.superpowers;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.pantheonsorbonne.miage.game.classes.cards.Exceptions.AlreadyUsedException;
+import fr.pantheonsorbonne.miage.game.classes.cards.Exceptions.NotEnoughChipsException;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 
+/*
+ * There was a choice to make : have useOnSelf() and useOnOther() method here, or in the subclasses.
+ * We chose to have them in SuperpowerSelf and SuperpowerOther respectively.
+ * There might be a cleaner way to do it though that makes better use of Polymorphism.
+ */
 public abstract class Superpower {
     protected int cost;
     protected String name;
@@ -12,7 +19,7 @@ public abstract class Superpower {
     protected List<Player> playersThatUsedIt;
     protected int numberOfUses;
 
-    public Superpower(int cost, String name, String description) {
+    protected Superpower(int cost, String name, String description) {
         this.cost = cost;
         this.name = name;
         this.description = description;
@@ -31,11 +38,11 @@ public abstract class Superpower {
         this.playersThatUsedIt.clear();
     }
 
-    protected void handleChecksAndUse(Player player) throws RuntimeException {
+    protected void handleChecksAndUse(Player player) throws NotEnoughChipsException, AlreadyUsedException {
         if (!this.canUse(player))
-            throw new RuntimeException("Not enough chips");
+            throw new NotEnoughChipsException("Not enough chips");
         if (this.hasBeenUsedBy(player))
-            throw new RuntimeException("Already used");
+            throw new AlreadyUsedException("Already used");
         player.setChipStack(player.getChipStack() - this.cost);
         this.playersThatUsedIt.add(player);
     }

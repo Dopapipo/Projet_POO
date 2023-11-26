@@ -11,11 +11,12 @@ import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.model.Game;
 import fr.pantheonsorbonne.miage.model.GameCommand;
 
+
 public class NetworkPlayerBot {
-    static final PlayerFacade playerFacade = Facade.getFacade();
-    static final String playerId = "Player-" + new Random().nextInt();
-    static Game poker;
-    static Player player = new PlayerBotSmarter(playerId, 300);
+    private static final PlayerFacade playerFacade = Facade.getFacade();
+    private static final String playerId = "Player-" + new Random().nextInt();
+    private static Game poker;
+    private static Player player = new PlayerBotSmarter(playerId, 300);
 
     public static void main(String[] args) {
 
@@ -33,10 +34,8 @@ public class NetworkPlayerBot {
                 case "raiseCallOrFold":
                     handleRaiseCallOrFold(command);
                     break;
-                case "showCards":
-                    handleShowCards(command);
                 case "askSuperpower":
-                    handleAskSuperpower(command);
+                    handleAskSuperpower();
                     break;
                 case "askSuperpowerTarget":
                     handleAskSuperpowerTarget(command);
@@ -47,7 +46,7 @@ public class NetworkPlayerBot {
                 case "kick":
                     break outerLoop;
                 case "invertedColor":
-                    handleInvertedColor(command);
+                    handleInvertedColor();
                     break;
                 case "giveCards":
                     handleGiveCards(command);
@@ -67,6 +66,8 @@ public class NetworkPlayerBot {
                 case "updateDealer":
                     handleUpdateDealer(command);
                     break;
+                default:
+                    break;
 
             }
         }
@@ -77,23 +78,17 @@ public class NetworkPlayerBot {
         playerFacade.sendGameCommandToPlayer(poker, poker.getHostName(), new GameCommand("superpowerTarget", target));
     }
 
-    private static void handleAskSuperpower(GameCommand command) {
+    private static void handleAskSuperpower() {
         String superpower = String.valueOf(((PlayerBotSmarter) player).getSuperpower());
         playerFacade.sendGameCommandToPlayer(poker, poker.getHostName(), new GameCommand("superpower", superpower));
     }
 
-
-
-    private static void handleShowCards(GameCommand command) {
-        player.getPlayerHand().showRandomCard();
-    }
-
     private static void handlePayout(GameCommand command) {
-        player.won(Integer.valueOf(command.body()));
+        player.won(Integer.parseInt(command.body()));
     }
 
     private static void handleRaiseCallOrFold(GameCommand command) {
-        int highestestBet = Integer.valueOf(command.body());
+        int highestestBet = Integer.parseInt(command.body());
         int playerCommand = ((PlayerBotSmarter) player).getCommand(highestestBet-player.getBet());
         int playerBetAmount = ((PlayerBotSmarter) player).getBetAmount(highestestBet-player.getBet());
         switch (playerCommand) {
@@ -105,13 +100,16 @@ public class NetworkPlayerBot {
                 break;
             case 3:
                 player.bet(highestestBet + playerBetAmount - player.getBet());
+                break;
+            default:
+                break;
         }
         playerFacade.sendGameCommandToPlayer(poker, poker.getHostName(),
                 new GameCommand(String.valueOf(playerCommand), String.valueOf(playerBetAmount)));
     }
 
     private static void handlePayBlind(GameCommand command) {
-        int toPay = Integer.valueOf(command.body());
+        int toPay = Integer.parseInt(command.body());
         bet(toPay);
     }
 
@@ -120,7 +118,7 @@ public class NetworkPlayerBot {
 
     }
 
-    private static void handleInvertedColor(GameCommand command) {
+    private static void handleInvertedColor() {
         playerFacade.sendGameCommandToPlayer(poker, poker.getHostName(),
                 new GameCommand("invertedColorAnswer", String.valueOf(((PlayerBotSmarter) player).askForInvertedColor())));
     }
@@ -139,7 +137,7 @@ public class NetworkPlayerBot {
     private static void handleCardSeen(GameCommand command) {
         String[] args = command.body().split(",");
         Card card = Card.stringToCard(args[0]);
-        Player playerSeen = new Player(args[1], Integer.valueOf(args[2]));
+        Player playerSeen = new Player(args[1], Integer.parseInt(args[2]));
         player.getCardsKnownFromOtherPlayers().get(playerSeen).add(card);
     }
 
@@ -147,7 +145,7 @@ public class NetworkPlayerBot {
         String[] args = command.body().split(",");
         Card card = Card.stringToCard(args[0]);
         String playerName = args[1];
-        int playerChips = Integer.valueOf(args[2]);
+        int playerChips = Integer.parseInt(args[2]);
         if (player.getName().equals(playerName)) {
             player.getPlayerHand().remove(card);
         } else {
@@ -160,7 +158,7 @@ public class NetworkPlayerBot {
     }
 
     private static void handleLostMoney(GameCommand command) {
-        int amount = Integer.valueOf(command.body());
+        int amount = Integer.parseInt(command.body());
         // other functions handle checks so this function should never malfunction
         player.setChipStack(player.getChipStack() - amount);
     }

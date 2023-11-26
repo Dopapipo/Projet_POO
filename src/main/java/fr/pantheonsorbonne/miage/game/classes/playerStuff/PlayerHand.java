@@ -22,21 +22,28 @@ public class PlayerHand {
 	}
 
 	public Card removeRandomCard() {
-		if (this.hand.size() > 0)
+		if (!this.hand.isEmpty())
 			return this.hand.remove((int) (Math.random() * this.hand.size()));
 		return null;
 	}
-
+	public void showCard(Card card) {
+		card.show();
+	}
 	public Card remove(Card card) {
 		if (this.hand.remove(card)) {
 			return card;
 		}
 		return null;
 	}
-
+	public Card getCardAtIndex(int i) {
+		return this.hand.get(i);
+	}
+	public void clear() {
+		this.hand.clear();
+	}
 	public void showRandomCard() {
 		int i;
-		if (this.hand.size() < 1 || this.allCardsAreShown()) {
+		if (this.hand.isEmpty()|| this.allCardsAreShown()) {
 			return;
 		}
 		do {

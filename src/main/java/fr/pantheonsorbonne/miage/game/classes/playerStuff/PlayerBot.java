@@ -25,7 +25,7 @@ public class PlayerBot extends Player {
 	}
 
 	/**
-	 * We always all-in
+	 * We always all-in (our bot is really dumb so he doesn't even care how much he has to bet for call!)
 	 * 
 	 * @return how much we bet
 	 */
@@ -42,7 +42,7 @@ public class PlayerBot extends Player {
 	public Player askForPlayerToUseSuperpowerOn(List<Player> players) {
 		Player toReturn;
 		do {
-			toReturn = players.get((int) Math.random() * players.size());
+			toReturn = players.get(random.nextInt(players.size()));
 		} while (!toReturn.isPlaying() && players.size() > 1 && toReturn != this);
 		return toReturn;
 	}
@@ -50,11 +50,12 @@ public class PlayerBot extends Player {
 	// Use superpower on random player (that might not be playing but hey the bot is
 	// dumb!)
 	public String askForPlayerToUseSuperpowerOn(String players) {
-		return players.split(",")[(int) Math.random() * players.split(",").length].trim();
-	}
+		return players.split(",")[(int) Math.random() * players.split(",").length].trim();	}
 
 	// always invert the same color :D
 	public int askForInvertedColor() {
 		return 0;
 	}
+
+	
 }

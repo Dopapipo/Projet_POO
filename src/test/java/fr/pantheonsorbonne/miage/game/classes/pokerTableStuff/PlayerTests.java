@@ -16,7 +16,7 @@ import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBot;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBotSmarter;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerHand;
 
-public class PlayerTests {
+ class PlayerTests {
     @Test
     void testPlayer() {
         Player player = new PlayerBot("Player");
@@ -45,10 +45,10 @@ public class PlayerTests {
         assert (((PlayerBotSmarter) player).askForPlayerToUseSuperpowerOn("Player1,Player2").equals("Player1")
                 || ((PlayerBotSmarter) player).askForPlayerToUseSuperpowerOn("Player1,Player2").equals("Player2"));
         player.setChipStack(250);
-        assertEquals(((PlayerBotSmarter)player).getSuperpower(),0);
+        assertEquals(0,((PlayerBotSmarter)player).getSuperpower());
         player.won(500); //reset superpower and give him money
-        assertEquals(((PlayerBotSmarter)player).getSuperpower(),3);
-        assertEquals(((PlayerBotSmarter)player).getSuperpower(),2);
+        assertEquals(3,((PlayerBotSmarter)player).getSuperpower());
+        assertEquals(2,((PlayerBotSmarter)player).getSuperpower());
         ((PlayerBotSmarter)player).setWinrate(1); 
         assertEquals(((PlayerBotSmarter)player).getBetAmount(0),player.getChipStack());
         ((PlayerBotSmarter)player).setWinrate(0.8);
@@ -75,8 +75,30 @@ public class PlayerTests {
         table.updateShownCards();
         table.updateDealerHandForPlayers();
         //all of the above is to make sure our smart player has <0.4 calculated winrate
-        assertEquals(((PlayerBotSmarter)player).getCommand(0),1);
+        assertEquals(1,((PlayerBotSmarter)player).getCommand(0));
         //And if he has to pay anything with that abysmal winrate, he folds...
-        assertEquals(((PlayerBotSmarter)player).getCommand(10),2);
+        assertEquals(2,((PlayerBotSmarter)player).getCommand(10));
+    }
+    @Test
+    void testPlayerHand() {
+        List<Card> cards = new ArrayList<>();
+        cards.add(new Card(CardValue.ACE, CardColor.CLOVER));
+        cards.add(new Card(CardValue.ACE, CardColor.DIAMOND));
+
+        PlayerHand hand = new PlayerHand(cards);
+        hand.remove(new Card(CardValue.ACE,CardColor.CLOVER));
+        assert(!hand.getHand().contains(new Card(CardValue.ACE,CardColor.CLOVER)));
+        assert(hand.getHand().contains(new Card(CardValue.ACE,CardColor.DIAMOND)));
+        hand.removeRandomCard();
+        assert(hand.getHand().isEmpty());
+        hand.showRandomCard();
+        hand.add(new Card(CardValue.ACE,CardColor.CLOVER));
+        hand.showRandomCard();
+        assert(hand.getHand().contains(new Card(CardValue.ACE,CardColor.CLOVER)));
+        assert(hand.getCardAtIndex(0).isFaceUp());
+        hand.showRandomCard();
+        //call this method a bunch to make sure there's no infinite loop
+        //(and also to make jacoco happy :D)
+
     }
 }

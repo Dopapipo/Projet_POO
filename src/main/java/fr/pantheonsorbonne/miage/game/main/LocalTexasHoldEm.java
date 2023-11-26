@@ -11,7 +11,7 @@ import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.PokerTableAutomati
 public class LocalTexasHoldEm {
 
 	public static void main(String[] args) {
-
+		//uncomment below to run an individual game
 		// Player p1 = new PlayerBotSmarter("Romain", 300);
 		// Player p2 = new PlayerBot("Lucian", 300);
 		// Player p3 = new PlayerBot("Raymond", 300);
@@ -23,13 +23,13 @@ public class LocalTexasHoldEm {
 		// playerList.add(p4);
 		// PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
 		// System.out.println(table.play().getName());
-
-		System.out.println(runSimulations());
+		//The line below will print the result of 1000 games between 2 smart and 2 dumb bots
+		System.out.println(runSimulations(1000));
 	}
-	static String runSimulations() {
+	static String runSimulations(int howMany) {
 		int smartWins=0;
 		int otherWins=0;
-		for (int i =0;i<1000;i++) {
+		for (int i =0;i<howMany;i++) {
 			Player p1 = new PlayerBotSmarter("Romain", 300);
 			Player p2 = new PlayerBotSmarter("Lucian", 300);
 			Player p3 = new PlayerBot("Raymond", 300);

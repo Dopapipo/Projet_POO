@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 
-public class BlindsTest {
+ class BlindsTest {
     @Test
     void testBlindIncrease() {
         Blind blind = new Blind(10, null);

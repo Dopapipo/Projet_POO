@@ -14,7 +14,7 @@ import fr.pantheonsorbonne.miage.game.classes.cards.InvertedCard;
 import fr.pantheonsorbonne.miage.game.classes.cards.WinCondition;
 import fr.pantheonsorbonne.miage.game.classes.cards.WinningCombination;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerHand;
-import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.DealerHand;
+import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.Dealer;
 
 public class WinConditionLogic {
 
@@ -69,7 +69,7 @@ public class WinConditionLogic {
 		return new WinningCombination(WinCondition.HIGH_CARD, findHighestCardInCardList(consideredHand));
 	}
 
-	public static WinningCombination findWinningCombination(DealerHand dealerHand, PlayerHand playerHand) {
+	public static WinningCombination findWinningCombination(Dealer dealerHand, PlayerHand playerHand) {
 		List<Card> consideredHand = new ArrayList<>();
 
 		for (Card card : dealerHand.getDealerHand()) {
@@ -81,7 +81,7 @@ public class WinConditionLogic {
 		return findWinningCombination(consideredHand);
 	}
 
-	public static WinningCombination findWinningCombination(CardColor invertedColor, DealerHand dealerHand,
+	public static WinningCombination findWinningCombination(CardColor invertedColor, Dealer dealerHand,
 			PlayerHand playerHand) {
 		List<Card> consideredHand = new ArrayList<>();
 

@@ -2,6 +2,8 @@ package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 
 import java.util.List;
 
+import fr.pantheonsorbonne.miage.game.classes.cards.Exceptions.AlreadyUsedException;
+import fr.pantheonsorbonne.miage.game.classes.cards.Exceptions.NotEnoughChipsException;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBot;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBotSmarter;
@@ -51,6 +53,8 @@ public class PokerTableAutomatisee extends PokerTable {
 							this.raise(player, x);
 							this.playerQueue.add(player);
 							if (x>0) loopAgain=true;
+							break;
+						default:
 							break;
 						}
 					}
@@ -103,7 +107,7 @@ public class PokerTableAutomatisee extends PokerTable {
 					superpowerShow.useOnOther(player, otherPlayer);
 					return otherPlayer;
 
-				} catch (RuntimeException e) {
+				} catch (NotEnoughChipsException |AlreadyUsedException e) {
 					//System.out.println(e.getMessage());
 				}
 				break;
@@ -113,7 +117,7 @@ public class PokerTableAutomatisee extends PokerTable {
 					Player otherPlayer = ((PlayerBot) player).askForPlayerToUseSuperpowerOn(this.currentlyPlaying);
 					superpowerDestroy.useOnOther(player, otherPlayer);
 					return otherPlayer;
-				} catch (RuntimeException e) {
+				} catch (NotEnoughChipsException |AlreadyUsedException e) {
 					//System.out.println(e.getMessage());
 				}
 				break;
@@ -121,7 +125,7 @@ public class PokerTableAutomatisee extends PokerTable {
 				// add a card to your hand (shown)
 				try {
 					superpowerAdd.useOnSelf(player, this.deck);
-				} catch (RuntimeException e) {
+				} catch (NotEnoughChipsException |AlreadyUsedException e) {
 					//System.out.println(e.getMessage());
 				}
 				break;
@@ -130,7 +134,7 @@ public class PokerTableAutomatisee extends PokerTable {
 				try {
 
 					this.superpowerAddHidden.useOnSelf(player, this.deck);
-				} catch (RuntimeException e) {
+				} catch (NotEnoughChipsException |AlreadyUsedException e) {
 					//System.out.println(e.getMessage());
 				}
 				break;
@@ -156,8 +160,9 @@ public class PokerTableAutomatisee extends PokerTable {
 				return this.useSuperpower(player, 2);
 			case "show":
 				return this.useSuperpower(player, 1);
+			default :
+				return null;
 		}
-		return null;
 	}
 
 }

@@ -69,20 +69,8 @@ public class Pot implements Comparable<Pot> {
 	}
 
 	@Override
-	/**
-	 * Compares pots based on their values
-	 * 
-	 * @param o : other pot
-	 * @return positive integer if this pot has higher value than the other, 0
-	 *         if this pot has the same value as the other, and negative integer if
-	 *         this pot
-	 *         has a lower value than the other pot
-	 */
 	public int compareTo(Pot o) {
 		return this.getValue() - o.getValue();
 	}
 
-	public String toString() {
-		return "this pot holds a value of " + this.value + "and has a threshold bet of " + this.thresholdBet;
-	}
 }

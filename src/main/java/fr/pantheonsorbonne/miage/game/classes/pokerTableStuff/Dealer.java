@@ -5,17 +5,17 @@ import java.util.List;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 
-public class DealerHand {
-	private List<Card> dealerHand;
+public class Dealer {
+	private List<Card> hand;
 	private Deck deck;
 
-	public DealerHand(Deck deck) {
-		this.dealerHand = new ArrayList<>();
+	public Dealer(Deck deck) {
+		this.hand = new ArrayList<>();
 		this.deck = deck;
 	}
 
-	public DealerHand(List<Card> cards) {
-		this.dealerHand = cards;
+	public Dealer(List<Card> cards) {
+		this.hand = cards;
 		this.deck = new Deck();
 	}
 
@@ -30,12 +30,11 @@ public class DealerHand {
 	}
 
 	public void river() {
-		this.deck.discard();
-		this.addToDealerHand(deck.draw());
+		this.turn();
 	}
 
 	private void addToDealerHand(Card card) {
-		this.dealerHand.add(card);
+		this.hand.add(card);
 	}
 
 	private void addToDealerHand(List<Card> cards) {
@@ -45,26 +44,16 @@ public class DealerHand {
 	}
 
 	public List<Card> getDealerHand() {
-		return this.dealerHand;
+		return this.hand;
 	}
 
-	public void printHand() {
-		System.out.println("Dealer" + " has the following hand :");
-		for (Card card : this.dealerHand) {
-			System.out.println(card);
-		}
-		// System.out.print(this.dealerHand.stream().map(c ->
-		// c.toFancyString()).collect(Collectors.joining(" ")));
-
-		// System.out.println();
-	}
 
 	public void clear() {
-		this.dealerHand.clear();
+		this.hand.clear();
 	}
 
 	// This method is public for unit testing purposes
 	public void setHand(List<Card> cards) {
-		this.dealerHand = cards;
+		this.hand = cards;
 	}
 }

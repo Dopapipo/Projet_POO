@@ -1,5 +1,11 @@
 package fr.pantheonsorbonne.miage.game.classes.cards;
 
+/*
+ * A WinningCombination is used to represent a poker hand strength, for instance
+ * Pair of Kings, or Jack high straight
+ * We can compare them, and the higher the WinningCombination, the better the hand
+ * Highest WinningCombination will win the pot.
+ */
 public class WinningCombination implements Comparable<WinningCombination> {
 	private WinCondition winCondition;
 	private CardValue cardValue;
@@ -35,10 +41,19 @@ public class WinningCombination implements Comparable<WinningCombination> {
 
 	@Override
 	public boolean equals(Object other) {
+		if (this == other) {
+			return true;
+		}
+		if (other == null)
+			return false;
 		if (other instanceof WinningCombination) {
 			return this.compareTo((WinningCombination) other) == 0;
 		}
 		return false;
+	}
+	@Override
+	public int hashCode() {
+		return this.cardValue.hashCode() + this.winCondition.hashCode();
 	}
 
 }

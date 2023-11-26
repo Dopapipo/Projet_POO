@@ -1,5 +1,7 @@
 package fr.pantheonsorbonne.miage.game.classes.cards;
 
+import fr.pantheonsorbonne.miage.game.classes.cards.Exceptions.ColorNotFoundException;
+
 /**
  * List the possible colors of a card
  */
@@ -21,7 +23,7 @@ public enum CardColor {
                 return color;
             }
         }
-        throw new RuntimeException("No Such Color");
+        throw new ColorNotFoundException("No Such Color");
     }
 
     public int getCode() {

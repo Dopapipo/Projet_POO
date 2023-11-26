@@ -33,10 +33,10 @@ public class PokerTableSimulations extends PokerTableAutomatisee {
         for (Card card:this.initialDealerHand) {
             this.deck.remove(card);
         }
-        for(Player player : this.initialCardsKnownFromOtherPlayers.keySet()) {
-            for(Card card : initialCardsKnownFromOtherPlayers.get(player)) {
+        for(Map.Entry<Player,Set<Card>> entry: this.initialCardsKnownFromOtherPlayers.entrySet()) {
+            for(Card card : entry.getValue()) {
                 this.deck.remove(card);
-                player.getPlayerHand().add(card);
+                entry.getKey().addCard(card);
             }
         }
         this.currentlyPlaying=this.players;
@@ -73,7 +73,7 @@ public class PokerTableSimulations extends PokerTableAutomatisee {
             }
             List<Player> winners = this.checkWhoWins(this.currentlyPlaying);
             if (winners.contains(this.simulatedPlayer)) {
-                sum+=1/winners.size();
+                sum+=((double)1)/winners.size();
             }
             this.reset();
             

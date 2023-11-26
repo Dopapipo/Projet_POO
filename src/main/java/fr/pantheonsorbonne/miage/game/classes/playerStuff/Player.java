@@ -24,7 +24,6 @@ public class Player implements Comparable<Player> {
 	private CardColor invertedColor;
 	public Player(String name) {
 		this(name, 0);
-		this.dealerHand=new ArrayList<>();
 	}
 
 	public Player(String name, int chips) {
@@ -57,10 +56,11 @@ public class Player implements Comparable<Player> {
 		return bet;
 	}
 	public void resetHand() {
-		this.playerHand.getHand().clear();
-	}
-	public void setBet(int bet) {
-		this.bet = bet;
+		this.playerHand.clear();
+	} 
+	//No setBet(), because it would only be used with 0 as parameter
+	public void resetBet() {
+		this.bet = 0;
 	}
 
 	public PlayerHand getPlayerHand() {
@@ -69,7 +69,7 @@ public class Player implements Comparable<Player> {
 	public void setInvertedColor(CardColor inverted) {
 		this.invertedColor=inverted;
 	}
-	public CardColor getInvertedColor() {
+	protected CardColor getInvertedColor() {
 		return this.invertedColor;
 	}
 	public boolean isPlaying() {
@@ -80,7 +80,6 @@ public class Player implements Comparable<Player> {
 		this.playing = playing;
 	}
 
-	// les méthodes
 	public void setHand(PlayerHand cards) {
 		this.playerHand = cards;
 	}
@@ -88,13 +87,7 @@ public class Player implements Comparable<Player> {
 	public void setWinCombination(WinningCombination winCondition) {
 		this.combination = winCondition;
 	}
-
-	public void printHand() {
-		System.out.println(this.name + " has the following hand :");
-		for (Card card : this.playerHand.getHand()) {
-			System.out.println(card);
-		}
-	}
+	//Returns a copy of the player. Used to avoid spaghetti code when running PokerTablesSimulations
 	protected Player copy() {
 		Player copy =  new Player(this.getName(),this.getChipStack());
 		 copy.setCurrentlyPlaying(true);
@@ -135,7 +128,6 @@ public class Player implements Comparable<Player> {
 		return this.bet;
 
 	}
-
 	public void call(int howMuch) {
 		this.bet(howMuch);
 		this.currentlyRaising = false;
@@ -146,10 +138,7 @@ public class Player implements Comparable<Player> {
 		this.currentlyRaising = false;
 	}
 
-	public void lost() {
-		this.won(0);
-	}
-
+	
 	public void won(int winnings) {
 		this.chipStack += winnings;
 		this.bet = 0;
@@ -166,7 +155,7 @@ public class Player implements Comparable<Player> {
 	public void setHasNotFolded(boolean hasNotFolded) {
 		this.hasNotFolded = hasNotFolded;
 	}
-
+	//Compare players by their winning combination : useful for finding the winner(s)
 	@Override
 	public int compareTo(Player player) {
 		return (this.getWinningCombination().compareTo(player.getWinningCombination()));
@@ -200,10 +189,16 @@ public class Player implements Comparable<Player> {
 		return cardsKnownFromOtherPlayers;
 	}
 
+	public void showCard(Card card) {
+		this.playerHand.showCard(card);
+	}
+	public Card getCardAtIndex(int index) {
+		return this.playerHand.getCardAtIndex(index);
+	}
+	//Very useful for unit testing of player known cards maps
 	public void showRandomCard() {
 		this.playerHand.showRandomCard();
 	}
-
 	public boolean allCardsAreShown() {
 		return this.playerHand.allCardsAreShown();
 	}

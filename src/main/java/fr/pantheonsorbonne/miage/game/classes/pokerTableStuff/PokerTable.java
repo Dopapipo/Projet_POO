@@ -32,7 +32,7 @@ public abstract class PokerTable {
 	// Code refactoring would be too big if I had to change currentlyPlaying to a
 	// queue
 	// So i'll just use a queue for turn order and keep currentlyPlaying as a list
-	protected DealerHand dealer;
+	protected Dealer dealer;
 	protected Deck deck;
 	protected int totalBets;
 	protected int highestBet;
@@ -40,8 +40,8 @@ public abstract class PokerTable {
 	protected Blind bigBlind;
 	protected Blind smallBlind;
 	protected Blind donor;
-	protected final int defaultBlind = 10;
-	protected final int turnsForBlindIncrease = 5;
+	protected static final int DEFAULT_BLIND = 10;
+	protected static final int TURNS_FOR_BLIND_INCREASE = 5;
 	protected SuperpowerSelf superpowerAdd;
 	protected SuperpowerOther superpowerShow;
 	protected SuperpowerOther superpowerDestroy;
@@ -54,7 +54,7 @@ public abstract class PokerTable {
 		this.playerList = new ArrayList<>();
 		this.currentlyPlaying = new ArrayList<>();
 		this.deck = new Deck();
-		this.dealer = new DealerHand(deck);
+		this.dealer = new Dealer(deck);
 		totalBets = 0;
 		this.highestBet = 0;
 		this.initializeSuperpowers();
@@ -102,7 +102,7 @@ public abstract class PokerTable {
 	}
 
 	public int getDefaultBlind() {
-		return this.defaultBlind;
+		return DEFAULT_BLIND;
 	}
 
 	protected void initializeBlinds() {
@@ -114,8 +114,8 @@ public abstract class PokerTable {
 		// will be small blind, and the one before that will be donor.
 		// if there's only two players, one player will always be donor and small blind.
 		if (this.bigBlind == null) {
-			this.bigBlind = new Blind(this.defaultBlind, this.currentlyPlaying.get(n - 1));
-			this.smallBlind = new Blind(this.defaultBlind / 2, this.currentlyPlaying.get(n - 2));
+			this.bigBlind = new Blind(this.DEFAULT_BLIND, this.currentlyPlaying.get(n - 1));
+			this.smallBlind = new Blind(this.DEFAULT_BLIND / 2, this.currentlyPlaying.get(n - 2));
 			this.donor = new Blind(0, this.currentlyPlaying.get(Math.max(0, n - 3)));
 		}
 
@@ -197,10 +197,10 @@ public abstract class PokerTable {
 	 * @return
 	 */
 	protected List<Player> checkWhoWins(List<Player> players) {
-		if (players.isEmpty()) {
-			return null;
-		}
 		List<Player> playersThatWon = new ArrayList<>();
+		if (players.isEmpty()) {
+			return playersThatWon;
+		}
 		for (Player player : players) {
 			player.setWinCombination(
 					WinConditionLogic.findWinningCombination(this.invertedColor, dealer, player.getPlayerHand()));
@@ -274,7 +274,7 @@ public abstract class PokerTable {
 		for (Player player : this.currentlyPlaying) {
 			player.setCurrentlyRaising(false);
 			player.setHasNotFolded(true);
-			player.setBet(0);
+			player.resetBet();
 			player.setHand(null);
 		}
 	}
@@ -311,8 +311,8 @@ public abstract class PokerTable {
 	 * Used to increase blinds
 	 */
 	protected void increaseBlinds() {
-		this.bigBlind.increase(defaultBlind);
-		this.smallBlind.increase(defaultBlind / 2);
+		this.bigBlind.increase(DEFAULT_BLIND);
+		this.smallBlind.increase(DEFAULT_BLIND / 2);
 	}
 
 	/**
@@ -460,7 +460,7 @@ public abstract class PokerTable {
 		this.numberOfTurns++;
 		this.totalBets = 0;
 		this.highestBet = 0;
-		if (this.numberOfTurns % this.turnsForBlindIncrease == 0) {
+		if (this.numberOfTurns % TURNS_FOR_BLIND_INCREASE == 0) {
 			increaseBlinds();
 		}
 		clearPots();
@@ -503,14 +503,6 @@ public abstract class PokerTable {
 		player.won(value);
 	}
 
-	protected void printAllHands() {
-		for (Player player : this.currentlyPlaying) {
-			if (player.hasNotFolded()) {
-				System.out.println(player.getName() + " has the hand: " + player.getWinningCombination());
-				player.printHand();
-			}
-		}
-	}
 
 	public int getSuperpowerUseNumber(String name) {
 		if (name.equals("add")) {
@@ -539,7 +531,7 @@ public abstract class PokerTable {
 		createPot();
 		makeAllInPotIfNecessary(0);
 		this.updateAllPotsValues();
-		// find highest bet (useful for unit testing)
+		// find highest bet (useful for unit testing and double checking)
 		this.findHighestBet();
 		// threshold for base pot is the highest bet
 		this.setThresholdForBasePot();
@@ -547,10 +539,6 @@ public abstract class PokerTable {
 		this.addCompetingPlayersToBasePot();
 		// sort the pots by increasing order
 		this.pots.sort(null);
-		/*
-		 * for (int i = 0;i<this.pots.size();i++) { System.out.println("i=" +i + " "
-		 * +this.pots.get(i)); }
-		 */
 		for (int i = 0; i < this.pots.size(); i++) {
 			payoutPot(this.pots.get(i));
 		}
@@ -561,24 +549,18 @@ public abstract class PokerTable {
 		this.buildQueue();
 		turnCards();
 		turnPots();
-		// this.printAllHands();
-		// this.getDealer().printHand();
 	}
 
 	public Player play() {
 		while (this.gameContinues()) {
 			this.startTurnWithPots();
 			this.resetTable();
-			// for (Player player : this.currentlyPlaying) {
-			// System.out.println(player.getName() + " has " + player.getChipStack() + "
-			// chips left.");
-			// }
 		}
 		return this.currentlyPlaying.get(0);
 	}
 
 	// unit testing purposes
-	protected DealerHand getDealer() {
+	protected Dealer getDealer() {
 		return this.dealer;
 	}
 
@@ -635,8 +617,8 @@ public abstract class PokerTable {
 	protected void updateShownCards() {
 		for (Player player : this.currentlyPlaying) { // update cards that each player knows
 			for (Player otherPlayer : this.currentlyPlaying) { // from all the other player hands
-				if (player != otherPlayer) {
-					player.getCardsKnownFromOtherPlayers().putIfAbsent(otherPlayer, new HashSet<Card>());
+				if (!player.equals(otherPlayer)) {
+					player.getCardsKnownFromOtherPlayers().putIfAbsent(otherPlayer, new HashSet<>());
 					for (Card card : otherPlayer.getPlayerHand().getHand()) {
 						if (card.isFaceUp()) {
 							player.getCardsKnownFromOtherPlayers().get(otherPlayer).add(card);
@@ -664,13 +646,15 @@ public abstract class PokerTable {
 			case 3:
 				toInvertTo = CardColor.CLOVER;
 				break;
+			default:
+				break;
 		}
 		this.invertedColor = toInvertTo;
 		for (Player player : this.currentlyPlaying) {
 			player.setInvertedColor(toInvertTo);
 		}
 	}
-
+	//Used for unit testing
 	public CardColor getInvertedColor() {
 		return this.invertedColor;
 	}

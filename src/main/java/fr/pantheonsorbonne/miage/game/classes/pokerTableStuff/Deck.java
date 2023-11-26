@@ -27,13 +27,13 @@ public class Deck {
 	 * @param deckSize : number of cards to draw
 	 * @return list of drawn cards
 	 */
-	public ArrayList<Card> getRandomCards(int deckSize) {
+	public List<Card> getRandomCards(int deckSize) {
 
-		ArrayList<Card> cards = new ArrayList<>(deckSize);
+		List<Card> cardss = new ArrayList<>(deckSize);
 		for (int i = 0; i < deckSize; i++) {
-			cards.add(i, this.draw());
+			cardss.add(i, this.draw());
 		}
-		return cards;
+		return cardss;
 
 	};
 	public void remove(Card card) {
@@ -45,7 +45,7 @@ public class Deck {
 	 * @return card drawn
 	 */
 	public Card draw() {
-		if (this.cards.size()<1) {
+		if (this.cards.isEmpty()) {
 			return null;
 		}
 		int i = random.nextInt(this.cards.size());

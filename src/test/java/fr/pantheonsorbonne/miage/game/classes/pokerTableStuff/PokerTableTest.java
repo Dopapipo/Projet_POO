@@ -54,12 +54,12 @@ class PokerTableTest {
 		dealerHand.add(new Card(CardValue.SIX, CardColor.HEART));
 		dealerHand.add(new Card(CardValue.SEVEN, CardColor.SPADE));
 		table.getDealer().setHand(dealerHand);
-		table.getPlayers().get(0).bet(40);
-		table.getPlayers().get(1).bet(40);
+		player1.bet(40);
+		player2.bet(40);
 		table.turnPots();
 
-		Assertions.assertEquals(player1.getChipStack(), 90);
-		Assertions.assertEquals(player2.getChipStack(), 10);
+		Assertions.assertEquals(90, player1.getChipStack());
+		Assertions.assertEquals(10, player2.getChipStack());
 	}
 
 	@Test
@@ -92,13 +92,13 @@ class PokerTableTest {
 		table.getDealer().setHand(dealerHand);
 
 		// Both players bet their whole chipstack
-		table.getPlayers().get(0).bet(50);
-		table.getPlayers().get(1).bet(50);
+		player1.bet(50);
+		player2.bet(50);
 		table.turnPots();
 
 		// Assertions
-		Assertions.assertEquals(player1.getChipStack(), 100);
-		Assertions.assertEquals(player2.getChipStack(), 0);
+		Assertions.assertEquals(100, player1.getChipStack());
+		Assertions.assertEquals(0, player2.getChipStack());
 	}
 
 	@Test
@@ -131,13 +131,13 @@ class PokerTableTest {
 		table.getDealer().setHand(dealerHand);
 
 		// Both players all-in but p1 has more chips.
-		table.getPlayers().get(0).bet(100);
-		table.getPlayers().get(1).bet(50);
+		player1.bet(100);
+		player2.bet(50);
 		table.turnPots();
 
 		// Assertions
-		Assertions.assertEquals(player1.getChipStack(), 150);
-		Assertions.assertEquals(player2.getChipStack(), 0);
+		Assertions.assertEquals(150, player1.getChipStack());
+		Assertions.assertEquals(0, player2.getChipStack());
 	}
 
 	@Test
@@ -169,13 +169,13 @@ class PokerTableTest {
 		table.getDealer().setHand(dealerHand);
 
 		// Both players all-in but p1 has more chips.
-		table.getPlayers().get(0).bet(100);
-		table.getPlayers().get(1).bet(50);
+		player1.bet(100);
+		player2.bet(50);
 		table.turnPots();
 
 		// Assertions
-		Assertions.assertEquals(player1.getChipStack(), 100);
-		Assertions.assertEquals(player2.getChipStack(), 50);
+		Assertions.assertEquals(100, player1.getChipStack());
+		Assertions.assertEquals(50, player2.getChipStack());
 	}
 
 	// have different chipstacks.
@@ -212,15 +212,15 @@ class PokerTableTest {
 		table.getDealer().setHand(dealerHand);
 
 		// Both players all-in but p1 has more chips.
-		table.getPlayers().get(0).bet(100);
-		table.getPlayers().get(1).bet(100);
-		table.getPlayers().get(2).bet(100);
+		player1.bet(100);
+		player2.bet(100);
+		player3.bet(100);
 		table.turnPots();
 
 		// Assertions
-		Assertions.assertEquals(player1.getChipStack(), 0);
-		Assertions.assertEquals(player2.getChipStack(), 0);
-		Assertions.assertEquals(player3.getChipStack(), 300);
+		Assertions.assertEquals(0, player1.getChipStack());
+		Assertions.assertEquals(0, player2.getChipStack());
+		Assertions.assertEquals(300, player3.getChipStack());
 	}
 
 	@Test
@@ -258,15 +258,15 @@ class PokerTableTest {
 		table.getDealer().setHand(dealerHand);
 
 		// Both players all-in but p1 has more chips.
-		table.getPlayers().get(0).bet(100);
-		table.getPlayers().get(1).bet(100);
-		table.getPlayers().get(2).bet(100);
+		player1.bet(100);
+		player2.bet(100);
+		player3.bet(100);
 		table.turnPots();
 
 		// Assertions
-		Assertions.assertEquals(player1.getChipStack(), 0);
-		Assertions.assertEquals(player2.getChipStack(), 0);
-		Assertions.assertEquals(player3.getChipStack(), 170);
+		Assertions.assertEquals(0, player1.getChipStack());
+		Assertions.assertEquals(0, player2.getChipStack());
+		Assertions.assertEquals(170, player3.getChipStack());
 	}
 
 	@Test
@@ -303,15 +303,15 @@ class PokerTableTest {
 		table.getDealer().setHand(dealerHand);
 
 		// Both players all-in but p1 has more chips.
-		table.getPlayers().get(0).bet(100);
-		table.getPlayers().get(1).bet(100);
-		table.getPlayers().get(2).bet(100);
+		player1.bet(100);
+		player2.bet(100);
+		player3.bet(100);
 		table.turnPots();
 
 		// Assertions
-		Assertions.assertEquals(player1.getChipStack(), 0);
-		Assertions.assertEquals(player2.getChipStack(), 40);
-		Assertions.assertEquals(player3.getChipStack(), 170);
+		Assertions.assertEquals(0, player1.getChipStack());
+		Assertions.assertEquals(40, player2.getChipStack());
+		Assertions.assertEquals(170, player3.getChipStack());
 	}
 
 	@Test
@@ -352,17 +352,17 @@ class PokerTableTest {
 		dealerHand.add(new Card(CardValue.SEVEN, CardColor.SPADE));
 		table.getDealer().setHand(dealerHand);
 
-		table.getPlayers().get(0).bet(200);
-		table.getPlayers().get(1).bet(200);
-		table.getPlayers().get(2).bet(200);
-		table.getPlayers().get(3).bet(200);
+		player1.bet(200);
+		player2.bet(200);
+		player3.bet(200);
+		player4.bet(200);
 		table.turnPots();
 
 		// assert
-		assertEquals(player1.getChipStack(), 0);
-		assertEquals(player2.getChipStack(), 0);
-		assertEquals(player3.getChipStack(), 0);
-		assertEquals(player4.getChipStack(), 800);
+		assertEquals(0, player1.getChipStack());
+		assertEquals(0, player2.getChipStack());
+		assertEquals(0, player3.getChipStack());
+		assertEquals(800, player4.getChipStack());
 	}
 
 	@Test
@@ -403,10 +403,10 @@ class PokerTableTest {
 		dealerHand.add(new Card(CardValue.SEVEN, CardColor.SPADE));
 		table.getDealer().setHand(dealerHand);
 
-		table.getPlayers().get(0).bet(200);
-		table.getPlayers().get(1).bet(200);
-		table.getPlayers().get(2).bet(200);
-		table.getPlayers().get(3).bet(200);
+		player1.bet(200);
+		player2.bet(200);
+		player3.bet(200);
+		player4.bet(200);
 		table.turnPots();
 
 		// assert
@@ -454,10 +454,10 @@ class PokerTableTest {
 		dealerHand.add(new Card(CardValue.SEVEN, CardColor.SPADE));
 		table.getDealer().setHand(dealerHand);
 
-		table.getPlayers().get(0).bet(200);
-		table.getPlayers().get(1).bet(200);
-		table.getPlayers().get(2).bet(200);
-		table.getPlayers().get(3).bet(200);
+		player1.bet(200);
+		player2.bet(200);
+		player3.bet(200);
+		player4.bet(200);
 		table.turnPots();
 
 		// assert
@@ -505,10 +505,10 @@ class PokerTableTest {
 		dealerHand.add(new Card(CardValue.SEVEN, CardColor.SPADE));
 		table.getDealer().setHand(dealerHand);
 
-		table.getPlayers().get(0).bet(200);
-		table.getPlayers().get(1).bet(200);
-		table.getPlayers().get(2).bet(200);
-		table.getPlayers().get(3).bet(200);
+		player1.bet(200);
+		player2.bet(200);
+		player3.bet(200);
+		player4.bet(200);
 		table.turnPots();
 
 		// assert
@@ -556,8 +556,8 @@ class PokerTableTest {
 		dealerHand.add(new Card(CardValue.SEVEN, CardColor.SPADE));
 		table.getDealer().setHand(dealerHand);
 
-		table.getPlayers().get(0).bet(200);
-		table.getPlayers().get(1).bet(200);
+		player1.bet(200);
+		player3.bet(200);
 		table.turnPots();
 
 		// assert
@@ -609,14 +609,14 @@ class PokerTableTest {
 		List<Player> playerList = Arrays.asList(player1, player2, player3, player4);
 		PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
 		table.raise(player1, 100);
-		assertEquals(table.getPlayers().get(0).getBet(), 100);
+		assertEquals(player1.getBet(), 100);
 		assertEquals(true, player1.isCurrentlyRaising());
 		table.call(player2);
-		assertEquals(table.getPlayers().get(1).getBet(), 100);
+		assertEquals(player2.getBet(), 100);
 		table.fold(player3);
-		assertEquals(table.getPlayers().get(2).hasNotFolded(), false);
+		assertEquals(player3.hasNotFolded(), false);
 		table.raise(player4, -50);
-		assertEquals(table.getPlayers().get(3).getBet(), 100);
+		assertEquals(player4.getBet(), 100);
 
 	}
 
@@ -630,71 +630,71 @@ class PokerTableTest {
 		PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
 		table.giveCards();
 		//map is initialized in constructor
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().size(), 3);
 		table.updateShownCards(); // no cards should be shown
 		// Each player knows about the existence of 3 other players...
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().size(), 3);
 		// But no card is known
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player2).size(), 0);
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player3).size(), 0);
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player4).size(), 0);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player1).size(), 0);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player3).size(), 0);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player4).size(), 0);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player1).size(), 0);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player2).size(), 0);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player4).size(), 0);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player1).size(), 0);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player2).size(), 0);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player3).size(), 0);
-		table.getPlayers().get(0).showRandomCard();
-		table.getPlayers().get(1).showRandomCard();
-		table.getPlayers().get(2).showRandomCard();
-		table.getPlayers().get(3).showRandomCard();
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player2).size(), 0);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player3).size(), 0);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player4).size(), 0);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player1).size(), 0);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player3).size(), 0);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player4).size(), 0);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player1).size(), 0);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player2).size(), 0);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player4).size(), 0);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player1).size(), 0);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player2).size(), 0);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player3).size(), 0);
+		player1.showCard(player1.getCardAtIndex(0));
+		player2.showCard(player2.getCardAtIndex(0));
+		player3.showCard(player3.getCardAtIndex(0));
+		player4.showCard(player4.getCardAtIndex(0));
 		table.updateShownCards(); // each player should know 1 card from 3 other players
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player1).size(), 1);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player2).size(), 1);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player3).size(), 1);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player1).size(), 1);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player2).size(), 1);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player4).size(), 1);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player1).size(), 1);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player3).size(), 1);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player4).size(), 1);
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player4).size(), 1);
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player3).size(), 1);
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player2).size(), 1);
-		table.getPlayers().get(0).showRandomCard();
-		table.getPlayers().get(1).showRandomCard();
-		table.getPlayers().get(2).showRandomCard();
-		table.getPlayers().get(3).showRandomCard();
+		assertEquals(player1.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player1).size(), 1);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player2).size(), 1);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player3).size(), 1);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player1).size(), 1);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player2).size(), 1);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player4).size(), 1);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player1).size(), 1);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player3).size(), 1);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player4).size(), 1);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player4).size(), 1);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player3).size(), 1);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player2).size(), 1);
+		player1.showCard(player1.getCardAtIndex(1));
+		player2.showCard(player2.getCardAtIndex(1));
+		player3.showCard(player3.getCardAtIndex(1));
+		player4.showCard(player4.getCardAtIndex(1));
 		table.updateShownCards(); // each player should know 2 cards from 3 other players
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().size(), 3);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player1).size(), 2);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player2).size(), 2);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player3).size(), 2);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player1).size(), 2);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player2).size(), 2);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player4).size(), 2);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player1).size(), 2);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player3).size(), 2);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player4).size(), 2);
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player4).size(), 2);
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player3).size(), 2);
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player2).size(), 2);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().size(), 3);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player1).size(), 2);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player2).size(), 2);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player3).size(), 2);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player1).size(), 2);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player2).size(), 2);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player4).size(), 2);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player1).size(), 2);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player3).size(), 2);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player4).size(), 2);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player4).size(), 2);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player3).size(), 2);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player2).size(), 2);
 
 	}
 
@@ -725,24 +725,24 @@ class PokerTableTest {
 		assertEquals(player5.getChipStack(), 10);
 		// check that the cards are known by the bots
 		table.updateShownCards();
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player2).size(), 1);
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player3).size(), 1);
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player4).size(), 1);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player1).size(), 1);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player3).size(), 1);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player4).size(), 1);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player1).size(), 1);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player2).size(), 1);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player4).size(), 1);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player1).size(), 1);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player2).size(), 1);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player3).size(), 1);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player2).size(), 1);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player3).size(), 1);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player4).size(), 1);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player1).size(), 1);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player3).size(), 1);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player4).size(), 1);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player1).size(), 1);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player2).size(), 1);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player4).size(), 1);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player1).size(), 1);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player2).size(), 1);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player3).size(), 1);
 
 		// check that the players all have 3 cards
-		assertEquals(table.getPlayers().get(0).getPlayerHand().getHand().size(), 3);
-		assertEquals(table.getPlayers().get(1).getPlayerHand().getHand().size(), 3);
-		assertEquals(table.getPlayers().get(2).getPlayerHand().getHand().size(), 3);
-		assertEquals(table.getPlayers().get(3).getPlayerHand().getHand().size(), 3);
+		assertEquals(player1.getPlayerHand().getHand().size(), 3);
+		assertEquals(player2.getPlayerHand().getHand().size(), 3);
+		assertEquals(player3.getPlayerHand().getHand().size(), 3);
+		assertEquals(player4.getPlayerHand().getHand().size(), 3);
 
 	}
 
@@ -770,25 +770,25 @@ class PokerTableTest {
 		assertEquals(player3.getChipStack(), 400 - SuperpowerAddHidden.getCost());
 		assertEquals(player4.getChipStack(), 400 - SuperpowerAddHidden.getCost());
 		assertEquals(player5.getChipStack(), 10);
-		assertEquals(table.getPlayers().get(0).getPlayerHand().getHand().size(), 3);
-		assertEquals(table.getPlayers().get(1).getPlayerHand().getHand().size(), 3);
-		assertEquals(table.getPlayers().get(2).getPlayerHand().getHand().size(), 3);
-		assertEquals(table.getPlayers().get(3).getPlayerHand().getHand().size(), 3);
+		assertEquals(player1.getPlayerHand().getHand().size(), 3);
+		assertEquals(player2.getPlayerHand().getHand().size(), 3);
+		assertEquals(player3.getPlayerHand().getHand().size(), 3);
+		assertEquals(player4.getPlayerHand().getHand().size(), 3);
 		assertEquals(table.getPlayers().get(4).getPlayerHand().getHand().size(), 2);
 
 		table.updateShownCards();
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player2).size(), 0);
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player3).size(), 0);
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(player4).size(), 0);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player1).size(), 0);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player3).size(), 0);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(player4).size(), 0);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player1).size(), 0);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player2).size(), 0);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(player4).size(), 0);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player1).size(), 0);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player2).size(), 0);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(player3).size(), 0);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player2).size(), 0);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player3).size(), 0);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(player4).size(), 0);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player1).size(), 0);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player3).size(), 0);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(player4).size(), 0);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player1).size(), 0);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player2).size(), 0);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(player4).size(), 0);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player1).size(), 0);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player2).size(), 0);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(player3).size(), 0);
 	}
 
 	@Test
@@ -857,10 +857,10 @@ class PokerTableTest {
 		assertEquals(player4.getChipStack(), 400 - SuperpowerShow.getCost());
 		assertEquals(player5.getChipStack(), 10);
 		table.updateShownCards();
-		assertEquals(table.getPlayers().get(0).getCardsKnownFromOtherPlayers().get(shown1).size(), 1);
-		assertEquals(table.getPlayers().get(1).getCardsKnownFromOtherPlayers().get(shown2).size(), 1);
-		assertEquals(table.getPlayers().get(2).getCardsKnownFromOtherPlayers().get(shown3).size(), 1);
-		assertEquals(table.getPlayers().get(3).getCardsKnownFromOtherPlayers().get(shown4).size(), 1);
+		assertEquals(player1.getCardsKnownFromOtherPlayers().get(shown1).size(), 1);
+		assertEquals(player2.getCardsKnownFromOtherPlayers().get(shown2).size(), 1);
+		assertEquals(player3.getCardsKnownFromOtherPlayers().get(shown3).size(), 1);
+		assertEquals(player4.getCardsKnownFromOtherPlayers().get(shown4).size(), 1);
 		Player showAgain = table.useSuperpower(player1, "show");
 		// couldn't use the superpower because already used!
 		assertEquals(table.getSuperpowerUseNumber("show"), 4);

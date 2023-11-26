@@ -1,5 +1,7 @@
 package fr.pantheonsorbonne.miage.game.classes.cards;
 
+import fr.pantheonsorbonne.miage.game.classes.cards.Exceptions.ValueNotFoundException;
+
 /**
  * An enum that represend the possible cards value from a deck
  */
@@ -18,8 +20,8 @@ public enum CardValue {
     QUEEN("Q", 12),
     KING("K", 13);
 
-    final private String stringRepresentation;
-    final private int rank;
+    private final  String stringRepresentation;
+    private final  int rank;
 
     CardValue(String stringRepresentation, int value) {
         this.stringRepresentation = stringRepresentation;
@@ -42,7 +44,7 @@ public enum CardValue {
             }
         }
 
-        throw new RuntimeException("failed to parse value");
+        throw new ValueNotFoundException("failed to parse value");
 
     }
 
@@ -61,9 +63,7 @@ public enum CardValue {
     }
 
     public CardValue getInverted() {
-        // int number = this.rank;
-        // int targetRank = this.rank<=8?(8-number)*2+number:((number-(number-8)*2));
-        return getValueFromRank(14 - this.getRank() + 2); // found this formula while writing the unit test
+        return getValueFromRank(14 - this.getRank() + 2); 
     }
 
     private CardValue getValueFromRank(int rank) {

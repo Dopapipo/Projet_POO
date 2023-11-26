@@ -11,6 +11,8 @@ import fr.pantheonsorbonne.miage.HostFacade;
 import fr.pantheonsorbonne.miage.model.Game;
 import fr.pantheonsorbonne.miage.model.GameCommand;
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
+import fr.pantheonsorbonne.miage.game.classes.cards.Exceptions.AlreadyUsedException;
+import fr.pantheonsorbonne.miage.game.classes.cards.Exceptions.NotEnoughChipsException;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.*;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerAdd;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerAddHidden;
@@ -22,6 +24,9 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 	private static final int DEFAULT_CHIPS = 300;
 	private final HostFacade hostFacade;
 	private final Game poker;
+	private static final String CARD_SEEN = "cardSeen";
+	private static final String LOST_MONEY = "lostMoney";
+
 
 	public NetworkPokerTableAutomatisee(HostFacade hostFacade, Set<String> players,
 			fr.pantheonsorbonne.miage.model.Game poker) {
@@ -71,7 +76,7 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 		hostFacade.sendGameCommandToPlayer(poker, this.getBigBlind().getPlayer().getName(),
 				new GameCommand("invertedColor", String.valueOf(this.getInvertedColor())));
 		String answer = hostFacade.receiveGameCommand(poker).body();
-		this.setInvertedColor(Integer.valueOf(answer));
+		this.setInvertedColor(Integer.parseInt(answer));
 	}
 
 	@Override
@@ -98,24 +103,23 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 
 	@Override
 	protected int askForBetsWithPots(int playersInRound) {
-		boolean everyoneCalled = false;
-		// Implementation of support for constant raising : while
-		// not everyone has called/folded (i.e. there's still a player raising)
-		// We ask every other player for a call/fold/raise
-		List<Boolean> playersCalled = new ArrayList<>();
-		while (!everyoneCalled) {
-			playersCalled.clear();
-			for (Player player : this.currentlyPlaying) {
-				// ask for superpower use
+		boolean loopAgain = true;
+		//ask for bets while someone over-raised like in real poker
+		while (playersInRound>1&&loopAgain) {
+			int playersToAsk = this.playerQueue.size();
+			loopAgain=false;
+			for (int i = 0;i<playersToAsk;i++) { //loop on the players to ask
+				Player player = this.playerQueue.poll();
 				this.askAndUseSuperpower(player);
 				// if there's more than one player to ask, player hasn't folded, isn't all in
 				// and isn't the one currently raising,
 				// ask him for bet
-				if (player.hasNotFolded() && !player.isAllIn() && !player.isCurrentlyRaising()) {
+				if (!player.isCurrentlyRaising()) {
 					GameCommand playerAnswer = this.askRaiseCallOrFold(player);
-					switch (Integer.valueOf(playerAnswer.name())) {
+					switch (Integer.parseInt(playerAnswer.name())) {
 						case 1:
 							this.call(player);
+							this.playerQueue.add(player);
 							break;
 						case 2:
 							this.fold(player);
@@ -124,8 +128,12 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 						// if a player raises, we set him to currently raising, and all the other
 						// players to not currently raising
 						case 3:
-							int x = Integer.valueOf(playerAnswer.body());
+							int x = Integer.parseInt(playerAnswer.body());
 							this.raise(player, x);
+							if (!player.isAllIn())this.playerQueue.add(player);
+							if (x>0) loopAgain=true;
+							break;
+						default:
 							break;
 					}
 				}
@@ -133,18 +141,6 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 					playersInRound--;
 				}
 				this.findHighestBet();
-			}
-			/**
-			 * If everyone has called, we can stop asking for bets
-			 * If someone has raised, we need to ask everyone again
-			 * If everyone called, playersCalled is empty.
-			 */
-			everyoneCalled = true;
-			for (Boolean playerCalled : playersCalled) {
-				if (!playerCalled) {
-					everyoneCalled = false;
-					break;
-				}
 			}
 		}
 		// reset player raise state for next dealer card
@@ -156,7 +152,7 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 	protected int askForSuperpowerUse(Player player) {
 		hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("askSuperpower", ""));
 		GameCommand received = hostFacade.receiveGameCommand(poker);
-		return Integer.valueOf(received.body());
+		return Integer.parseInt(received.body());
 	}
 
 	@Override
@@ -175,12 +171,14 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 					Player otherPlayer = this.strToPlayer(received.body());
 					Card card = this.superpowerShow.useOnOther(player, otherPlayer);
 					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
-							new GameCommand("lostMoney", String.valueOf(SuperpowerShow.getCost())));
+							new GameCommand(LOST_MONEY, String.valueOf(SuperpowerShow.getCost())));
 					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
-							new GameCommand("cardSeen", Card.cardToString(card) + "," + otherPlayer.getName()));
+							new GameCommand(CARD_SEEN, Card.cardToString(card) + "," + otherPlayer.getName()));
+					hostFacade.sendGameCommandToPlayer(poker, otherPlayer.getName(), new GameCommand(CARD_SEEN,
+							Card.cardToString(card)));
 					return otherPlayer;
 
-				} catch (RuntimeException e) {
+				} catch (NotEnoughChipsException |AlreadyUsedException e) {
 					System.out.println(e.getMessage());
 				}
 				break;
@@ -194,11 +192,11 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 					Card card = this.superpowerDestroy.useOnOther(player, otherPlayer); // will throw an exception if
 																						// can't use
 					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
-							new GameCommand("lostMoney", String.valueOf(SuperpowerDestroy.getCost())));
+							new GameCommand(LOST_MONEY, String.valueOf(SuperpowerDestroy.getCost())));
 					hostFacade.sendGameCommandToAll(poker, new GameCommand("cardDestroyed",
-							Card.cardToString(card) + "," + otherPlayer.getName() + "," + otherPlayer.getChipStack()));
+							Card.cardToString(card) + "," + otherPlayer.getName() ));
 					return otherPlayer;
-				} catch (RuntimeException e) {
+				} catch (NotEnoughChipsException |AlreadyUsedException e) {
 					System.out.println(e.getMessage());
 				}
 				break;
@@ -207,12 +205,12 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 				try {
 					Card card = superpowerAdd.useOnSelf(player, this.deck);
 					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
-							new GameCommand("lostMoney", String.valueOf(SuperpowerAdd.getCost())));
+							new GameCommand(LOST_MONEY, String.valueOf(SuperpowerAdd.getCost())));
 					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
 							new GameCommand("cardAdded", Card.cardToString(card)));
-					hostFacade.sendGameCommandToAll(poker, new GameCommand("cardSeen",
+					hostFacade.sendGameCommandToAll(poker, new GameCommand(CARD_SEEN,
 							Card.cardToString(card) + "," + player.getName() + "," + player.getChipStack()));
-				} catch (RuntimeException e) {
+				} catch (NotEnoughChipsException |AlreadyUsedException e) {
 					System.out.println(e.getMessage());
 				}
 				break;
@@ -222,12 +220,14 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 
 					Card card = this.superpowerAddHidden.useOnSelf(player, this.deck);
 					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
-							new GameCommand("lostMoney", String.valueOf(SuperpowerAddHidden.getCost())));
+							new GameCommand(LOST_MONEY, String.valueOf(SuperpowerAddHidden.getCost())));
 					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
 							new GameCommand("cardAdded", Card.cardToString(card)));
-				} catch (RuntimeException e) {
+				} catch (NotEnoughChipsException |AlreadyUsedException e) {
 					System.out.println(e.getMessage());
 				}
+				break;
+			default :
 				break;
 		}
 		return null;
@@ -236,8 +236,7 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 	private GameCommand askRaiseCallOrFold(Player player) {
 		hostFacade.sendGameCommandToPlayer(poker, player.getName(),
 				new GameCommand("raiseCallOrFold", String.valueOf(this.getHighestBet())));
-		GameCommand received = hostFacade.receiveGameCommand(poker);
-		return received;
+		return hostFacade.receiveGameCommand(poker);
 	}
 
 	@Override
