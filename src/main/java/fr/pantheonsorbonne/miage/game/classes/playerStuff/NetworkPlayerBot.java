@@ -1,5 +1,6 @@
 package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -44,6 +45,7 @@ public class NetworkPlayerBot {
                     handlePayout(command);
                     break;
                 case "kick":
+                    System.out.println(player.getName() +" has lost the game!");
                     break outerLoop;
                 case "invertedColor":
                     handleInvertedColor();
@@ -84,6 +86,7 @@ public class NetworkPlayerBot {
     }
 
     private static void handlePayout(GameCommand command) {
+        System.out.println(player.getName() +" has won chips: " + command.body());
         player.won(Integer.parseInt(command.body()));
     }
 
@@ -124,21 +127,24 @@ public class NetworkPlayerBot {
     }
 
     private static void handleGiveCards(GameCommand command) {
-        List<Card> cards = Arrays.stream(command.body().split(",")).map(Card::stringToCard)
-                .collect(Collectors.toList());
+        List <Card> cards = new ArrayList<>(); 
+        String[] args = command.body().split(",");
+        for (int i = 0; i < args.length; i++) {
+            cards.add(Card.stringToCard(args[i]));
+        }
         player.setHand(new PlayerHand(cards));
     }
 
     private static void handleCardAdded(GameCommand command) {
         Card card = Card.stringToCard(command.body());
-        player.getPlayerHand().add(card);
+        player.addCard(card);
     }
 
     private static void handleCardSeen(GameCommand command) {
         String[] args = command.body().split(",");
         Card card = Card.stringToCard(args[0]);
         Player playerSeen = new Player(args[1], Integer.parseInt(args[2]));
-        player.getCardsKnownFromOtherPlayers().get(playerSeen).add(card);
+        player.updateCardSeen(playerSeen, card);
     }
 
     private static void handleCardDestroyed(GameCommand command) {

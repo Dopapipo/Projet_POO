@@ -69,7 +69,6 @@ public abstract class PokerTable {
 				this.currentlyPlaying.add(player);
 			}
 		}
-		this.initializeBlinds();
 		this.initializePlayerHands();
 		this.updateShownCards(); // will initialize player's maps
 
@@ -546,12 +545,14 @@ public abstract class PokerTable {
 
 	// Starts a turn (a round)
 	public void startTurnWithPots() {
+		this.initializeBlinds();
 		this.buildQueue();
 		turnCards();
 		turnPots();
 	}
 
 	public Player play() {
+		this.initializeShownCards();
 		while (this.gameContinues()) {
 			this.startTurnWithPots();
 			this.resetTable();
@@ -618,12 +619,20 @@ public abstract class PokerTable {
 		for (Player player : this.currentlyPlaying) { // update cards that each player knows
 			for (Player otherPlayer : this.currentlyPlaying) { // from all the other player hands
 				if (!player.equals(otherPlayer)) {
-					player.getCardsKnownFromOtherPlayers().putIfAbsent(otherPlayer, new HashSet<>());
 					for (Card card : otherPlayer.getPlayerHand().getHand()) {
 						if (card.isFaceUp()) {
 							player.getCardsKnownFromOtherPlayers().get(otherPlayer).add(card);
 						}
 					}
+				}
+			}
+		}
+	}
+	protected void initializeShownCards() {
+		for (Player player : this.currentlyPlaying) { 
+			for (Player otherPlayer : this.currentlyPlaying) { 
+				if (!player.equals(otherPlayer)) {
+					player.getCardsKnownFromOtherPlayers().putIfAbsent(otherPlayer, new HashSet<>());
 				}
 			}
 		}

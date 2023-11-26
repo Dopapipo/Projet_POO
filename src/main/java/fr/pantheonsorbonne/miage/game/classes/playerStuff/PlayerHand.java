@@ -1,5 +1,6 @@
 package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
@@ -9,6 +10,9 @@ public class PlayerHand {
 
 	public PlayerHand(List<Card> cards) {
 		this.hand = cards;
+	}
+	public PlayerHand() {
+		this.hand = new ArrayList<>();
 	}
 	public int size() {
 		return this.hand.size();

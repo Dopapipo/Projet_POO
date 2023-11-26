@@ -24,7 +24,7 @@ public class LocalTexasHoldEm {
 		// PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
 		// System.out.println(table.play().getName());
 		//The line below will print the result of 1000 games between 2 smart and 2 dumb bots
-		System.out.println(runSimulations(1000));
+		System.out.println(runSimulations(50));
 	}
 	static String runSimulations(int howMany) {
 		int smartWins=0;

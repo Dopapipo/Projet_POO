@@ -57,7 +57,7 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 		hostFacade.waitForExtraPlayerCount(PLAYER_COUNT);
 
 		NetworkPokerTableAutomatisee host = new NetworkPokerTableAutomatisee(hostFacade, poker.getPlayers(), poker);
-		host.play();
+		System.out.println(host.play().getName() +" won the game!");
 		System.exit(0);
 
 	}
@@ -84,7 +84,10 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 		for (Player player : this.getPlayers()) {
 			Card c1 = this.getDeck().draw();
 			Card c2 = this.getDeck().draw();
-			player.setHand(new PlayerHand(Arrays.asList(c1, c2)));
+			List<Card> cards = new ArrayList<>(); //don't use Arrays.asList() because it's immutable
+			cards.add(c1);
+			cards.add(c2);
+			player.setHand(new PlayerHand(cards));
 			String card1 = Card.cardToString(c1);
 			String card2 = Card.cardToString(c2);
 			hostFacade.sendGameCommandToPlayer(poker, player.getName(),

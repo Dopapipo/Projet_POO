@@ -2,6 +2,7 @@ package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +22,7 @@ public class Player implements Comparable<Player> {
 	private boolean currentlyRaising;
 	private List<Card> dealerHand;
 	private Map<Player, Set<Card>> cardsKnownFromOtherPlayers;
-	private CardColor invertedColor;
+	private CardColor invertedColor; 
 	public Player(String name) {
 		this(name, 0);
 	}
@@ -160,7 +161,10 @@ public class Player implements Comparable<Player> {
 	public int compareTo(Player player) {
 		return (this.getWinningCombination().compareTo(player.getWinningCombination()));
 	}
-
+	public void updateCardSeen(Player player, Card card) {
+		this.cardsKnownFromOtherPlayers.putIfAbsent(player,new HashSet<>());
+		this.cardsKnownFromOtherPlayers.get(player).add(card);
+	}
 	public boolean isCurrentlyRaising() {
 		return currentlyRaising;
 	}
@@ -180,7 +184,11 @@ public class Player implements Comparable<Player> {
 	public void addCard(Card card) {
 		this.playerHand.add(card);
 	}
-
+	//Only works if the hand is null, so players don't try to CHEAT
+	public void initializePlayerHand() {
+		if (this.playerHand==null)
+			this.playerHand=new PlayerHand();
+	}
 	public Card removeRandomCard() {
 		return this.playerHand.removeRandomCard();
 	}
@@ -212,9 +220,13 @@ public class Player implements Comparable<Player> {
 			return true;
 		}
 		if (obj instanceof Player) {
-			return this.name.equals(((Player) obj).getName()) && this.chipStack == ((Player) obj).getChipStack();
+			return this.name.equals(((Player) obj).getName());
 		}
 		return false;
+	}
+	@Override
+	public int hashCode() {
+		return this.name.hashCode();
 	}
 
 }

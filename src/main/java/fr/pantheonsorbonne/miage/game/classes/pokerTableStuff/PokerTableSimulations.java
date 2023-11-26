@@ -36,6 +36,9 @@ public class PokerTableSimulations extends PokerTableAutomatisee {
         for(Map.Entry<Player,Set<Card>> entry: this.initialCardsKnownFromOtherPlayers.entrySet()) {
             for(Card card : entry.getValue()) {
                 this.deck.remove(card);
+                entry.getKey().initializePlayerHand(); 
+                //initialize the hand because it will be null (our player doesn't see PlayerHand objects)
+                //of other players!
                 entry.getKey().addCard(card);
             }
         }
