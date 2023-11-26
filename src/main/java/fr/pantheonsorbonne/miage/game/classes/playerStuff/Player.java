@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
 import fr.pantheonsorbonne.miage.game.classes.cards.WinningCombination;
@@ -95,8 +96,8 @@ public class Player implements Comparable<Player> {
 		 copy.setHand(this.playerHand);
 		 return copy;
 	 }
-	public void setCurrentlyPlaying(boolean g) {
-		this.playing = true;
+	private void setCurrentlyPlaying(boolean g) {
+		this.playing = g;
 	}
 	private int allIn() {
 		if (!this.playing) {
@@ -203,7 +204,7 @@ public class Player implements Comparable<Player> {
 	public Card getCardAtIndex(int index) {
 		return this.playerHand.getCardAtIndex(index);
 	}
-	//Very useful for unit testing of player known cards maps
+
 	public void showRandomCard() {
 		this.playerHand.showRandomCard();
 	}

@@ -2,6 +2,7 @@ package fr.pantheonsorbonne.miage.game.classes.superpowers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Exceptions.AlreadyUsedException;
 import fr.pantheonsorbonne.miage.game.classes.cards.Exceptions.NotEnoughChipsException;
@@ -13,16 +14,13 @@ import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
  * There might be a cleaner way to do it though that makes better use of Polymorphism.
  */
 public abstract class Superpower {
-    protected int cost;
-    protected String name;
-    protected String description;
-    protected List<Player> playersThatUsedIt;
-    protected int numberOfUses;
+    private int cost;
+    private List<Player> playersThatUsedIt;
+    private int numberOfUses;
+    protected Random random = new Random();
 
-    protected Superpower(int cost, String name, String description) {
+    protected Superpower(int cost) {
         this.cost = cost;
-        this.name = name;
-        this.description = description;
         this.playersThatUsedIt = new ArrayList<>();
     }
 
@@ -49,6 +47,9 @@ public abstract class Superpower {
 
     public int getNumberOfUses() {
         return numberOfUses;
+    }
+    protected void incrementUse() {
+        this.numberOfUses++;
     }
 
 }

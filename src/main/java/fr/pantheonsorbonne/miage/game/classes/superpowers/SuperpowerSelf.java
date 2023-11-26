@@ -8,13 +8,13 @@ import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 
 
 public abstract class SuperpowerSelf extends Superpower {
-    protected SuperpowerSelf(int cost, String name, String description) {
-        super(cost, name, description);
+    protected SuperpowerSelf(int cost) {
+        super(cost);
     }
 
     public Card useOnSelf(Player player, Deck deck) throws AlreadyUsedException, NotEnoughChipsException {
             this.handleChecksAndUse(player);
-            this.numberOfUses++;
+            this.incrementUse();
             return this.use(player, deck);
     }
 

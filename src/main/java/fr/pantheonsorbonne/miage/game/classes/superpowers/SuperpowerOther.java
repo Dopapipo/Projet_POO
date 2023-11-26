@@ -7,13 +7,13 @@ import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 
 public abstract class SuperpowerOther extends Superpower {
 
-    protected SuperpowerOther(int cost, String name, String description) {
-        super(cost, name, description);
+    protected SuperpowerOther(int cost) {
+        super(cost);
     }
 
     public Card useOnOther(Player player, Player other) throws AlreadyUsedException, NotEnoughChipsException {
             this.handleChecksAndUse(player);
-            this.numberOfUses++;
+            this.incrementUse();
             return this.use(player, other);
     }
 

@@ -50,7 +50,7 @@ public abstract class PokerTable {
 
 	protected List<Pot> pots = new ArrayList<>();
 
-	public PokerTable() {
+	protected PokerTable() {
 		this.playerList = new ArrayList<>();
 		this.currentlyPlaying = new ArrayList<>();
 		this.deck = new Deck();
@@ -61,7 +61,7 @@ public abstract class PokerTable {
 		this.playerQueue = new LinkedList<Player>();
 	}
 
-	public PokerTable(List<Player> players) {
+	protected PokerTable(List<Player> players) {
 		this();
 		this.playerList = players;
 		for (Player player : this.playerList) {
@@ -70,7 +70,7 @@ public abstract class PokerTable {
 			}
 		}
 		this.initializePlayerHands();
-		this.updateShownCards(); // will initialize player's maps
+		this.initializeShownCards(); // will initialize player's maps
 
 	}
 
@@ -158,23 +158,10 @@ public abstract class PokerTable {
 				this.currentlyPlaying.remove(player);
 			}
 		}
-		return removedNames;
+		return removedNames; //our network table will love this return 
 	}
 
-	/**
-	 * Adds a player to the current <PokerTable>
-	 * This method is here for convenience, we could always initialize a pokerTable
-	 * from a list if we
-	 * wanted to. I left it public because it's used in pokerTableTest.
-	 * 
-	 * @param player
-	 */
-	public void addPlayer(Player player) {
-		this.playerList.add(player);
-		if (player.isPlaying()) {
-			this.currentlyPlaying.add(player);
-		}
-	}
+
 
 	/**
 	 * Deals 2 new cards to every player from the current deck
@@ -560,7 +547,6 @@ public abstract class PokerTable {
 		return this.currentlyPlaying.get(0);
 	}
 
-	// unit testing purposes
 	protected Dealer getDealer() {
 		return this.dealer;
 	}

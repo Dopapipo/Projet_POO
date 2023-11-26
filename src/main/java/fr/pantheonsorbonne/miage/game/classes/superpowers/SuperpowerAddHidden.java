@@ -10,7 +10,7 @@ public class SuperpowerAddHidden extends SuperpowerSelf {
     private static final String DESCRIPTION = "Add a random card to your hand without showing it";
 
     public SuperpowerAddHidden() {
-        super(COST, NAME, DESCRIPTION);
+        super(COST);
     }
 
     @Override

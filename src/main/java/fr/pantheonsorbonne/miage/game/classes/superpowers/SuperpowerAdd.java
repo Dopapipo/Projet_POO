@@ -10,7 +10,7 @@ public class SuperpowerAdd extends SuperpowerSelf {
     private static final String DESCRIPTION = "Add a random card to your hand and show it to everyone";
 
     public SuperpowerAdd() {
-        super(COST, NAME, DESCRIPTION);
+        super(COST);
     }
 
     @Override

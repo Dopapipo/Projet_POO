@@ -8,6 +8,11 @@ import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBot;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBotSmarter;
 import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.PokerTableAutomatisee;
 
+
+/*
+ * Some general comments:
+ * 
+ */
 public class LocalTexasHoldEm {
 
 	public static void main(String[] args) {
@@ -24,7 +29,7 @@ public class LocalTexasHoldEm {
 		// PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
 		// System.out.println(table.play().getName());
 		//The line below will print the result of 1000 games between 2 smart and 2 dumb bots
-		System.out.println(runSimulations(50));
+		System.out.println(runSimulations(1000));
 	}
 	static String runSimulations(int howMany) {
 		int smartWins=0;

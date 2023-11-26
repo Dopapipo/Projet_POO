@@ -2,12 +2,13 @@ package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 
 public class PlayerHand {
 	private List<Card> hand;
-
+	private Random random = new Random();
 	public PlayerHand(List<Card> cards) {
 		this.hand = cards;
 	}
@@ -27,7 +28,7 @@ public class PlayerHand {
 
 	public Card removeRandomCard() {
 		if (!this.hand.isEmpty())
-			return this.hand.remove((int) (Math.random() * this.hand.size()));
+			return this.hand.remove(random.nextInt(this.hand.size()));
 		return null;
 	}
 	public void showCard(Card card) {
@@ -51,7 +52,7 @@ public class PlayerHand {
 			return;
 		}
 		do {
-			i = (int) (Math.random() * this.hand.size());
+			i = random.nextInt(this.hand.size());
 		} while (this.hand.get(i).isFaceUp());
 		this.hand.get(i).show();
 	}
