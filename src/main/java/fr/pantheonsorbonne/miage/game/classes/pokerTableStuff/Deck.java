@@ -1,17 +1,17 @@
 package fr.pantheonsorbonne.miage.game.classes.pokerTableStuff;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardValue;
 
 public class Deck {
-	private List<Card> cards;
-	private Random random = new Random();
-
+	private Deque<Card> cards;
 	/**
 	 * A deck contains all cards from 2 to ace, of all 4 colors, and each card only
 	 * appears once. Drawing from the deck removes the card from the deck.
@@ -35,7 +35,7 @@ public class Deck {
 		}
 		return cardss;
 
-	};
+	}
 	public void remove(Card card) {
 		this.cards.remove(card);
 	}
@@ -48,39 +48,38 @@ public class Deck {
 		if (this.cards.isEmpty()) {
 			return null;
 		}
-		int i = random.nextInt(this.cards.size());
-		Card toReturn = this.cards.get(i);
-		this.cards.remove(i);
-		return toReturn;
+		return this.cards.removeFirst();
 	}
 
 	
 	
 	public void resetDeck() {
-		this.cards = new ArrayList<>(52);
+		List<Card> cardss = new ArrayList<>();
 		int k = 0;
 		for (int i = 0; i < 13; i++) {
-			this.cards.add(i, new Card(CardValue.values()[k], CardColor.CLOVER));
+			cardss.add(new Card(CardValue.values()[k], CardColor.CLOVER));
 			k++;
 		}
 		k = 0;
 		for (int i = 13; i < 26; i++) {
-			this.cards.add(i, new Card(CardValue.values()[k], CardColor.DIAMOND));
+			cardss.add(new Card(CardValue.values()[k], CardColor.DIAMOND));
 			k++;
 		}
 		k = 0;
 		for (int i = 26; i < 39; i++) {
-			this.cards.add(i, new Card(CardValue.values()[k], CardColor.SPADE));
+			cardss.add( new Card(CardValue.values()[k], CardColor.SPADE));
 			k++;
 		}
 		k = 0;
 		for (int i = 39; i < 52; i++) {
-			this.cards.add(i, new Card(CardValue.values()[k], CardColor.HEART));
+			cardss.add( new Card(CardValue.values()[k], CardColor.HEART));
 			k++;
 		}
+		Collections.shuffle(cardss);
+		this.cards = new LinkedList<>(cardss);
 	}
 	
 	public void discard() {
-		this.cards.remove(random.nextInt(this.cards.size()));
+		this.cards.remove();
 	}
 }

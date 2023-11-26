@@ -38,7 +38,6 @@ public class PokerTableSimulations extends PokerTableAutomatisee {
                 this.deck.remove(card);
                 entry.getKey().initializePlayerHand(); 
                 //initialize the hand because it will be null (our player doesn't see PlayerHand objects)
-                //of other players!
                 entry.getKey().addCard(card);
             }
         }
@@ -48,13 +47,13 @@ public class PokerTableSimulations extends PokerTableAutomatisee {
     protected void giveCards() {
         for (Player player : this.currentlyPlaying) {
             if (!player.equals(this.simulatedPlayer)) {
-                while (player.getPlayerHand().size()<2) {
+                while (player.handSize()<2) {
                     player.addCard(this.deck.draw());
                 }
             }
             else {
                 for (Card card : this.initialPlayerHand) {
-                    player.getPlayerHand().add(card);
+                    player.addCard(card);
                 }
             }
         }

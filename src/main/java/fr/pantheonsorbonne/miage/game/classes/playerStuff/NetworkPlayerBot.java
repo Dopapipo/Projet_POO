@@ -153,7 +153,7 @@ public class NetworkPlayerBot {
         String playerName = args[1];
         int playerChips = Integer.parseInt(args[2]);
         if (player.getName().equals(playerName)) {
-            player.getPlayerHand().remove(card);
+            player.remove(card);
         } else {
             for (Player player : player.getCardsKnownFromOtherPlayers().keySet()) {
                 if (player.getName().equals(playerName)) {

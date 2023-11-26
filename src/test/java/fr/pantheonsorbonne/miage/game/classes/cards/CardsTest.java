@@ -1,87 +1,82 @@
 package fr.pantheonsorbonne.miage.game.classes.cards;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class CardsTest {
+class CardsTest {
     @Test
     void testInvertCardValue() {
-        // Naive way of doing that : (useful to reassure myself...)
         CardValue ace = CardValue.ACE;
-        assert (ace.getInverted().getRank() == 2);
-        assert (ace.getInverted() == CardValue.TWO);
+        assertEquals(2, ace.getInverted().getRank());
+        assertEquals(CardValue.TWO, ace.getInverted());
         CardValue king = CardValue.KING;
-        assert (king.getInverted().getRank() == 3);
-        assert (king.getInverted() == CardValue.THREE);
+        assertEquals(3, king.getInverted().getRank());
+        assertEquals(CardValue.THREE, king.getInverted());
         CardValue queen = CardValue.QUEEN;
-        assert (queen.getInverted().getRank() == 4);
-        assert (queen.getInverted() == CardValue.FOUR);
+        assertEquals(4, queen.getInverted().getRank());
+        assertEquals(CardValue.FOUR, queen.getInverted());
         CardValue jack = CardValue.JACK;
-        assert (jack.getInverted().getRank() == 5);
-        assert (jack.getInverted() == CardValue.FIVE);
+        assertEquals(5, jack.getInverted().getRank());
+        assertEquals(CardValue.FIVE, jack.getInverted());
         CardValue ten = CardValue.TEN;
-        assert (ten.getInverted().getRank() == 6);
-        assert (ten.getInverted() == CardValue.SIX);
+        assertEquals(6, ten.getInverted().getRank());
+        assertEquals(CardValue.SIX, ten.getInverted());
         CardValue nine = CardValue.NINE;
-        assert (nine.getInverted().getRank() == 7);
-        assert (nine.getInverted() == CardValue.SEVEN);
+        assertEquals(7, nine.getInverted().getRank());
+        assertEquals(CardValue.SEVEN, nine.getInverted());
         CardValue eight = CardValue.EIGHT;
-        assert (eight.getInverted().getRank() == 8);
-        assert (eight.getInverted() == CardValue.EIGHT);
+        assertEquals(8, eight.getInverted().getRank());
+        assertEquals(CardValue.EIGHT, eight.getInverted());
         CardValue seven = CardValue.SEVEN;
-        assert (seven.getInverted().getRank() == 9);
-        assert (seven.getInverted() == CardValue.NINE);
+        assertEquals(9, seven.getInverted().getRank());
+        assertEquals(CardValue.NINE, seven.getInverted());
         CardValue six = CardValue.SIX;
-        assert (six.getInverted().getRank() == 10);
-        assert (six.getInverted() == CardValue.TEN);
+        assertEquals(10, six.getInverted().getRank());
+        assertEquals(CardValue.TEN, six.getInverted());
         CardValue five = CardValue.FIVE;
-        assert (five.getInverted().getRank() == 11);
-        assert (five.getInverted() == CardValue.JACK);
+        assertEquals(11, five.getInverted().getRank());
+        assertEquals(CardValue.JACK, five.getInverted());
         CardValue four = CardValue.FOUR;
-        assert (four.getInverted().getRank() == 12);
-        assert (four.getInverted() == CardValue.QUEEN);
+        assertEquals(12, four.getInverted().getRank());
+        assertEquals(CardValue.QUEEN, four.getInverted());
         CardValue three = CardValue.THREE;
-        assert (three.getInverted().getRank() == 13);
-        assert (three.getInverted() == CardValue.KING);
+        assertEquals(13, three.getInverted().getRank());
+        assertEquals(CardValue.KING, three.getInverted());
         CardValue two = CardValue.TWO;
-        assert (two.getInverted().getRank() == 14);
-        assert (two.getInverted() == CardValue.ACE);
-        // //smarter way of testing that:
-        // for (CardValue value : CardValue.values()) {
-        // CardValue inverted = value.getInverted();
-        // assert(inverted.getRank() == 14 - value.getRank()+2); //Ace will be 2, King
-        // will be 3, etc...
-        // }
+        assertEquals(14, two.getInverted().getRank());
+        assertEquals(CardValue.ACE, two.getInverted());
     }
 
     @Test
     void testSmallStuff() {
         Object obj = new Object();
         Card card = new Card(CardValue.ACE, CardColor.SPADE);
-        assert (!card.equals(obj));
-        assert (!card.equals(null));
+        assertNotEquals(obj, card);
+        assertNotEquals(null, card);
         Card card2 = new Card(CardValue.KING, CardColor.HEART);
-        assert (!card.equals(card2));
+        assertNotEquals(card, card2);
         Card card3 = new Card(CardValue.ACE, CardColor.HEART);
-        assert (!card.equals(card3));
-        assertEquals(card.compareTo(card2), true);
-        assertEquals(card.compareTo(card3), false);
-        assert (card.getCardValue().compare(card2.getCardValue()) > 0);
-        assertEquals(Card.cardToString(card), "1;S");
-        assertEquals(Card.stringToCard("1;S"), card);
+        assertNotEquals(card, card3);
+        assertEquals(false, card.compareTo(card3));
+        assertEquals(false, card.compareTo(card3));
+        assertTrue(card.getCardValue().compare(card2.getCardValue()) > 0);
+        assertEquals("1;S", Card.cardToString(card));
+        assertEquals(card, Card.stringToCard("1;S"));
         assertThrows(RuntimeException.class, () -> CardColor.valueOfStr("K"));
-        assertEquals(CardColor.SPADE.getCode(), 127137);
-        assertEquals(CardColor.HEART.getCode(), 127153);
-        assertEquals(CardColor.CLOVER.getCode(), 127185);
-        assertEquals(CardColor.DIAMOND.getCode(), 127169);
-        assertEquals(CardColor.SPADE.getStringRepresentation(), "S");
-        assertEquals(CardColor.HEART.getStringRepresentation(), "H");
-        assertEquals(CardColor.DIAMOND.getStringRepresentation(), "D");
-        assertEquals(CardColor.CLOVER.getStringRepresentation(), "C");
+        assertEquals(127137, CardColor.SPADE.getCode());
+        assertEquals(127153, CardColor.HEART.getCode());
+        assertEquals(127185, CardColor.CLOVER.getCode());
+        assertEquals(127169, CardColor.DIAMOND.getCode());
+        assertEquals("S", CardColor.SPADE.getStringRepresentation());
+        assertEquals("H", CardColor.HEART.getStringRepresentation());
+        assertEquals("D", CardColor.DIAMOND.getStringRepresentation());
+        assertEquals("C", CardColor.CLOVER.getStringRepresentation());
         assertThrows(RuntimeException.class, () -> CardValue.valueOfStr("rlbnlengv"));
-        assertEquals(card.getCardValue().max(card2.getCardValue()), CardValue.ACE);
+        assertEquals(CardValue.ACE, card.getCardValue().max(card2.getCardValue()));
 
     }
 

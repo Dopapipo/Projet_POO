@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
 import fr.pantheonsorbonne.miage.game.classes.cards.WinningCombination;
@@ -63,9 +64,11 @@ public class Player implements Comparable<Player> {
 	public void resetBet() {
 		this.bet = 0;
 	}
-
-	public PlayerHand getPlayerHand() {
-		return playerHand;
+	public int handSize() {
+		return this.playerHand.size();
+	}
+	public List<Card> getHand() {
+		return this.playerHand.getHand();
 	}
 	public void setInvertedColor(CardColor inverted) {
 		this.invertedColor=inverted;
@@ -95,8 +98,8 @@ public class Player implements Comparable<Player> {
 		 copy.setHand(this.playerHand);
 		 return copy;
 	 }
-	public void setCurrentlyPlaying(boolean g) {
-		this.playing = true;
+	private void setCurrentlyPlaying(boolean g) {
+		this.playing = g;
 	}
 	private int allIn() {
 		if (!this.playing) {
@@ -192,7 +195,9 @@ public class Player implements Comparable<Player> {
 	public Card removeRandomCard() {
 		return this.playerHand.removeRandomCard();
 	}
-
+	public Card remove(Card card) {
+		return this.playerHand.remove(card);
+	}
 	public Map<Player, Set<Card>> getCardsKnownFromOtherPlayers() {
 		return cardsKnownFromOtherPlayers;
 	}
@@ -203,7 +208,7 @@ public class Player implements Comparable<Player> {
 	public Card getCardAtIndex(int index) {
 		return this.playerHand.getCardAtIndex(index);
 	}
-	//Very useful for unit testing of player known cards maps
+
 	public void showRandomCard() {
 		this.playerHand.showRandomCard();
 	}

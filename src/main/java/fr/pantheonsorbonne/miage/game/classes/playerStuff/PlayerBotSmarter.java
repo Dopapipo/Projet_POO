@@ -77,7 +77,7 @@ public class PlayerBotSmarter extends PlayerBot {
         this.winrate = winrate;
     }
     private double findWinrate() {
-        List<Card> thisHand = this.getPlayerHand().getHand().stream().collect(Collectors.toList());
+        List<Card> thisHand = this.getHand().stream().collect(Collectors.toList());
         List<Card> thisDealer = this.getDealerHand().stream().collect(Collectors.toList());
         PokerTableSimulations simulation = new PokerTableSimulations(thisHand, thisDealer,this.copy(), this.getPlayers(), this.getCardsKnownFromOtherPlayers(),this.getInvertedColor(),100);
         return simulation.getWinRate();
@@ -89,6 +89,23 @@ public class PlayerBotSmarter extends PlayerBot {
         }
         players.add(this.copy());
         return players;
+    }
+    @Override
+    public boolean equals(Object other) {
+        if (other==this) {
+            return true;
+        }
+        if (other==null) {
+            return false;
+        }
+        if (other instanceof PlayerBotSmarter) {
+            return ((PlayerBotSmarter) other).getName().equals(this.getName());
+        }
+        return false;
+    }
+    @Override
+    public int hashCode() {
+        return this.getName().hashCode();
     }
     
 

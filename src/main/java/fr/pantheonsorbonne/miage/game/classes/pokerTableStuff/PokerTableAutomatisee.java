@@ -83,9 +83,6 @@ public class PokerTableAutomatisee extends PokerTable {
 		playersInRound = this.askForBetsWithPots(playersInRound);
 		this.river();
 		this.askForBetsWithPots(playersInRound);
-		// for (Player player : this.currentlyPlaying) {
-		// 	System.out.println(player.getName() + " is betting " + player.getBet());
-		// }
 	}
 
 	@Override
@@ -138,6 +135,8 @@ public class PokerTableAutomatisee extends PokerTable {
 					//System.out.println(e.getMessage());
 				}
 				break;
+			default:
+				return null;
 		}
 		return null;
 	}

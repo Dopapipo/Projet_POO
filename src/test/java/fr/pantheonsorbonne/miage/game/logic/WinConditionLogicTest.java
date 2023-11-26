@@ -11,6 +11,7 @@ import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardValue;
 import fr.pantheonsorbonne.miage.game.classes.cards.WinCondition;
 import fr.pantheonsorbonne.miage.game.classes.cards.WinningCombination;
+import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerHand;
 import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.Dealer;
 
@@ -29,8 +30,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.EIGHT, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.HIGH_CARD, CardValue.ACE));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.HIGH_CARD, CardValue.ACE), result);
 
 	}
 
@@ -48,8 +51,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.EIGHT, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.PAIR, CardValue.ACE));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.PAIR, CardValue.ACE), result);
 
 	}
 
@@ -64,8 +69,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.EIGHT, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.TWO_PAIR, CardValue.ACE));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.TWO_PAIR, CardValue.ACE), result);
 
 	}
 
@@ -80,8 +87,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.EIGHT, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.THREE_OF_A_KIND, CardValue.FIVE));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.THREE_OF_A_KIND, CardValue.FIVE), result);
 
 	}
 
@@ -102,8 +111,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.SIX, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.STRAIGHT, CardValue.SIX));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.STRAIGHT, CardValue.SIX), result);
 
 	}
 
@@ -122,8 +133,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.THREE, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.STRAIGHT, CardValue.FIVE));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.STRAIGHT, CardValue.FIVE), result);
 
 	}
 
@@ -141,8 +154,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.THREE, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.FLUSH, CardValue.ACE));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.FLUSH, CardValue.ACE), result);
 
 	}
 
@@ -160,8 +175,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.THREE, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.FULL_HOUSE, CardValue.ACE));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.FULL_HOUSE, CardValue.ACE), result);
 
 	}
 
@@ -179,8 +196,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.THREE, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.FOUR_OF_A_KIND, CardValue.ACE));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.FOUR_OF_A_KIND, CardValue.ACE), result);
 
 	}
 
@@ -198,8 +217,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.THREE, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.STRAIGHT_FLUSH, CardValue.SIX));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.STRAIGHT_FLUSH, CardValue.SIX), result);
 
 	}
 
@@ -214,8 +235,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.THREE, CardColor.CLOVER);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.FLUSH, CardValue.SIX));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.FLUSH, CardValue.SIX), result);
 
 	}
 
@@ -230,12 +253,13 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.THREE, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.ROYAL_FLUSH, CardValue.ACE));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.ROYAL_FLUSH, CardValue.ACE), result);
 
 	}
-	// --------------------------Testing for inverted cards
-	// logic---------------------------------
+	// ---------------------Testing for inverted cards logic --------------
 
 	@Test
 	void testHighCardInverted() {
@@ -248,8 +272,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.EIGHT, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(CardColor.CLOVER, dealerHand, hand);
-		assertEquals(result, new WinningCombination(WinCondition.HIGH_CARD, CardValue.ACE));
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(CardColor.CLOVER, dealerHand, player);
+		assertEquals(new WinningCombination(WinCondition.HIGH_CARD, CardValue.ACE), result);
 
 	}
 
@@ -264,7 +290,9 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.EIGHT, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(CardColor.SPADE, dealerHand, hand);
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(CardColor.SPADE, dealerHand, player);
 		assertEquals(result, new WinningCombination(WinCondition.PAIR, CardValue.KING));
 
 	}
@@ -280,7 +308,9 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.EIGHT, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(CardColor.SPADE, dealerHand, hand);
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(CardColor.SPADE, dealerHand, player);
 		assertEquals(result, new WinningCombination(WinCondition.TWO_PAIR, CardValue.KING));
 
 	}
@@ -288,7 +318,7 @@ class WinConditionLogicTest {
 	@Test
 	void testTOAKInverted() {
 		Card card1 = new Card(CardValue.TWO, CardColor.CLOVER);
-		Card card2 = new Card(CardValue.THREE, CardColor.SPADE);
+		Card card2 = new Card(CardValue.THREE, CardColor.SPADE);// this one will be inverted!
 		Card card3 = new Card(CardValue.KING, CardColor.SPADE);// this one will be inverted!
 		Card card4 = new Card(CardValue.SEVEN, CardColor.HEART);
 		Card card5 = new Card(CardValue.KING, CardColor.DIAMOND);
@@ -296,7 +326,10 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.EIGHT, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(CardColor.SPADE, dealerHand, hand);
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		// if we get 4 of a kind, something is wrong
+		WinningCombination result = WinConditionLogic.findWinningCombination(CardColor.SPADE, dealerHand, player);
 		assertEquals(result, new WinningCombination(WinCondition.THREE_OF_A_KIND, CardValue.KING));
 
 	}
@@ -312,8 +345,11 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.EIGHT, CardColor.HEART);
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinConditionLogic.findWinningCombination(CardColor.SPADE, dealerHand, hand); // use logic
-		// check that cards in player hand haven't been inverted and are still the same
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinConditionLogic.findWinningCombination(CardColor.SPADE, dealerHand, player);
+		// check that the cards in playerHand haven't been inverted and are still the
+		// same
 		assertEquals(card1, new Card(CardValue.TWO, CardColor.SPADE));
 		assertEquals(card2, new Card(CardValue.THREE, CardColor.SPADE));
 
@@ -330,9 +366,11 @@ class WinConditionLogicTest {
 		Card card7 = new Card(CardValue.EIGHT, CardColor.HEART); // 8 9 10 J Q straight
 		PlayerHand hand = new PlayerHand(Arrays.asList(card1, card2));
 		Dealer dealerHand = new Dealer(Arrays.asList(card3, card4, card5, card6, card7));
-		WinningCombination result = WinConditionLogic.findWinningCombination(CardColor.SPADE, dealerHand, hand);
+		Player player = new Player("test", 1000);
+		player.setHand(hand);
+		WinningCombination result = WinConditionLogic.findWinningCombination(CardColor.SPADE, dealerHand, player);
 		assertEquals(result, new WinningCombination(WinCondition.STRAIGHT, CardValue.KING));
 	}
-	// -----------------------------Everything seems to be working
-	// fine!---------------------------------
+	// -------------------Everything seems to be working
+	// fine!-----------------------
 }

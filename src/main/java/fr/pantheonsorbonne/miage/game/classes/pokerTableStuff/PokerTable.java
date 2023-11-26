@@ -50,7 +50,7 @@ public abstract class PokerTable {
 
 	protected List<Pot> pots = new ArrayList<>();
 
-	public PokerTable() {
+	protected PokerTable() {
 		this.playerList = new ArrayList<>();
 		this.currentlyPlaying = new ArrayList<>();
 		this.deck = new Deck();
@@ -61,7 +61,7 @@ public abstract class PokerTable {
 		this.playerQueue = new LinkedList<Player>();
 	}
 
-	public PokerTable(List<Player> players) {
+	protected PokerTable(List<Player> players) {
 		this();
 		this.playerList = players;
 		for (Player player : this.playerList) {
@@ -70,7 +70,7 @@ public abstract class PokerTable {
 			}
 		}
 		this.initializePlayerHands();
-		this.updateShownCards(); // will initialize player's maps
+		this.initializeShownCards(); // will initialize player's maps
 
 	}
 
@@ -113,8 +113,8 @@ public abstract class PokerTable {
 		// will be small blind, and the one before that will be donor.
 		// if there's only two players, one player will always be donor and small blind.
 		if (this.bigBlind == null) {
-			this.bigBlind = new Blind(this.DEFAULT_BLIND, this.currentlyPlaying.get(n - 1));
-			this.smallBlind = new Blind(this.DEFAULT_BLIND / 2, this.currentlyPlaying.get(n - 2));
+			this.bigBlind = new Blind(DEFAULT_BLIND, this.currentlyPlaying.get(n - 1));
+			this.smallBlind = new Blind(DEFAULT_BLIND / 2, this.currentlyPlaying.get(n - 2));
 			this.donor = new Blind(0, this.currentlyPlaying.get(Math.max(0, n - 3)));
 		}
 
@@ -158,23 +158,10 @@ public abstract class PokerTable {
 				this.currentlyPlaying.remove(player);
 			}
 		}
-		return removedNames;
+		return removedNames; //our network table will love this return 
 	}
 
-	/**
-	 * Adds a player to the current <PokerTable>
-	 * This method is here for convenience, we could always initialize a pokerTable
-	 * from a list if we
-	 * wanted to. I left it public because it's used in pokerTableTest.
-	 * 
-	 * @param player
-	 */
-	public void addPlayer(Player player) {
-		this.playerList.add(player);
-		if (player.isPlaying()) {
-			this.currentlyPlaying.add(player);
-		}
-	}
+
 
 	/**
 	 * Deals 2 new cards to every player from the current deck
@@ -202,7 +189,7 @@ public abstract class PokerTable {
 		}
 		for (Player player : players) {
 			player.setWinCombination(
-					WinConditionLogic.findWinningCombination(this.invertedColor, dealer, player.getPlayerHand()));
+					WinConditionLogic.findWinningCombination(this.invertedColor, dealer, player));
 		}
 		Collections.sort(players);
 		int index = players.size() - 1;
@@ -560,7 +547,6 @@ public abstract class PokerTable {
 		return this.currentlyPlaying.get(0);
 	}
 
-	// unit testing purposes
 	protected Dealer getDealer() {
 		return this.dealer;
 	}
@@ -619,7 +605,7 @@ public abstract class PokerTable {
 		for (Player player : this.currentlyPlaying) { // update cards that each player knows
 			for (Player otherPlayer : this.currentlyPlaying) { // from all the other player hands
 				if (!player.equals(otherPlayer)) {
-					for (Card card : otherPlayer.getPlayerHand().getHand()) {
+					for (Card card : otherPlayer.getHand()) {
 						if (card.isFaceUp()) {
 							player.getCardsKnownFromOtherPlayers().get(otherPlayer).add(card);
 						}
