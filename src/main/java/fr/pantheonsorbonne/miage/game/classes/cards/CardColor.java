@@ -16,7 +16,7 @@ public enum CardColor {
     CardColor(int code) {
         this.code = code;
     }
-
+    //Useful for network communication
     public static CardColor valueOfStr(String substring) {
         for (CardColor color : CardColor.values()) {
             if (color.name().substring(0, 1).equals(substring)) {
@@ -26,10 +26,7 @@ public enum CardColor {
         throw new ColorNotFoundException("No Such Color");
     }
 
-    public int getCode() {
-        return code;
-    }
-
+    //Useful for network communication
     public String getStringRepresentation() {
         return "" + this.name().charAt(0);
     }

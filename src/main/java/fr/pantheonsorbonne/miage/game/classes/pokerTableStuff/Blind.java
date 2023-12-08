@@ -12,19 +12,19 @@ public class Blind {
 		this.player = player;
 	}
 
-	public int getValue() {
+	protected int getValue() {
 		return this.value;
 	}
 
-	public Player getPlayer() {
+	protected Player getPlayer() {
 		return this.player;
 	}
 
-	public void increase(int howMuch) {
+	protected void increase(int howMuch) {
 		this.value += howMuch;
 	}
 
-	public void setPlayer(Player player) {
+	protected void setPlayer(Player player) {
 		this.player = player;
 	}
 

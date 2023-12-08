@@ -28,13 +28,13 @@ public enum CardValue {
         this.rank = value;
     }
 
-    // The stuff below will be useful for network most likely
+    // The stuff below will be useful for network
     /**
-     * From a string representation, return the cad
+     * From a string representation, return the card
      *
      * @param str
      * @return the corresponding card
-     * @throws RuntimeException if the representation is invalid
+     * @throws ValueNotFoundException if the representation is invalid
      */
 
     public static CardValue valueOfStr(String str) {
@@ -47,7 +47,7 @@ public enum CardValue {
         throw new ValueNotFoundException("failed to parse value");
 
     }
-
+    //Useful for network communication
     public String getStringRepresentation() {
         return stringRepresentation;
     }
@@ -61,11 +61,11 @@ public enum CardValue {
     public int getRank() {
         return rank;
     }
-
+    //Invert the card value (ACE -> TWO, KING -> THREE...)
     public CardValue getInverted() {
         return getValueFromRank(14 - this.getRank() + 2); 
     }
-
+    //From a card rank, returns the corresponding CardValue
     private CardValue getValueFromRank(int rank) {
         for (CardValue value : CardValue.values()) {
             if (value.getRank() == rank) {
@@ -74,11 +74,12 @@ public enum CardValue {
         }
         return null;
     }
-
+    //Returns the next card value (ACE -> TWO, KING -> ACE...)
+    //Useful to look for straights
     public CardValue getNext() {
         return CardValue.values()[(this.ordinal() + 1) % CardValue.values().length];
     }
-
+    //Can't override CompareTo so we have to do it like that
     public int compare(CardValue other) {
         if (other == null) {
             return 1;
@@ -86,7 +87,7 @@ public enum CardValue {
         return this.getRank() - other.getRank();
 
     }
-
+    //Returns the max between this and another CardValue
     public CardValue max(CardValue other) {
         if (this.compare(other) > 0) {
             return this;

@@ -45,15 +45,15 @@ public class Card {
 	public int hashCode() {
 		return this.getCardValue().hashCode() + this.getCardColor().hashCode();
 	}
-
+	//A Card is greater than another if its value is greater (useful for sorting & comparing)
 	public boolean compareTo(Card card) {
 		return this.getCardValue().compare(card.getCardValue()) > 0;
 	}
-
+	//Has this card been shown to everyone?
 	public boolean isFaceUp() {
 		return faceUp;
 	}
-
+	//Show this card to everyone
 	public void show() {
 		this.faceUp = true;
 	}
@@ -65,7 +65,7 @@ public class Card {
 		String[] values = str.split(";");
 		return new Card(CardValue.valueOfStr(values[0]), CardColor.valueOfStr(values[1]));
 	}
-
+	//Useful for network communication
 	public static String cardToString(Card card) {
 		return card.getCardValue().getStringRepresentation() + ";" + card.getCardColor().getStringRepresentation();
 	}

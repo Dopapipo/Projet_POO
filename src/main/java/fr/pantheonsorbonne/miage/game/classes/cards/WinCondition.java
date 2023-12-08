@@ -2,6 +2,8 @@ package fr.pantheonsorbonne.miage.game.classes.cards;
 /*
  * Represents a poker WinCondition : the higher the WinCondition, the better the hand
  * It has a rank for smarter bot algorithms, but I don't use it yet.
+ * I wanted to do a decision algorithm based on the rank of the WinCondition,
+ * but in the end I decided to do simulations instead.
  */
 public enum WinCondition {
 	HIGH_CARD(1), PAIR(2), TWO_PAIR(3), THREE_OF_A_KIND(6), STRAIGHT(12), FLUSH(24), FULL_HOUSE(31), FOUR_OF_A_KIND(39),
@@ -21,7 +23,7 @@ public enum WinCondition {
 	public int getRank() {
 		return this.rank;
 	}
-
+	//Is this WinCondition better than another? 
 	public int isHigher(WinCondition condition) {
 		return this.ordinal() - condition.ordinal();
 

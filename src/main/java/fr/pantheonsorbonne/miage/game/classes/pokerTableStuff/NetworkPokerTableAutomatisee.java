@@ -15,11 +15,19 @@ import fr.pantheonsorbonne.miage.game.classes.cards.Exceptions.NotEnoughChipsExc
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.*;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerAdd;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerAddHidden;
+import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerChoice;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerDestroy;
 import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerShow;
-
+/*
+ * This class is a poker table that can be played on a network.
+ * For logic, this table is the same as PokerTableAutomatisee. It runs on local players.
+ * However, it lets Network Players decide what to do. The difficulty was to make sure
+ * the information that our table has on the players and the information the network
+ * players have is synchronised. We have to let the players know when information updates,
+ * by sending them commands. 
+ */
 public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
-	private static final int PLAYER_COUNT = 5;
+	private static final int PLAYER_COUNT = 5; //apparently the host counts as a player
 	private static final int DEFAULT_CHIPS = 300;
 	private final HostFacade hostFacade;
 	private final Game poker;
@@ -56,6 +64,7 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 		hostFacade.waitForExtraPlayerCount(PLAYER_COUNT);
 
 		NetworkPokerTableAutomatisee host = new NetworkPokerTableAutomatisee(hostFacade, poker.getPlayers(), poker);
+		//start the game and print the winner (play() returns the winner)
 		System.out.println(host.play().getName() +" won the game!");
 		System.exit(0);
 
@@ -98,18 +107,18 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 	protected List<String> kickBrokePlayers() {
 		List<String> removed = super.kickBrokePlayers();
 		for (String player : removed) {
-			hostFacade.sendGameCommandToPlayer(poker, player, new GameCommand("kick", ""));
+			hostFacade.sendGameCommandToAll(poker, new GameCommand("kick", player));
 		}
 		return removed;
 	}
 
 	@Override
-	protected int askForBetsWithPots(int playersInRound) {
+	protected int askForBets(int playersInRound) {
 		boolean loopAgain = true;
 		//ask for bets while someone over-raised like in real poker
 		while (playersInRound>1&&loopAgain) {
 			int playersToAsk = this.playerQueue.size();
-			loopAgain=false;
+			loopAgain=false; //we loop again if someone raises
 			for (int i = 0;i<playersToAsk;i++) { //loop on the players to ask
 				Player player = this.playerQueue.poll();
 				this.askAndUseSuperpower(player);
@@ -119,6 +128,7 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 				if (!player.isCurrentlyRaising()) {
 					GameCommand playerAnswer = this.askRaiseCallOrFold(player);
 					switch (Integer.parseInt(playerAnswer.name())) {
+						//1 is call, 2 is fold, 3 is raise
 						case 1:
 							this.call(player);
 							this.playerQueue.add(player);
@@ -127,12 +137,10 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 							this.fold(player);
 							playersInRound--;
 							break;
-						// if a player raises, we set him to currently raising, and all the other
-						// players to not currently raising
 						case 3:
 							int x = Integer.parseInt(playerAnswer.body());
 							this.raise(player, x);
-							if (!player.isAllIn())this.playerQueue.add(player);
+							if (!player.isAllIn()) this.playerQueue.add(player);
 							if (x>0) loopAgain=true;
 							break;
 						default:
@@ -151,19 +159,19 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 	}
 
 	@Override
-	protected int askForSuperpowerUse(Player player) {
+	protected SuperpowerChoice askForSuperpowerUse(Player player) {
 		hostFacade.sendGameCommandToPlayer(poker, player.getName(), new GameCommand("askSuperpower", ""));
 		GameCommand received = hostFacade.receiveGameCommand(poker);
-		return Integer.parseInt(received.body());
+		return SuperpowerChoice.fromString(received.body());
 	}
 
 	@Override
-	protected Player useSuperpower(Player player, int answer) {
-		if (answer == 0) {
-			return null;
-		}
+	protected Player useSuperpower(Player player, SuperpowerChoice answer) {
+
 		switch (answer) {
-			case 1:
+			case NONE:	
+				return null;
+			case SHOW:
 				// see a random card from a player
 
 				try {
@@ -184,7 +192,7 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 					System.out.println(e.getMessage());
 				}
 				break;
-			case 2:
+			case DESTROY:
 				// destroy a random card from a player
 				try {
 					hostFacade.sendGameCommandToPlayer(poker, player.getName(),
@@ -202,7 +210,7 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 					System.out.println(e.getMessage());
 				}
 				break;
-			case 3:
+			case ADD:
 				// add a card to your hand (shown)
 				try {
 					Card card = superpowerAdd.useOnSelf(player, this.deck);
@@ -216,7 +224,7 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 					System.out.println(e.getMessage());
 				}
 				break;
-			case 4:
+			case ADD_HIDDEN:
 				// add a hidden card to your hand
 				try {
 
@@ -246,12 +254,26 @@ public class NetworkPokerTableAutomatisee extends PokerTableAutomatisee {
 		for (Player player : winners) {
 			this.won(player, value / winners.size());
 			hostFacade.sendGameCommandToPlayer(poker, player.getName(),
-					new GameCommand("payout", String.valueOf(value)));
+					new GameCommand("payout", String.valueOf(value/winners.size())));
+		}
+		for (Player player : this.getPlayers()) {
+			if (!winners.contains(player)) {
+				this.won(player,0);
+				hostFacade.sendGameCommandToPlayer(poker, player.getName(),
+						new GameCommand("payout", String.valueOf(0)));
+			}
 		}
 	}
 	@Override
-	protected void flop() {
-		super.flop();
+	protected void updateDealerHandForPlayers() {
+		super.updateDealerHandForPlayers();
 		hostFacade.sendGameCommandToAll(poker, new GameCommand("updateDealer", this.getDealer().getDealerHand().stream().map(Card::cardToString).collect(Collectors.joining(","))));
+
+	}
+	@Override
+	protected void initializeShownCards() {
+		super.initializeShownCards(); //initialize the player/cards known structures of our players from our table
+		//then let the network players initialize theirs
+		hostFacade.sendGameCommandToAll(poker, new GameCommand("namesOfPlayers", this.getPlayers().stream().map(Player::getName).collect(Collectors.joining(","))));
 	}
 }

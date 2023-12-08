@@ -14,7 +14,8 @@ public class WinningCombination implements Comparable<WinningCombination> {
 		this.winCondition = wc;
 		this.cardValue = cv;
 	}
-
+	//A WinningCombination is greater than another if its WinCondition is greater
+	//Or if its WinCondition is equal and its CardValue is greater
 	@Override
 	public int compareTo(WinningCombination wc) {
 		if (this.winCondition.compareTo(wc.winCondition) > 0) {
@@ -51,6 +52,7 @@ public class WinningCombination implements Comparable<WinningCombination> {
 		}
 		return false;
 	}
+	//Sonarlint says we should override hashCode when we override equals so let's do it
 	@Override
 	public int hashCode() {
 		return this.cardValue.hashCode() + this.winCondition.hashCode();

@@ -7,7 +7,15 @@ import java.util.Set;
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.cards.CardColor;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
-
+/*
+ * This class is used by bots to run simulations. They give it initial conditions,
+ * such as the list of playing players, the cards they know from them,
+ * the dealer's cards, their own cards, the inverted color. They choose the number
+ * of simulations to run, and then the table runs them from the initial conditions, while
+ * giving random cards to complete a round. It then returns the winrate of the player,
+ * i.e. the number of wins divided by the number of simulations, with a small tweak if
+ * there's draws.
+ */
 public class PokerTableSimulations extends PokerTableAutomatisee {
     private Player simulatedPlayer;
     private int nbSimulations;
@@ -26,18 +34,21 @@ public class PokerTableSimulations extends PokerTableAutomatisee {
         this.initialPlayerHand = playerHand;
         this.invertedColor=invertedColor;
     }
+    /*
+     * Initializes the table to the initial conditions
+     */
     private void initialize() {
         for (Card card:this.initialPlayerHand) {
-            this.deck.remove(card);
+            this.deck.remove(card); //remove the cards that the player knows from the deck
         }
         for (Card card:this.initialDealerHand) {
-            this.deck.remove(card);
+            this.deck.remove(card); //remove the cards that the player knows from the deck
         }
         for(Map.Entry<Player,Set<Card>> entry: this.initialCardsKnownFromOtherPlayers.entrySet()) {
+            //initialize the hand because it will be null (our player doesn't see PlayerHand objects)
+            entry.getKey().initializePlayerHand(); 
             for(Card card : entry.getValue()) {
                 this.deck.remove(card);
-                entry.getKey().initializePlayerHand(); 
-                //initialize the hand because it will be null (our player doesn't see PlayerHand objects)
                 entry.getKey().addCard(card);
             }
         }

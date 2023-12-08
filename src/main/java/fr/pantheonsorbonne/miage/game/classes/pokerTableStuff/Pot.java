@@ -22,9 +22,6 @@ public class Pot implements Comparable<Pot> {
 		this(0);
 	}
 
-	public Pot(List<Player> players) {
-		this.players = players;
-	}
 
 	public Pot(int thresholdBet) {
 		this.thresholdBet = thresholdBet;
@@ -32,39 +29,32 @@ public class Pot implements Comparable<Pot> {
 		this.players = new ArrayList<>();
 	}
 
-	public void addPlayer(Player player) {
+	protected void addPlayer(Player player) {
 		this.players.add(player);
 	}
 
-	public void addBet(int bet) {
+	protected void addBet(int bet) {
 		this.value += bet;
 	}
 
-	public int getValue() {
+	protected int getValue() {
 		return value;
 	}
 
-	public void setValue(int value) {
+	protected void setValue(int value) {
 		this.value = value;
 	}
-
-	public List<Player> getPlayers() {
-		List<Player> toReturn = new ArrayList<>();
-		for (Player player : this.players) {
-			toReturn.add(player);
-		}
-		return toReturn;
+	//Return a copy of the list of players
+	protected List<Player> getPlayers() {
+		return new ArrayList<>(this.players);
 	}
 
-	public void setPlayers(List<Player> players) {
-		this.players = players;
-	}
 
-	public int getThresholdBet() {
+	protected int getThresholdBet() {
 		return thresholdBet;
 	}
 
-	public void setThresholdBet(int thresholdBet) {
+	protected void setThresholdBet(int thresholdBet) {
 		this.thresholdBet = thresholdBet;
 	}
 

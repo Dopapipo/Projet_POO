@@ -67,10 +67,6 @@ class CardsTest {
         assertEquals("1;S", Card.cardToString(card));
         assertEquals(card, Card.stringToCard("1;S"));
         assertThrows(RuntimeException.class, () -> CardColor.valueOfStr("K"));
-        assertEquals(127137, CardColor.SPADE.getCode());
-        assertEquals(127153, CardColor.HEART.getCode());
-        assertEquals(127185, CardColor.CLOVER.getCode());
-        assertEquals(127169, CardColor.DIAMOND.getCode());
         assertEquals("S", CardColor.SPADE.getStringRepresentation());
         assertEquals("H", CardColor.HEART.getStringRepresentation());
         assertEquals("D", CardColor.DIAMOND.getStringRepresentation());

@@ -27,7 +27,7 @@ public class Deck {
 	 * @param deckSize : number of cards to draw
 	 * @return list of drawn cards
 	 */
-	public List<Card> getRandomCards(int deckSize) {
+	protected List<Card> getRandomCards(int deckSize) {
 
 		List<Card> cardss = new ArrayList<>(deckSize);
 		for (int i = 0; i < deckSize; i++) {
@@ -36,7 +36,7 @@ public class Deck {
 		return cardss;
 
 	}
-	public void remove(Card card) {
+	protected void remove(Card card) {
 		this.cards.remove(card);
 	}
 	/**
@@ -53,7 +53,7 @@ public class Deck {
 
 	
 	
-	public void resetDeck() {
+	protected void resetDeck() {
 		List<Card> cardss = new ArrayList<>();
 		int k = 0;
 		for (int i = 0; i < 13; i++) {
@@ -79,7 +79,7 @@ public class Deck {
 		this.cards = new LinkedList<>(cardss);
 	}
 	
-	public void discard() {
+	protected void discard() {
 		this.cards.remove();
 	}
 }

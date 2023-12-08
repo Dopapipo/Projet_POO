@@ -17,6 +17,7 @@ import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBot;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerBotSmarter;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.PlayerHand;
+import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerChoice;
 
 class PlayerTests {
     @Test
@@ -28,7 +29,6 @@ class PlayerTests {
         assertEquals(0, ((PlayerBot) player).getBetAmount(0));
         Player player2 = new PlayerBotSmarter("Player2");
         assertEquals (0, player2.getChipStack());
-        assertTrue (((PlayerBot) player).getSuperpower() < 5 && ((PlayerBot) player).getSuperpower() > -1);
         assertTrue (((PlayerBot) player).askForPlayerToUseSuperpowerOn("Player1,Player2").equals("Player1")
                 || ((PlayerBot) player).askForPlayerToUseSuperpowerOn("Player1,Player2").equals("Player2"));
 
@@ -44,14 +44,13 @@ class PlayerTests {
         assert (player.getName().equals("Player"));
         // player is alone so of course he has 100% winrate and raises he's SMART
         assert (((PlayerBotSmarter) player).getCommand(0) == 3);
-        assert (((PlayerBotSmarter) player).getSuperpower() < 5 && ((PlayerBot) player).getSuperpower() > -1);
         assert (((PlayerBotSmarter) player).askForPlayerToUseSuperpowerOn("Player1,Player2").equals("Player1")
                 || ((PlayerBotSmarter) player).askForPlayerToUseSuperpowerOn("Player1,Player2").equals("Player2"));
         player.setChipStack(250);
-        assertEquals(0, ((PlayerBotSmarter) player).getSuperpower());
+        assertEquals(SuperpowerChoice.NONE, ((PlayerBotSmarter) player).getSuperpower());
         player.won(500); // reset superpower and give him money
-        assertEquals(3, ((PlayerBotSmarter) player).getSuperpower());
-        assertEquals(2, ((PlayerBotSmarter) player).getSuperpower());
+        assertEquals(SuperpowerChoice.ADD, ((PlayerBotSmarter) player).getSuperpower());
+        assertEquals(SuperpowerChoice.DESTROY, ((PlayerBotSmarter) player).getSuperpower());
         ((PlayerBotSmarter) player).setWinrate(1);
         assertEquals(((PlayerBotSmarter) player).getBetAmount(0), player.getChipStack());
         ((PlayerBotSmarter) player).setWinrate(0.8);
@@ -86,26 +85,6 @@ class PlayerTests {
         assertEquals(2, ((PlayerBotSmarter) player).getCommand(10));
     }
 
-    @Test
-    void testPlayerHand() {
-        List<Card> cards = new ArrayList<>();
-        cards.add(new Card(CardValue.ACE, CardColor.CLOVER));
-        cards.add(new Card(CardValue.ACE, CardColor.DIAMOND));
 
-        PlayerHand hand = new PlayerHand(cards);
-        hand.remove(new Card(CardValue.ACE, CardColor.CLOVER));
-        assertFalse(hand.getHand().contains(new Card(CardValue.ACE, CardColor.CLOVER)));
-        assertTrue(hand.getHand().contains(new Card(CardValue.ACE, CardColor.DIAMOND)));
-        hand.removeRandomCard();
-        assertTrue(hand.getHand().isEmpty());
-        hand.showRandomCard();
-        hand.add(new Card(CardValue.ACE, CardColor.CLOVER));
-        hand.showRandomCard();
-        assertTrue(hand.getHand().contains(new Card(CardValue.ACE, CardColor.CLOVER)));
-        assertTrue(hand.getCardAtIndex(0).isFaceUp());
-        hand.showRandomCard();
-        // call this method a bunch to make sure there's no infinite loop
-        // (and also to make jacoco happy :D)
-    }
 
 }

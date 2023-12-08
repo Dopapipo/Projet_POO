@@ -9,44 +9,45 @@ import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 public class PlayerHand {
 	private List<Card> hand;
 	private Random random = new Random();
+
 	public PlayerHand(List<Card> cards) {
 		this.hand = cards;
 	}
 	public PlayerHand() {
-		this.hand = new ArrayList<>();
+		this(new ArrayList<>());
 	}
-	public int size() {
+	protected int size() {
 		return this.hand.size();
 	}
-	public List<Card> getHand() {
+	protected List<Card> getHand() {
 		return this.hand;
 	}
 
-	public void add(Card card) {
+	protected void add(Card card) {
 		this.hand.add(card);
 	}
 
-	public Card removeRandomCard() {
+	protected Card removeRandomCard() {
 		if (!this.hand.isEmpty())
 			return this.hand.remove(random.nextInt(this.hand.size()));
 		return null;
 	}
-	public void showCard(Card card) {
+	protected void showCard(Card card) {
 		card.show();
 	}
-	public Card remove(Card card) {
+	protected Card remove(Card card) {
 		if (this.hand.remove(card)) {
 			return card;
 		}
 		return null;
 	}
-	public Card getCardAtIndex(int i) {
+	protected Card getCardAtIndex(int i) {
 		return this.hand.get(i);
 	}
-	public void clear() {
+	protected void clear() {
 		this.hand.clear();
 	}
-	public void showRandomCard() {
+	protected void showRandomCard() {
 		int i;
 		if (this.hand.isEmpty()|| this.allCardsAreShown()) {
 			return;
@@ -57,7 +58,7 @@ public class PlayerHand {
 		this.hand.get(i).show();
 	}
 
-	public boolean allCardsAreShown() {
+	protected boolean allCardsAreShown() {
 		for (Card card : this.hand) {
 			if (!card.isFaceUp()) {
 				return false;

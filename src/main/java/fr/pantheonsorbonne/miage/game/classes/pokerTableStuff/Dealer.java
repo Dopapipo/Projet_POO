@@ -19,17 +19,17 @@ public class Dealer {
 		this.deck = new Deck();
 	}
 
-	public void flop() {
+	protected void flop() {
 		this.deck.discard();
 		this.addToDealerHand(deck.getRandomCards(3));
 	}
 
-	public void turn() {
+	protected void turn() {
 		this.deck.discard();
 		this.addToDealerHand(deck.draw());
 	}
 
-	public void river() {
+	protected void river() {
 		this.turn();
 	}
 
@@ -48,12 +48,12 @@ public class Dealer {
 	}
 
 
-	public void clear() {
+	protected void clear() {
 		this.hand.clear();
 	}
 
-	// This method is public for unit testing purposes
-	public void setHand(List<Card> cards) {
+	// This method is protected for unit testing purposes
+	protected void setHand(List<Card> cards) {
 		this.hand = cards;
 	}
 }

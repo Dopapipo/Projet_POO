@@ -3,6 +3,8 @@ package fr.pantheonsorbonne.miage.game.classes.playerStuff;
 import java.util.List;
 import java.util.Random;
 
+import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerChoice;
+
 public class PlayerBot extends Player {
 	Random random = new Random();
 
@@ -17,6 +19,7 @@ public class PlayerBot extends Player {
 	/**
 	 * Call,fold,raise
 	 * For now, we always all-in.
+	 * This bot is super dumb, doesn't even care about the amount needed to call
 	 * 
 	 * @return 1,2,3 (call,fold,raise)
 	 */
@@ -34,8 +37,8 @@ public class PlayerBot extends Player {
 	}
 
 	// Use superpower at random
-	public int getSuperpower() {
-		return random.nextInt(5);
+	public SuperpowerChoice getSuperpower() {
+		return SuperpowerChoice.values()[random.nextInt(SuperpowerChoice.values().length)];
 	}
 
 	// Use superpower on random player
@@ -47,12 +50,12 @@ public class PlayerBot extends Player {
 		return toReturn;
 	}
 
-	// Use superpower on random player (that might not be playing but hey the bot is
+	// Use superpower on random player (that might not be playing but hey the bot is extra
 	// dumb!)
 	public String askForPlayerToUseSuperpowerOn(String players) {
 		return players.split(",")[(int) Math.random() * players.split(",").length].trim();	}
 
-	// always invert the same color :D
+	// always invert the same color because dumb :D
 	public int askForInvertedColor() {
 		return 0;
 	}

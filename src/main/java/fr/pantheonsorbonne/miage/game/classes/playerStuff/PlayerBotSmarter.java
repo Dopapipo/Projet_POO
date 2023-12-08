@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import fr.pantheonsorbonne.miage.game.classes.cards.Card;
 import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.PokerTableSimulations;
+import fr.pantheonsorbonne.miage.game.classes.superpowers.SuperpowerChoice;
 
 /*
  * This playerbot always tries to use the add superpower as it's the most overpowered, so he's 
@@ -18,8 +19,8 @@ import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.PokerTableSimulati
  * He will check if he's got a weak hand & no one raised, otherwise he will fold !
  */
 public class PlayerBotSmarter extends PlayerBot {
-    private int superpower = 3;
-    private boolean alreadyRaised = false;
+    private SuperpowerChoice superpower = SuperpowerChoice.ADD; //superpower to choose
+    private boolean alreadyRaised = false; //did we already raise this round?
     private double winrate;
     public PlayerBotSmarter(String name) {
         super(name);
@@ -28,14 +29,16 @@ public class PlayerBotSmarter extends PlayerBot {
     public PlayerBotSmarter(String name, int chipStack) {
         super(name, chipStack);
     }
+    // Call,fold,raise (1,2,3)
     @Override
     public int getCommand(int amountToCall) {
-        this.winrate = this.findWinrate();
+        //Run simulations to find out our winrate with our known conditions
+        this.winrate = this.findWinrate(); 
         if (winrate>0.9||(!alreadyRaised && winrate>0.4 && amountToCall<this.getChipStack()*0.2)){
             alreadyRaised = true;
             return 3;
         }
-        if (amountToCall==0) {
+        if (amountToCall==0 || this.getBet()>this.getChipStack()) {
             return 1;
         }
         if ((this.getChipStack()*0.4<amountToCall&&winrate>0.4) || (this.getChipStack()*0.1<amountToCall&&winrate>0.1) || (this.getChipStack()*0.9<amountToCall&&winrate>0.8)) {
@@ -56,22 +59,23 @@ public class PlayerBotSmarter extends PlayerBot {
     }
 
     @Override
-    public int getSuperpower() {
+    public SuperpowerChoice getSuperpower() {
         if (this.getChipStack()<300) {
-            return 0;
+            return SuperpowerChoice.NONE;
         }
-        if (this.getChipStack()>600 && this.superpower!=3) {
-            return 2;
+        if (this.getChipStack()>500 && this.superpower!=SuperpowerChoice.ADD) {
+            return SuperpowerChoice.ADD_HIDDEN;
         }
-        int toReturn = this.superpower;
-        this.superpower = 1000; // so that we don't use it again for this round
+        SuperpowerChoice toReturn = this.superpower;
+        this.superpower = SuperpowerChoice.NONE; // so that we don't use it again for this round
         return toReturn;
     }
 
     @Override
     public void won(int winnings) {
         super.won(winnings);
-        this.superpower = 3;// reset superpower bc round ended
+        this.alreadyRaised=false;
+        this.superpower = SuperpowerChoice.ADD;// reset superpower bc round ended
     }
     public void setWinrate(double winrate) {
         this.winrate = winrate;
@@ -82,6 +86,8 @@ public class PlayerBotSmarter extends PlayerBot {
         PokerTableSimulations simulation = new PokerTableSimulations(thisHand, thisDealer,this.copy(), this.getPlayers(), this.getCardsKnownFromOtherPlayers(),this.getInvertedColor(),100);
         return simulation.getWinRate();
     }
+    //Get the list of players to inject into our simulations
+    //Use copies of the players to avoid spaghetti code
     private List<Player> getPlayers() {
         List<Player> players = new ArrayList<>();
         for (Player player : this.getCardsKnownFromOtherPlayers().keySet()) {
@@ -103,6 +109,7 @@ public class PlayerBotSmarter extends PlayerBot {
         }
         return false;
     }
+    //Sonarlint says we should override hashCode when we override equals so let's do it
     @Override
     public int hashCode() {
         return this.getName().hashCode();
