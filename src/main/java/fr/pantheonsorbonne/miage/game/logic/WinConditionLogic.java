@@ -17,6 +17,13 @@ import fr.pantheonsorbonne.miage.game.classes.cards.WinningCombination;
 import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.Dealer;
 
+/**
+ * This class handles logic for finding the highest <WinningCombination> in a hand
+ * A hand is the combination of a PlayerHand and a Dealer hand
+ * This class has mostly private methods, and the public ones are variations of the same method
+ * We can call that method on a list of card, or on playerhands and dealerhands directly, 
+ * with or without an inverted color.
+ */
 public class WinConditionLogic {
 
 	private WinConditionLogic() {

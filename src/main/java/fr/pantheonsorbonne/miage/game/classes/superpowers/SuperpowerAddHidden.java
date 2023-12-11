@@ -5,7 +5,7 @@ import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 import fr.pantheonsorbonne.miage.game.classes.pokerTableStuff.Deck;
 
 public class SuperpowerAddHidden extends SuperpowerSelf {
-    private static final int COST = 125;
+    private static final int COST = 100;
     private static final String NAME = "Add hidden";
     private static final String DESCRIPTION = "Add a random card to your hand without showing it";
 

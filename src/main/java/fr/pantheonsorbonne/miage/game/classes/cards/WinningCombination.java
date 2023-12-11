@@ -52,10 +52,5 @@ public class WinningCombination implements Comparable<WinningCombination> {
 		}
 		return false;
 	}
-	//Sonarlint says we should override hashCode when we override equals so let's do it
-	@Override
-	public int hashCode() {
-		return this.cardValue.hashCode() + this.winCondition.hashCode();
-	}
 
 }

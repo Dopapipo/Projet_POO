@@ -219,6 +219,7 @@ public abstract class PokerTable {
 		}
 		playersThatWon.add(wonForSure);
 		// check for other players that haven't folded with similar strength hands
+		//This allows us to support draws
 		for (Player player : playersCopy) {
 			if (player.hasNotFolded() && !playersThatWon.contains(player) && wonForSure.compareTo(player) == 0) {
 				playersThatWon.add(player);

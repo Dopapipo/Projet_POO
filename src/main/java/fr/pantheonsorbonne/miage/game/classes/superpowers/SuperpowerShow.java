@@ -6,7 +6,7 @@ import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 
 public class SuperpowerShow extends SuperpowerOther {
     //i'll the name and description here for readability
-    private static final int COST = 50;
+    private static final int COST = 100;
     private static final String NAME = "See random card";
     private static final String DESCRIPTION = "This superpower allows you to see a random card from the other player's hand.";
 

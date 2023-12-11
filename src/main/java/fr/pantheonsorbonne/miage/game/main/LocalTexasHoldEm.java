@@ -28,9 +28,12 @@ public class LocalTexasHoldEm {
 		// playerList.add(p4);
 		// PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
 		// System.out.println(table.play().getName());
+
 		//The line below will print the result of 1000 games between 2 smart and 2 dumb bots
 		System.out.println(runSimulations(1000));
 	}
+
+	//Runs howMany games between 2 smart and 2 dumb bots, to check who wins most
 	static String runSimulations(int howMany) {
 		int smartWins=0;
 		int otherWins=0;
@@ -46,6 +49,8 @@ public class LocalTexasHoldEm {
 			playerList.add(p4);
 			PokerTableAutomatisee table = new PokerTableAutomatisee(playerList);
 			Player winner = table.play();
+			//Check for PlayerBotSmarter instanceof first, or we'll always increment
+			//otherWins (because PlayerBotSmarter is a PlayerBot)
 			if (winner instanceof PlayerBotSmarter) {
 				smartWins++;
 			}

@@ -5,7 +5,7 @@ import fr.pantheonsorbonne.miage.game.classes.playerStuff.Player;
 
 public class SuperpowerDestroy extends SuperpowerOther {
     //i'll the name and description here for readability
-    private static final int COST = 100;
+    private static final int COST = 200;
     private static final String NAME = "Destroy";
     private static final String DESCRIPTION = "Destroy a random card from the other player's hand.";
 

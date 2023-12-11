@@ -48,9 +48,9 @@ class PlayerTests {
                 || ((PlayerBotSmarter) player).askForPlayerToUseSuperpowerOn("Player1,Player2").equals("Player2"));
         player.setChipStack(250);
         assertEquals(SuperpowerChoice.NONE, ((PlayerBotSmarter) player).getSuperpower());
-        player.won(500); // reset superpower and give him money
+        player.won(1000); // reset superpower and give him money
         assertEquals(SuperpowerChoice.ADD, ((PlayerBotSmarter) player).getSuperpower());
-        assertEquals(SuperpowerChoice.DESTROY, ((PlayerBotSmarter) player).getSuperpower());
+        assertEquals(SuperpowerChoice.ADD_HIDDEN, ((PlayerBotSmarter) player).getSuperpower());
         ((PlayerBotSmarter) player).setWinrate(1);
         assertEquals(((PlayerBotSmarter) player).getBetAmount(0), player.getChipStack());
         ((PlayerBotSmarter) player).setWinrate(0.8);
