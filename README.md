@@ -15,20 +15,22 @@ Le croupier distribue les cartes aux joueurs, puis prend les mises automatiques 
 ## Fin de la partie
 
 La partie est terminée lorsqu'il ne reste plus qu'un joueur à la table. Jusque là, les manches s'enchaînent. Les blindes nous assurent une mise minimum à chaque manche, donc que la partie termine.
+La méthode play() de notre table de poker renvoie le gagnant.
 
 # Détail des classes principales
-TODO
 
-   * LocalTexasHoldEm la version du jeu supportant le jeu en local
-   * TexasHoldEmEngine le moteur du jeu
-   * TexasHoldEmPlayer le joueur distant en cas de partie réseau
-   * TexasHoldEmNetWworkEngine la version du jeu supportant le réseau
+
+   * LocalTexasHoldEm la version du jeu supportant le jeu en local (classe à lancer pour voir une game de poker)
+   * PokerTable le moteur du jeu et PokerTableAutomatisee la table de poker locale
+   * NetworkPlayerBot le joueur distant en cas de partie réseau
+   * NetworkPokerTableAutomatisee la table de poker supportant le réseau (et aussi le host)
 
 # Protocole réseau
 
-TODO
+
 
 > Le protocole réseau définit les séquences des commandes échangées entre les différentes parties prenantes. Il doit contenir, pour chaque commande, l'expéditeur, le destinataire, le nom de la commande et le contenu du corps de la commande.
+> Ce protocole est désormais un peu obsolète, avec l'ajout de nouvelles méthodes et commandes échangées
 
 ![protocole Poker](protocole.png)
 
